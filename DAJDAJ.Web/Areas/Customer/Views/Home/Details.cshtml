@@ -1,0 +1,146 @@
+﻿@model DAJDAJ.Entities.ViewModels.Shoppingcart
+
+@{
+    ViewData["Title"] = "Product Details";
+
+    // Dictionary for mapping custom color names to valid CSS color values
+    var colorMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    {
+        { "burgendy", "#800020" }, // correct spelling: burgundy
+        { "burgundy", "#800020" },
+        { "red", "red" },
+        { "white", "white" },
+        { "black", "black" }
+        // Add more mappings if needed
+    };
+}
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-6">
+            <div style="width: 100%; max-width: 500px; height: 500px; overflow: hidden; margin: auto;">
+                <img src="~/@Model.product.Img"
+                     alt="Product Image"
+                     style="width: 100%; height: 100%; object-fit: cover; object-position: center; border-radius: 12px;" />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h2>@Model.product.Name</h2>
+            <h4 class="text-muted">@Model.product.Price.ToString("0.00") L.E</h4>
+            <p>@Model.product.Description</p>
+
+            <!-- Sizes -->
+            @if (Model.Sizes != null && Model.Sizes.Any())
+            {
+                <div class="mb-3">
+                    <label class="fw-bold">Size:</label>
+                    <div class="d-flex gap-2 mt-1" id="size-options">
+                        @foreach (var size in Model.Sizes)
+                        {
+                            var isSoldOut = size.ToLower().Contains("soldout");
+                            var displaySize = size.Replace("soldout", "", StringComparison.OrdinalIgnoreCase).Trim();
+
+                            <button type="button"
+                                    class="btn rounded-pill px-3 py-1 size-btn @(isSoldOut ? "btn-secondary disabled" : "btn-outline-dark")"
+                                    data-size="@displaySize"
+                                    @(isSoldOut ? "disabled" : "")>
+                                @displaySize
+                            </button>
+                        }
+                    </div>
+                    <input type="hidden" name="SelectedSize" id="SelectedSize" value="" />
+                </div>
+            }
+
+            <!-- Colors -->
+            @if (Model.Colors != null && Model.Colors.Any())
+            {
+                <div class="mb-3">
+                    <label class="fw-bold">Color:</label>
+                    <div class="d-flex gap-2 mt-1" id="color-options">
+                        @foreach (var color in Model.Colors)
+                        {
+                            var isSoldOut = color.ToLower().Contains("soldout");
+                            var displayColor = color.Replace("soldout", "", StringComparison.OrdinalIgnoreCase).Trim();
+
+                            string colorCode = colorMap.ContainsKey(displayColor.ToLower())
+                            ? colorMap[displayColor.ToLower()]
+                            : displayColor;
+
+                            <div class="color-circle border @(isSoldOut ? "border-light opacity-50" : "")"
+                                 data-color="@displayColor"
+                                 title="@displayColor"
+                                 style="width: 30px; height: 30px; background-color:@colorCode; border-radius: 50%; cursor: pointer;"
+                                 @(isSoldOut ? "data-soldout='true'" : "")>
+                            </div>
+                        }
+                    </div>
+                    <input type="hidden" name="SelectedColor" id="SelectedColor" value="" />
+                </div>
+            }
+
+            <!-- Count -->
+            <div class="mb-3">
+                <label class="fw-bold">Quantity:</label>
+                <div class="input-group w-25">
+                    <button type="button" class="btn btn-outline-secondary" onclick="updateCount(-1)">-</button>
+                    <input type="text" id="countInput" class="form-control text-center" value="@Model.Count" readonly />
+                    <button type="button" class="btn btn-outline-secondary" onclick="updateCount(1)">+</button>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-flex flex-column gap-2">
+                <button class="btn text-white" style="background-color: #f06292;" type="submit">
+                    <i class="bi bi-cart-fill me-1"></i> Add to cart
+                </button>
+                <button class="btn btn-dark text-white" type="button">Buy it now</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function updateCount(change) {
+            const countInput = document.getElementById("countInput");
+            let current = parseInt(countInput.value);
+            let updated = current + change;
+
+            if (updated >= 1 && updated <= 100) {
+                countInput.value = updated;
+            }
+        }
+
+        // Handle color selection
+        document.querySelectorAll('.color-circle').forEach(circle => {
+            circle.addEventListener('click', function () {
+                if (this.dataset.soldout === 'true') return;
+
+                document.querySelectorAll('.color-circle').forEach(c => {
+                    c.classList.remove('border-dark', 'border-3');
+                    c.classList.add('border');
+                });
+
+                this.classList.add('border-dark', 'border-3');
+                document.getElementById('SelectedColor').value = this.getAttribute('data-color');
+            });
+        });
+
+        // Handle size selection
+        document.querySelectorAll('.size-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                if (this.classList.contains('disabled')) return;
+
+                document.querySelectorAll('.size-btn').forEach(b => {
+                    b.classList.remove('btn-dark');
+                    b.classList.add('btn-outline-dark');
+                });
+
+                this.classList.remove('btn-outline-dark');
+                this.classList.add('btn-dark');
+                document.getElementById('SelectedSize').value = this.getAttribute('data-size');
+            });
+        });
+    </script>
+}

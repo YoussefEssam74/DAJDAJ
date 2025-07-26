@@ -1,0 +1,816 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\wwwroot\\js\\product.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\wwwroot\\js\\product.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\views\\shared\\_dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\views\\shared\\_dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\areas\\admin\\controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\areas\\admin\\controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\areas\\admin\\views\\product\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\areas\\admin\\views\\product\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\areas\\admin\\views\\product\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\areas\\admin\\views\\product\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\areas\\admin\\views\\category\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\areas\\admin\\views\\category\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\areas\\admin\\views\\product\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\areas\\admin\\views\\product\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\areas\\admin\\controllers\\categorycontroller .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\areas\\admin\\controllers\\categorycontroller .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\areas\\admin\\views\\category\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\areas\\admin\\views\\category\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\areas\\admin\\views\\category\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\areas\\admin\\views\\category\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\areas\\admin\\views\\category\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\areas\\admin\\views\\category\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\views\\shared\\_toaster.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\views\\shared\\_toaster.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0B3DAE9F-CB56-4950-BD56-37C38E6C974E}|DAJDAJ.DataAccess\\DAJDAJ.DataAccess.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.dataaccess\\implementation\\productrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0B3DAE9F-CB56-4950-BD56-37C38E6C974E}|DAJDAJ.DataAccess\\DAJDAJ.DataAccess.csproj|solutionrelative:dajdaj.dataaccess\\implementation\\productrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D2B7AF74-1BC8-48FB-BC21-4AE5B8960B2C}|DAJDAJ.Entities\\DAJDAJ.Entities.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.entities\\models\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D2B7AF74-1BC8-48FB-BC21-4AE5B8960B2C}|DAJDAJ.Entities\\DAJDAJ.Entities.csproj|solutionrelative:dajdaj.entities\\models\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D2B7AF74-1BC8-48FB-BC21-4AE5B8960B2C}|DAJDAJ.Entities\\DAJDAJ.Entities.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.entities\\viewmodels\\productvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D2B7AF74-1BC8-48FB-BC21-4AE5B8960B2C}|DAJDAJ.Entities\\DAJDAJ.Entities.csproj|solutionrelative:dajdaj.entities\\viewmodels\\productvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\areas\\customer\\views\\home\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\areas\\customer\\views\\home\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0B3DAE9F-CB56-4950-BD56-37C38E6C974E}|DAJDAJ.DataAccess\\DAJDAJ.DataAccess.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.dataaccess\\migrations\\20250725194101_addproductstable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0B3DAE9F-CB56-4950-BD56-37C38E6C974E}|DAJDAJ.DataAccess\\DAJDAJ.DataAccess.csproj|solutionrelative:dajdaj.dataaccess\\migrations\\20250725194101_addproductstable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0B3DAE9F-CB56-4950-BD56-37C38E6C974E}|DAJDAJ.DataAccess\\DAJDAJ.DataAccess.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.dataaccess\\migrations\\20250611002503_first.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0B3DAE9F-CB56-4950-BD56-37C38E6C974E}|DAJDAJ.DataAccess\\DAJDAJ.DataAccess.csproj|solutionrelative:dajdaj.dataaccess\\migrations\\20250611002503_first.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0B3DAE9F-CB56-4950-BD56-37C38E6C974E}|DAJDAJ.DataAccess\\DAJDAJ.DataAccess.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.dataaccess\\migrations\\applicationdbcontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0B3DAE9F-CB56-4950-BD56-37C38E6C974E}|DAJDAJ.DataAccess\\DAJDAJ.DataAccess.csproj|solutionrelative:dajdaj.dataaccess\\migrations\\applicationdbcontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\areas\\customer\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\areas\\customer\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D2B7AF74-1BC8-48FB-BC21-4AE5B8960B2C}|DAJDAJ.Entities\\DAJDAJ.Entities.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.entities\\models\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D2B7AF74-1BC8-48FB-BC21-4AE5B8960B2C}|DAJDAJ.Entities\\DAJDAJ.Entities.csproj|solutionrelative:dajdaj.entities\\models\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0B3DAE9F-CB56-4950-BD56-37C38E6C974E}|DAJDAJ.DataAccess\\DAJDAJ.DataAccess.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.dataaccess\\implementation\\categoryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0B3DAE9F-CB56-4950-BD56-37C38E6C974E}|DAJDAJ.DataAccess\\DAJDAJ.DataAccess.csproj|solutionrelative:dajdaj.dataaccess\\implementation\\categoryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D2B7AF74-1BC8-48FB-BC21-4AE5B8960B2C}|DAJDAJ.Entities\\DAJDAJ.Entities.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.entities\\viewmodels\\shoppingcart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D2B7AF74-1BC8-48FB-BC21-4AE5B8960B2C}|DAJDAJ.Entities\\DAJDAJ.Entities.csproj|solutionrelative:dajdaj.entities\\viewmodels\\shoppingcart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D2B7AF74-1BC8-48FB-BC21-4AE5B8960B2C}|DAJDAJ.Entities\\DAJDAJ.Entities.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.entities\\models\\errorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D2B7AF74-1BC8-48FB-BC21-4AE5B8960B2C}|DAJDAJ.Entities\\DAJDAJ.Entities.csproj|solutionrelative:dajdaj.entities\\models\\errorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0B3DAE9F-CB56-4950-BD56-37C38E6C974E}|DAJDAJ.DataAccess\\DAJDAJ.DataAccess.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.dataaccess\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0B3DAE9F-CB56-4950-BD56-37C38E6C974E}|DAJDAJ.DataAccess\\DAJDAJ.DataAccess.csproj|solutionrelative:dajdaj.dataaccess\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\views\\shared\\_loginpartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\views\\shared\\_loginpartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\dajdaj.web.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\dajdaj.web.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0B3DAE9F-CB56-4950-BD56-37C38E6C974E}|DAJDAJ.DataAccess\\DAJDAJ.DataAccess.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.dataaccess\\dajdaj.dataaccess.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{0B3DAE9F-CB56-4950-BD56-37C38E6C974E}|DAJDAJ.DataAccess\\DAJDAJ.DataAccess.csproj|solutionrelative:dajdaj.dataaccess\\dajdaj.dataaccess.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D2B7AF74-1BC8-48FB-BC21-4AE5B8960B2C}|DAJDAJ.Entities\\DAJDAJ.Entities.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.entities\\dajdaj.entities.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{D2B7AF74-1BC8-48FB-BC21-4AE5B8960B2C}|DAJDAJ.Entities\\DAJDAJ.Entities.csproj|solutionrelative:dajdaj.entities\\dajdaj.entities.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\areas\\customer\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\areas\\customer\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\views\\shared\\_customer.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\views\\shared\\_customer.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\areas\\customer\\views\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\areas\\customer\\views\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\areas\\customer\\views\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\areas\\customer\\views\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\scaffoldingreadme.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\scaffoldingreadme.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0B3DAE9F-CB56-4950-BD56-37C38E6C974E}|DAJDAJ.DataAccess\\DAJDAJ.DataAccess.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.dataaccess\\implementation\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0B3DAE9F-CB56-4950-BD56-37C38E6C974E}|DAJDAJ.DataAccess\\DAJDAJ.DataAccess.csproj|solutionrelative:dajdaj.dataaccess\\implementation\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\areas\\admin\\views\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\areas\\admin\\views\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\areas\\admin\\views\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\areas\\admin\\views\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\wwwroot\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\wwwroot\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D2B7AF74-1BC8-48FB-BC21-4AE5B8960B2C}|DAJDAJ.Entities\\DAJDAJ.Entities.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.entities\\repositories\\iuntiofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D2B7AF74-1BC8-48FB-BC21-4AE5B8960B2C}|DAJDAJ.Entities\\DAJDAJ.Entities.csproj|solutionrelative:dajdaj.entities\\repositories\\iuntiofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D2B7AF74-1BC8-48FB-BC21-4AE5B8960B2C}|DAJDAJ.Entities\\DAJDAJ.Entities.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.entities\\repositories\\iproductrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D2B7AF74-1BC8-48FB-BC21-4AE5B8960B2C}|DAJDAJ.Entities\\DAJDAJ.Entities.csproj|solutionrelative:dajdaj.entities\\repositories\\iproductrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D2B7AF74-1BC8-48FB-BC21-4AE5B8960B2C}|DAJDAJ.Entities\\DAJDAJ.Entities.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.entities\\repositories\\igenericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D2B7AF74-1BC8-48FB-BC21-4AE5B8960B2C}|DAJDAJ.Entities\\DAJDAJ.Entities.csproj|solutionrelative:dajdaj.entities\\repositories\\igenericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 338,
+          "SelectedChildIndex": 7,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Delete.cshtml",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Views\\Category\\Delete.cshtml",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\Areas\\Admin\\Views\\Category\\Delete.cshtml",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Views\\Category\\Delete.cshtml",
+              "RelativeToolTip": "DAJDAJ.Web\\Areas\\Admin\\Views\\Category\\Delete.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-07-26T07:34:34.032Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Edit.cshtml",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Views\\Product\\Edit.cshtml",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\Areas\\Admin\\Views\\Product\\Edit.cshtml",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Views\\Product\\Edit.cshtml",
+              "RelativeToolTip": "DAJDAJ.Web\\Areas\\Admin\\Views\\Product\\Edit.cshtml",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAuwFQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-07-24T07:39:17.057Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Create.cshtml",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Views\\Product\\Create.cshtml",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\Areas\\Admin\\Views\\Product\\Create.cshtml",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Views\\Product\\Create.cshtml",
+              "RelativeToolTip": "DAJDAJ.Web\\Areas\\Admin\\Views\\Product\\Create.cshtml",
+              "ViewState": "AgIAACsAAAAAAAAAAAAkwEgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-07-03T17:33:32.825Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Views\\Product\\Index.cshtml",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\Areas\\Admin\\Views\\Product\\Index.cshtml",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Views\\Product\\Index.cshtml",
+              "RelativeToolTip": "DAJDAJ.Web\\Areas\\Admin\\Views\\Product\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-07-03T21:19:05.68Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Product.js",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\wwwroot\\js\\Product.js",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\wwwroot\\js\\Product.js",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\wwwroot\\js\\Product.js",
+              "RelativeToolTip": "DAJDAJ.Web\\wwwroot\\js\\Product.js",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAiwDcAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-07-03T21:23:45.917Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ProductController.cs",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Controllers\\ProductController.cs",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\Areas\\Admin\\Controllers\\ProductController.cs",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Controllers\\ProductController.cs",
+              "RelativeToolTip": "DAJDAJ.Web\\Areas\\Admin\\Controllers\\ProductController.cs",
+              "ViewState": "AgIAAJ0AAAAAAAAAAAAuwKIAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-03T16:53:49.4Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "_Dashboard.cshtml",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Views\\Shared\\_Dashboard.cshtml",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\Views\\Shared\\_Dashboard.cshtml",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Views\\Shared\\_Dashboard.cshtml",
+              "RelativeToolTip": "DAJDAJ.Web\\Views\\Shared\\_Dashboard.cshtml",
+              "ViewState": "AgIAACkBAAAAAAAAAAAAADYBAABHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-07-03T21:12:52.955Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "CategoryController .cs",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Controllers\\CategoryController .cs",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\Areas\\Admin\\Controllers\\CategoryController .cs",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Controllers\\CategoryController .cs",
+              "RelativeToolTip": "DAJDAJ.Web\\Areas\\Admin\\Controllers\\CategoryController .cs",
+              "ViewState": "AgIAAEEAAAAAAAAAAAAswFoAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-03T17:00:44.865Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Views\\Category\\Index.cshtml",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\Areas\\Admin\\Views\\Category\\Index.cshtml",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Views\\Category\\Index.cshtml",
+              "RelativeToolTip": "DAJDAJ.Web\\Areas\\Admin\\Views\\Category\\Index.cshtml",
+              "ViewState": "AgIAABAAAAAAAAAAAAAuwC0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-07-03T21:19:14.008Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Edit.cshtml",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Views\\Category\\Edit.cshtml",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\Areas\\Admin\\Views\\Category\\Edit.cshtml",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Views\\Category\\Edit.cshtml",
+              "RelativeToolTip": "DAJDAJ.Web\\Areas\\Admin\\Views\\Category\\Edit.cshtml",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAuwCgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-07-26T07:29:44.926Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Create.cshtml",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Views\\Category\\Create.cshtml",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\Areas\\Admin\\Views\\Category\\Create.cshtml",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Views\\Category\\Create.cshtml",
+              "RelativeToolTip": "DAJDAJ.Web\\Areas\\Admin\\Views\\Category\\Create.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-07-03T17:33:42.555Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "_Toaster.cshtml",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Views\\Shared\\_Toaster.cshtml",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\Views\\Shared\\_Toaster.cshtml",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Views\\Shared\\_Toaster.cshtml",
+              "RelativeToolTip": "DAJDAJ.Web\\Views\\Shared\\_Toaster.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-07-24T10:28:26.734Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Program.cs",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\Program.cs",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Program.cs",
+              "RelativeToolTip": "DAJDAJ.Web\\Program.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAQwDIAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-24T07:19:00.319Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ProductRepository.cs",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.DataAccess\\Implementation\\ProductRepository.cs",
+              "RelativeDocumentMoniker": "DAJDAJ.DataAccess\\Implementation\\ProductRepository.cs",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.DataAccess\\Implementation\\ProductRepository.cs",
+              "RelativeToolTip": "DAJDAJ.DataAccess\\Implementation\\ProductRepository.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAAwBwAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-03T17:03:15.816Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Product.cs",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Entities\\Models\\Product.cs",
+              "RelativeDocumentMoniker": "DAJDAJ.Entities\\Models\\Product.cs",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Entities\\Models\\Product.cs",
+              "RelativeToolTip": "DAJDAJ.Entities\\Models\\Product.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAA6wCYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-03T15:23:18.425Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "ProductVM.cs",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Entities\\ViewModels\\ProductVM.cs",
+              "RelativeDocumentMoniker": "DAJDAJ.Entities\\ViewModels\\ProductVM.cs",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Entities\\ViewModels\\ProductVM.cs",
+              "RelativeToolTip": "DAJDAJ.Entities\\ViewModels\\ProductVM.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-03T18:17:36.768Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Details.cshtml",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Customer\\Views\\Home\\Details.cshtml",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\Areas\\Customer\\Views\\Home\\Details.cshtml",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Customer\\Views\\Home\\Details.cshtml",
+              "RelativeToolTip": "DAJDAJ.Web\\Areas\\Customer\\Views\\Home\\Details.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAH0AAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-07-24T16:24:17.165Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "20250725194101_AddProductsTable.cs",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.DataAccess\\Migrations\\20250725194101_AddProductsTable.cs",
+              "RelativeDocumentMoniker": "DAJDAJ.DataAccess\\Migrations\\20250725194101_AddProductsTable.cs",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.DataAccess\\Migrations\\20250725194101_AddProductsTable.cs",
+              "RelativeToolTip": "DAJDAJ.DataAccess\\Migrations\\20250725194101_AddProductsTable.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-25T19:41:02.478Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "20250611002503_First.cs",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.DataAccess\\Migrations\\20250611002503_First.cs",
+              "RelativeDocumentMoniker": "DAJDAJ.DataAccess\\Migrations\\20250611002503_First.cs",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.DataAccess\\Migrations\\20250611002503_First.cs",
+              "RelativeToolTip": "DAJDAJ.DataAccess\\Migrations\\20250611002503_First.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-25T19:40:20.498Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "ApplicationDbContextModelSnapshot.cs",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.DataAccess\\Migrations\\ApplicationDbContextModelSnapshot.cs",
+              "RelativeDocumentMoniker": "DAJDAJ.DataAccess\\Migrations\\ApplicationDbContextModelSnapshot.cs",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.DataAccess\\Migrations\\ApplicationDbContextModelSnapshot.cs",
+              "RelativeToolTip": "DAJDAJ.DataAccess\\Migrations\\ApplicationDbContextModelSnapshot.cs",
+              "ViewState": "AgIAAGMBAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-25T19:39:44.147Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Customer\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\Areas\\Customer\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Customer\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "DAJDAJ.Web\\Areas\\Customer\\Controllers\\HomeController.cs",
+              "ViewState": "AgIAADgAAAAAAAAAAAAlwEMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-24T13:17:36.926Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "Category.cs",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Entities\\Models\\Category.cs",
+              "RelativeDocumentMoniker": "DAJDAJ.Entities\\Models\\Category.cs",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Entities\\Models\\Category.cs",
+              "RelativeToolTip": "DAJDAJ.Entities\\Models\\Category.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-03T15:25:21.055Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "CategoryRepository.cs",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.DataAccess\\Implementation\\CategoryRepository.cs",
+              "RelativeDocumentMoniker": "DAJDAJ.DataAccess\\Implementation\\CategoryRepository.cs",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.DataAccess\\Implementation\\CategoryRepository.cs",
+              "RelativeToolTip": "DAJDAJ.DataAccess\\Implementation\\CategoryRepository.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAA6wBgAAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-03T17:06:14.25Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "Shoppingcart.cs",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Entities\\ViewModels\\Shoppingcart.cs",
+              "RelativeDocumentMoniker": "DAJDAJ.Entities\\ViewModels\\Shoppingcart.cs",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Entities\\ViewModels\\Shoppingcart.cs",
+              "RelativeToolTip": "DAJDAJ.Entities\\ViewModels\\Shoppingcart.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-24T16:11:11.869Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "DAJDAJ.Web\\Controllers\\HomeController.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-03T16:50:36.229Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "ErrorViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Entities\\Models\\ErrorViewModel.cs",
+              "RelativeDocumentMoniker": "DAJDAJ.Entities\\Models\\ErrorViewModel.cs",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Entities\\Models\\ErrorViewModel.cs",
+              "RelativeToolTip": "DAJDAJ.Entities\\Models\\ErrorViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-25T07:20:12.748Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.DataAccess\\Data\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "DAJDAJ.DataAccess\\Data\\ApplicationDbContext.cs",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.DataAccess\\Data\\ApplicationDbContext.cs",
+              "RelativeToolTip": "DAJDAJ.DataAccess\\Data\\ApplicationDbContext.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAuwA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-03T16:30:57.362Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "DAJDAJ.Web.csproj",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\DAJDAJ.Web.csproj",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\DAJDAJ.Web.csproj",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\DAJDAJ.Web.csproj",
+              "RelativeToolTip": "DAJDAJ.Web\\DAJDAJ.Web.csproj",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAYwCgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-07-25T12:43:35.044Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "_LoginPartial.cshtml",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Views\\Shared\\_LoginPartial.cshtml",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\Views\\Shared\\_LoginPartial.cshtml",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Views\\Shared\\_LoginPartial.cshtml",
+              "RelativeToolTip": "DAJDAJ.Web\\Views\\Shared\\_LoginPartial.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-07-25T14:17:01.316Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Customer\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\Areas\\Customer\\Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Customer\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "DAJDAJ.Web\\Areas\\Customer\\Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAABFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-07-24T13:50:40.845Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\appsettings.json",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\appsettings.json",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\appsettings.json",
+              "RelativeToolTip": "DAJDAJ.Web\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-07-25T09:29:41.104Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "DAJDAJ.DataAccess.csproj",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.DataAccess\\DAJDAJ.DataAccess.csproj",
+              "RelativeDocumentMoniker": "DAJDAJ.DataAccess\\DAJDAJ.DataAccess.csproj",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.DataAccess\\DAJDAJ.DataAccess.csproj",
+              "RelativeToolTip": "DAJDAJ.DataAccess\\DAJDAJ.DataAccess.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAABgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-07-25T09:38:54.307Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "DAJDAJ.Entities.csproj",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Entities\\DAJDAJ.Entities.csproj",
+              "RelativeDocumentMoniker": "DAJDAJ.Entities\\DAJDAJ.Entities.csproj",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Entities\\DAJDAJ.Entities.csproj",
+              "RelativeToolTip": "DAJDAJ.Entities\\DAJDAJ.Entities.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-07-25T12:50:20.749Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "DAJDAJ.Web\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAABgAAAAAAAAAACBjwCkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-07-24T10:04:57.429Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "_Customer.cshtml",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Views\\Shared\\_Customer.cshtml",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\Views\\Shared\\_Customer.cshtml",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Views\\Shared\\_Customer.cshtml",
+              "RelativeToolTip": "DAJDAJ.Web\\Views\\Shared\\_Customer.cshtml",
+              "ViewState": "AgIAAGAAAAAAAAAAACBjwBkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-07-24T13:03:22.165Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "_ViewImports.cshtml",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Customer\\Views\\_ViewImports.cshtml",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\Areas\\Customer\\Views\\_ViewImports.cshtml",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Customer\\Views\\_ViewImports.cshtml",
+              "RelativeToolTip": "DAJDAJ.Web\\Areas\\Customer\\Views\\_ViewImports.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-07-24T13:21:07.977Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "_ViewStart.cshtml",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Customer\\Views\\_ViewStart.cshtml",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\Areas\\Customer\\Views\\_ViewStart.cshtml",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Customer\\Views\\_ViewStart.cshtml",
+              "RelativeToolTip": "DAJDAJ.Web\\Areas\\Customer\\Views\\_ViewStart.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-07-24T13:21:10.849Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "DAJDAJ.Web\\Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-07-24T13:49:56.745Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "UnitOfWork.cs",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.DataAccess\\Implementation\\UnitOfWork.cs",
+              "RelativeDocumentMoniker": "DAJDAJ.DataAccess\\Implementation\\UnitOfWork.cs",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.DataAccess\\Implementation\\UnitOfWork.cs",
+              "RelativeToolTip": "DAJDAJ.DataAccess\\Implementation\\UnitOfWork.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-03T17:12:43.868Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "ScaffoldingReadMe.txt",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\ScaffoldingReadMe.txt",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\ScaffoldingReadMe.txt",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\ScaffoldingReadMe.txt",
+              "RelativeToolTip": "DAJDAJ.Web\\ScaffoldingReadMe.txt",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
+              "WhenOpened": "2025-07-24T13:14:59.577Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 40,
+              "Title": "_ViewStart.cshtml",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Views\\_ViewStart.cshtml",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\Areas\\Admin\\Views\\_ViewStart.cshtml",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Views\\_ViewStart.cshtml",
+              "RelativeToolTip": "DAJDAJ.Web\\Areas\\Admin\\Views\\_ViewStart.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-07-24T13:21:19.425Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 41,
+              "Title": "_ViewImports.cshtml",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Views\\_ViewImports.cshtml",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\Areas\\Admin\\Views\\_ViewImports.cshtml",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Views\\_ViewImports.cshtml",
+              "RelativeToolTip": "DAJDAJ.Web\\Areas\\Admin\\Views\\_ViewImports.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-07-03T18:21:57.871Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 42,
+              "Title": "site.css",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\wwwroot\\css\\site.css",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\wwwroot\\css\\site.css",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\wwwroot\\css\\site.css",
+              "RelativeToolTip": "DAJDAJ.Web\\wwwroot\\css\\site.css",
+              "ViewState": "AgIAABAAAAAAAAAAAAAkwBcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-07-24T09:55:27.525Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 43,
+              "Title": "index.html",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\wwwroot\\index.html",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\wwwroot\\index.html",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\wwwroot\\index.html",
+              "RelativeToolTip": "DAJDAJ.Web\\wwwroot\\index.html",
+              "ViewState": "AgIAAAAAAAAAAAAAACBjwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2025-07-24T09:13:09.605Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 44,
+              "Title": "IUntiOfWork.cs",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Entities\\Repositories\\IUntiOfWork.cs",
+              "RelativeDocumentMoniker": "DAJDAJ.Entities\\Repositories\\IUntiOfWork.cs",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Entities\\Repositories\\IUntiOfWork.cs",
+              "RelativeToolTip": "DAJDAJ.Entities\\Repositories\\IUntiOfWork.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-03T17:13:02.095Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 45,
+              "Title": "IProductRepository.cs",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Entities\\Repositories\\IProductRepository.cs",
+              "RelativeDocumentMoniker": "DAJDAJ.Entities\\Repositories\\IProductRepository.cs",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Entities\\Repositories\\IProductRepository.cs",
+              "RelativeToolTip": "DAJDAJ.Entities\\Repositories\\IProductRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-03T17:00:10.274Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 46,
+              "Title": "IGenericRepository.cs",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Entities\\Repositories\\IGenericRepository.cs",
+              "RelativeDocumentMoniker": "DAJDAJ.Entities\\Repositories\\IGenericRepository.cs",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Entities\\Repositories\\IGenericRepository.cs",
+              "RelativeToolTip": "DAJDAJ.Entities\\Repositories\\IGenericRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-03T16:52:59.025Z"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{56df62a4-05a3-4e5b-aa1a-99371ccfb997}"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 62,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
