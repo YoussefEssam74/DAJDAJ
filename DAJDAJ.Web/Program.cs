@@ -1,8 +1,12 @@
 using DAJDAJ.DataAccess;
 using DAJDAJ.DataAccess.Implementation;
 using DAJDAJ.Entities.Repositories;
-using Microsoft.EntityFrameworkCore;
+using DAJDAJ.Utilities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System.Security.Principal;
 namespace DAJDAJ.Web
 {
     public class Program
@@ -18,7 +22,10 @@ namespace DAJDAJ.Web
                 builder.Configuration.GetConnectionString("DefaultConnection")
             ));
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultTokenProviders()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            builder.Services.AddSingleton<IEmailSender, EmailSender>();
             builder.Services.AddScoped<IUntiOfWork, UnitOfWork>();
 
 
@@ -38,6 +45,7 @@ namespace DAJDAJ.Web
             app.UseRouting();
 
             app.UseAuthorization();
+            app.MapRazorPages();
 
             app.MapControllerRoute(
                 name: "default",

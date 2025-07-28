@@ -382,11 +382,18 @@ wwwroot\docs\layout.md
 wwwroot\docs\license.md
 wwwroot\docs\upgrade-guide.md
 wwwroot\favicon.ico
-wwwroot\Images\Products\733fe237-398f-49ab-b0d5-4fdb4c7de371.png
-wwwroot\Images\Products\7d59aef4-9250-4129-b121-95f258faf559.png
-wwwroot\Images\Products\80128c9f-a79c-4bae-a305-eed4e38d702e.png
-wwwroot\Images\Products\9807a7e8-81c6-42f2-925b-b4bb8a9edd1b.png
-wwwroot\Images\Products\bb8c7634-6892-49ff-91af-68256e7a1e58.png
+wwwroot\Images\Products\2d3f30d8-c1d5-4a37-a946-05fdffe26f62.png
+wwwroot\Images\Products\3\9e2677ec-86e8-486b-9d10-0f75b18ef48b.png
+wwwroot\Images\Products\3\IMG-20250724-WA0059.jpg
+wwwroot\Images\Products\3\IMG-20250724-WA0062.jpg
+wwwroot\Images\Products\3\IMG-20250724-WA0063.jpg
+wwwroot\Images\Products\3\IMG-20250724-WA0064.jpg
+wwwroot\Images\Products\3\IMG-20250724-WA0065.jpg
+wwwroot\Images\Products\3\IMG-20250724-WA0066.jpg
+wwwroot\Images\Products\4\Screenshot 2025-07-25 103041.png
+wwwroot\Images\Products\4\Screenshot 2025-07-25 103733.png
+wwwroot\Images\Products\789162c1-e1d8-450a-b0a1-4ad0f0cc1cfb.png
+wwwroot\Images\tiktok-brands-solid-full.svg
 wwwroot\img\AdminLTELogo.png
 wwwroot\img\avatar.png
 wwwroot\img\avatar2.png

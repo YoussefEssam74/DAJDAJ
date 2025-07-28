@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36109.1 d17.14
+VisualStudioVersion = 17.14.36109.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAJDAJ.DataAccess", "DAJDAJ.DataAccess\DAJDAJ.DataAccess.csproj", "{0B3DAE9F-CB56-4950-BD56-37C38E6C974E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAJDAJ.Entities", "DAJDAJ.Entities\DAJDAJ.Entities.csproj", "{D2B7AF74-1BC8-48FB-BC21-4AE5B8960B2C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAJDAJ.Web", "DAJDAJ.Web\DAJDAJ.Web.csproj", "{7E389687-354D-4071-AFC5-30B2288D3C79}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAJDAJ.Utilities", "DAJDAJ.Utilities\DAJDAJ.Utilities.csproj", "{A4A25405-1F1E-4927-8DED-699EE5CBDF3F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{7E389687-354D-4071-AFC5-30B2288D3C79}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E389687-354D-4071-AFC5-30B2288D3C79}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E389687-354D-4071-AFC5-30B2288D3C79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4A25405-1F1E-4927-8DED-699EE5CBDF3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4A25405-1F1E-4927-8DED-699EE5CBDF3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4A25405-1F1E-4927-8DED-699EE5CBDF3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4A25405-1F1E-4927-8DED-699EE5CBDF3F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

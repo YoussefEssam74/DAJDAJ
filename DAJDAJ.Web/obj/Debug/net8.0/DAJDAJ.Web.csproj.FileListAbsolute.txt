@@ -579,3 +579,5 @@ C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Web\bin\Debug\net8.0\zh-Hans\Microsoft
 C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Web\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Scripting.resources.dll
 C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Web\bin\Debug\net8.0\runtimes\browser\lib\net8.0\System.Text.Encodings.Web.dll
 C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Web\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Web\bin\Debug\net8.0\DAJDAJ.Utilities.dll
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Web\bin\Debug\net8.0\DAJDAJ.Utilities.pdb

@@ -31,10 +31,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DAJDAJ.DataAccess\DAJDAJ.DataAccess.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\Images\Products\" />
+    <ProjectReference Include="..\DAJDAJ.Utilities\DAJDAJ.Utilities.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,13 @@
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Utilities\bin\Debug\net8.0\DAJDAJ.Utilities.deps.json
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Utilities\bin\Debug\net8.0\DAJDAJ.Utilities.dll
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Utilities\bin\Debug\net8.0\DAJDAJ.Utilities.pdb
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Utilities\obj\Debug\net8.0\DAJDAJ.Utilities.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Utilities\obj\Debug\net8.0\DAJDAJ.Utilities.AssemblyInfoInputs.cache
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Utilities\obj\Debug\net8.0\DAJDAJ.Utilities.AssemblyInfo.cs
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Utilities\obj\Debug\net8.0\DAJDAJ.Utilities.csproj.CoreCompileInputs.cache
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Utilities\obj\Debug\net8.0\DAJDAJ.Utilities.sourcelink.json
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Utilities\obj\Debug\net8.0\DAJDAJ.Utilities.dll
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Utilities\obj\Debug\net8.0\refint\DAJDAJ.Utilities.dll
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Utilities\obj\Debug\net8.0\DAJDAJ.Utilities.pdb
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Utilities\obj\Debug\net8.0\ref\DAJDAJ.Utilities.dll
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Utilities\obj\Debug\net8.0\DAJDAJ.Utilities.csproj.AssemblyReference.cache

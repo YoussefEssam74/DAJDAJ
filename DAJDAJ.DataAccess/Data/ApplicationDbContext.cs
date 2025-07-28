@@ -1,10 +1,12 @@
-﻿using DAJDAJ.Entities.Models;
+﻿using DAJDAJ.Entities;
+using DAJDAJ.Entities.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAJDAJ.DataAccess
 {
-    public class ApplicationDbContext:IdentityDbContext
+    public class ApplicationDbContext:IdentityDbContext<IdentityUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -12,6 +14,6 @@ namespace DAJDAJ.DataAccess
         }
         public DbSet<Category> categories { get; set; }
         public DbSet<Product> products { get; set; }
-
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
     }
 }

@@ -15,5 +15,7 @@ namespace DAJDAJ.Entities.ViewModels
         public List<string> Colors { get; set; }
         [Range(1,100, ErrorMessage = "Count must be between 1 and 100.")]
         public int Count { get; set; }
+        public List<string> ProductImages { get; set; } = new();
+
     }
 }

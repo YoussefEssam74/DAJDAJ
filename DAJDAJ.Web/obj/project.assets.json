@@ -3637,13 +3637,27 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
-          "Microsoft.AspNetCore.Mvc.ViewFeatures": "2.3.0"
+          "Microsoft.AspNetCore.Mvc.ViewFeatures": "2.3.0",
+          "Microsoft.Extensions.Identity.Stores": "8.0.10"
         },
         "compile": {
           "bin/placeholder/DAJDAJ.Entities.dll": {}
         },
         "runtime": {
           "bin/placeholder/DAJDAJ.Entities.dll": {}
+        }
+      },
+      "DAJDAJ.Utilities/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "Microsoft.AspNetCore.Identity.UI": "8.0.10"
+        },
+        "compile": {
+          "bin/placeholder/DAJDAJ.Utilities.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/DAJDAJ.Utilities.dll": {}
         }
       }
     }
@@ -9474,11 +9488,17 @@
       "type": "project",
       "path": "../DAJDAJ.Entities/DAJDAJ.Entities.csproj",
       "msbuildProject": "../DAJDAJ.Entities/DAJDAJ.Entities.csproj"
+    },
+    "DAJDAJ.Utilities/1.0.0": {
+      "type": "project",
+      "path": "../DAJDAJ.Utilities/DAJDAJ.Utilities.csproj",
+      "msbuildProject": "../DAJDAJ.Utilities/DAJDAJ.Utilities.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
       "DAJDAJ.DataAccess >= 1.0.0",
+      "DAJDAJ.Utilities >= 1.0.0",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 8.0.10",
       "Microsoft.AspNetCore.Identity.UI >= 8.0.10",
       "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation >= 8.0.10",
@@ -9522,6 +9542,9 @@
           "projectReferences": {
             "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.DataAccess\\DAJDAJ.DataAccess.csproj": {
               "projectPath": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.DataAccess\\DAJDAJ.DataAccess.csproj"
+            },
+            "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Utilities\\DAJDAJ.Utilities.csproj": {
+              "projectPath": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Utilities\\DAJDAJ.Utilities.csproj"
             }
           }
         }

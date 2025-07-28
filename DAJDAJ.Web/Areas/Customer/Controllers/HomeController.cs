@@ -1,26 +1,29 @@
 ﻿using DAJDAJ.Entities.Models;
 using DAJDAJ.Entities.Repositories;
 using DAJDAJ.Entities.ViewModels;
-using static DAJDAJ.Entities.ViewModels.Shoppingcart;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using static DAJDAJ.Entities.ViewModels.Shoppingcart;
 namespace DAJDAJ.Web.Areas.Customer.Controllers
 {
     [Area("Customer")]
     public class HomeController : Controller
     {
         private readonly IUntiOfWork _unitOfWork;
+        private readonly IWebHostEnvironment _webHostEnvironment; // Correct type for dependency injection
 
-        public HomeController(IUntiOfWork unitOfWork)
+        public HomeController(IUntiOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment; // Assign the injected dependency
         }
-
         public IActionResult Index()
         {
             var products = _unitOfWork.Product.GetAll();
 
             return View(products);
         }
+
 
         public IActionResult Details(int id)
         {
@@ -31,7 +34,6 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
                 return NotFound();
             }
 
-            // هنا هنفك المقاسات والألوان لو موجودة
             List<string> sizes = new List<string>();
             List<string> colors = new List<string>();
 
@@ -53,16 +55,38 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
                             .ToList();
             }
 
+            string wwwRootPath = _webHostEnvironment.WebRootPath;
+            string productFolder = Path.Combine(wwwRootPath, "Images", "Products", product.Id.ToString());
+
+            List<string> productImages = new();
+            if (Directory.Exists(productFolder))
+            {
+                var files = Directory.GetFiles(productFolder);
+                productImages = files.Select(file =>
+                    Path.Combine("/Images/Products", product.Id.ToString(), Path.GetFileName(file)).Replace("\\", "/")
+                ).ToList();
+            }
+
+
+
             var shoppingcart = new Shoppingcart()
             {
                 product = product,
                 Sizes = sizes,
                 Colors = colors,
-                Count = 1
+                Count = 1,
+                ProductImages = productImages
             };
 
             return View(shoppingcart);
         }
+
+        public IActionResult Returns()
+        {
+            return View();
+        }
+
+
 
     }
 }

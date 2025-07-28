@@ -35,5 +35,6 @@ namespace DAJDAJ.Entities.Models
         public string Size { get; set; } // E.g., "S", "M", "L", "XL", or "One Size"
 
         public bool IsOneSize { get; set; } // True if product comes in only one size
+
     }
 }
