@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAJDAJ.DataAccess.Implementation
 {
@@ -18,18 +19,30 @@ namespace DAJDAJ.DataAccess.Implementation
 
         public void Update(Product product)
         {
-            var ProductInDb = _context.products.FirstOrDefault(x => x.Id == product.Id);
+            var ProductInDb = _context.products
+                .Include(p => p.ProductImages)
+                .FirstOrDefault(x => x.Id == product.Id);
             if (ProductInDb != null)
             {
                 ProductInDb.Name = product.Name;
                 ProductInDb.Description = product.Description;
-              
                 ProductInDb.Price = product.Price;
                 ProductInDb.Size = product.Size;
                 ProductInDb.Color = product.Color;
                 ProductInDb.Img = product.Img;
                 ProductInDb.IsOneSize = product.IsOneSize;
                 ProductInDb.CategoryId = product.CategoryId;
+                // تحديث صور المنتج إذا تم رفع صور جديدة فقط
+                if (product.ProductImages != null && product.ProductImages.Count > 0)
+                {
+                    ProductInDb.ProductImages.Clear();
+                    foreach (var img in product.ProductImages)
+                    {
+                        ProductInDb.ProductImages.Add(img);
+                    }
+                }
+                // حفظ التغييرات دائماً حتى لو لم يتم رفع صور جديدة
+                _context.SaveChanges();
             }
         }
     }

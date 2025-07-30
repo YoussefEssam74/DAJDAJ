@@ -1,9 +1,11 @@
-﻿using DAJDAJ.Entities.Models;
+﻿using DAJDAJ.DataAccess.Implementation;
+using DAJDAJ.Entities.Models;
 using DAJDAJ.Entities.Repositories;
-using DAJDAJ.Entities.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using static DAJDAJ.Entities.ViewModels.Shoppingcart;
+using System.Security.Claims;
+using static DAJDAJ.Entities.Models.Shoppingcart;
 namespace DAJDAJ.Web.Areas.Customer.Controllers
 {
     [Area("Customer")]
@@ -27,16 +29,13 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
 
         public IActionResult Details(int id)
         {
-            var product = _unitOfWork.Product.GetFirstorDefault(x => x.Id == id, "Category");
-
+            var product = _unitOfWork.Product.GetFirstorDefault(x => x.Id == id, "Category,ProductImages");
             if (product == null)
             {
                 return NotFound();
             }
-
             List<string> sizes = new List<string>();
             List<string> colors = new List<string>();
-
             if (!string.IsNullOrWhiteSpace(product.Size))
             {
                 sizes = product.Size
@@ -45,7 +44,6 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
                             .Distinct()
                             .ToList();
             }
-
             if (!string.IsNullOrWhiteSpace(product.Color))
             {
                 colors = product.Color
@@ -54,21 +52,15 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
                             .Distinct()
                             .ToList();
             }
-
-            string wwwRootPath = _webHostEnvironment.WebRootPath;
-            string productFolder = Path.Combine(wwwRootPath, "Images", "Products", product.Id.ToString());
-
             List<string> productImages = new();
-            if (Directory.Exists(productFolder))
+            if (product.ProductImages != null && product.ProductImages.Any())
             {
-                var files = Directory.GetFiles(productFolder);
-                productImages = files.Select(file =>
-                    Path.Combine("/Images/Products", product.Id.ToString(), Path.GetFileName(file)).Replace("\\", "/")
-                ).ToList();
+                productImages = product.ProductImages.Select(img => "/" + img.ImagePath.Replace("\\", "/")).ToList();
             }
-
-
-
+            else if (!string.IsNullOrWhiteSpace(product.Img))
+            {
+                productImages.Add("/" + product.Img.Replace("\\", "/"));
+            }
             var shoppingcart = new Shoppingcart()
             {
                 product = product,
@@ -77,9 +69,34 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
                 Count = 1,
                 ProductImages = productImages
             };
-
             return View(shoppingcart);
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public IActionResult Details(Shoppingcart shoppingcart)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var cliam = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            shoppingcart.ApplicationUserId = cliam.Value;
+
+            Shoppingcart Cartobj = _unitOfWork.ShoppingCart.GetFirstorDefault(
+                u => u.ApplicationUserId == cliam.Value && u.ProductId == shoppingcart.ProductId
+                );
+            if (Cartobj != null)
+            {
+                _unitOfWork.ShoppingCart.Add(shoppingcart);
+            }
+            else
+            {
+                _unitOfWork.ShoppingCart.IncreaseCount(Cartobj, shoppingcart.Count);
+            }
+                _unitOfWork.Complete();
+            return RedirectToAction("Index");
+        }
+
 
         public IActionResult Returns()
         {

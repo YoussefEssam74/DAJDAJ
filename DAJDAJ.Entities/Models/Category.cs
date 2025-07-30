@@ -2,6 +2,8 @@
 
 namespace DAJDAJ.Entities.Models
 {
+   
+
     public class Category
     {
         public int Id { get; set; }

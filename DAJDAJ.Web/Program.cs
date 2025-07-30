@@ -4,6 +4,7 @@ using DAJDAJ.Entities.Repositories;
 using DAJDAJ.Utilities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Security.Principal;
@@ -22,7 +23,10 @@ namespace DAJDAJ.Web
                 builder.Configuration.GetConnectionString("DefaultConnection")
             ));
 
-            builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultTokenProviders()
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>
+                (options=>options.Lockout.DefaultLockoutTimeSpan=TimeSpan.FromMinutes(30))
+                .AddDefaultTokenProviders()
+                .AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             builder.Services.AddSingleton<IEmailSender, EmailSender>();

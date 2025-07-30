@@ -1,8 +1,10 @@
 ﻿using DAJDAJ.Entities.Models;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,5 +16,9 @@ namespace DAJDAJ.Entities.ViewModels
         public Product product { get; set; }
         [ValidateNever]
         public IEnumerable<SelectListItem> categorylist { get; set; }
+        [Required(ErrorMessage = "The Image field is required.")]
+        public IFormFile Img { get; set; }
+        [ValidateNever]
+        public List<IFormFile> Images { get; set; } = new();
     }
 }

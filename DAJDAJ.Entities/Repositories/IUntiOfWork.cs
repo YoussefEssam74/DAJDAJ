@@ -10,7 +10,7 @@ namespace DAJDAJ.Entities.Repositories
     {
         ICategoryRepository Category{ get; }
         IProductRepository Product { get; }
-
+        IShoppingCartRepository ShoppingCart { get; }
         int Complete();
     }
 }

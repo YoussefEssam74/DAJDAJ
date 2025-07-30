@@ -15,11 +15,12 @@ namespace DAJDAJ.Entities.Models
         [Required]
 
         public string Name { get; set; }
+        [Required(ErrorMessage = "The Description field is required.")]
 
         public string Description { get; set; }
         [DisplayName("Image")]
-        [ValidateNever]
-        public string Img { get; set; }
+        [ValidateNever] // لا تحقق هنا
+        public string Img { get; set; } 
         [Required]
 
         public decimal Price { get; set; }
@@ -36,5 +37,7 @@ namespace DAJDAJ.Entities.Models
 
         public bool IsOneSize { get; set; } // True if product comes in only one size
 
+        [ValidateNever]
+        public ICollection<ProductImage> ProductImages { get; set; }
     }
 }

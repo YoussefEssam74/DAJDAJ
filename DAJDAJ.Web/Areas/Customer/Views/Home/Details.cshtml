@@ -1,4 +1,4 @@
-﻿@model DAJDAJ.Entities.ViewModels.Shoppingcart
+﻿@model Shoppingcart
 
 @{
     ViewData["Title"] = "Product Details";
@@ -15,92 +15,98 @@
     };
 }
 
-<div class="container py-5">
-    <div class="row">
-        <div class="col-md-6">
-            <!-- Image Carousel -->
-            <div class="position-relative text-center d-inline-block" style="width: 100%; max-width: 500px; height: 500px; overflow: hidden; border-radius: 12px;">
-                <img id="carouselImage" src="@productImages.FirstOrDefault()" alt="Product Image"
-                     class="img-fluid rounded border zoomable"
-                     style="width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform 0.3s ease;" />
+<form method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="ProductId" value="@Model.product.Id" />
+    <input type="hidden" name="SelectedColor" id="SelectedColor" value="" />
+    <input type="hidden" name="SelectedSize" id="SelectedSize" value="" />
+    <input type="hidden" name="Count" id="Count" value="@Model.Count" />
 
-                <button onclick="prevImage()" class="btn btn-dark position-absolute"
-                        style="top: 50%; left: 10px; transform: translateY(-50%); z-index: 10; opacity: 0.7;">
-                    ⟨
-                </button>
-                <button onclick="nextImage()" class="btn btn-dark position-absolute"
-                        style="top: 50%; right: 10px; transform: translateY(-50%); z-index: 10; opacity: 0.7;">
-                    ⟩
-                </button>
-            </div>
-        </div>
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-6">
+                <!-- Image Carousel -->
+                <div class="position-relative text-center d-inline-block" style="width: 100%; max-width: 500px; height: 500px; overflow: hidden; border-radius: 12px;">
+                    <img id="carouselImage" src="@productImages.FirstOrDefault()" alt="Product Image"
+                         class="img-fluid rounded border zoomable"
+                         style="width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform 0.3s ease;" />
 
-        <div class="col-md-6">
-            <h2>@Model.product.Name</h2>
-            <h4 class="text-muted">@Model.product.Price.ToString("0.00") L.E</h4>
-            <p>@Model.product.Description</p>
-
-            @if (Model.Sizes != null && Model.Sizes.Any())
-            {
-                <div class="mb-3">
-                    <label class="fw-bold">Size:</label>
-                    <div class="d-flex gap-2 mt-1" id="size-options">
-                        @foreach (var size in Model.Sizes)
-                        {
-                            var isSoldOut = size.ToLower().Contains("soldout");
-                            var displaySize = size.Replace("soldout", "", StringComparison.OrdinalIgnoreCase).Trim();
-
-                            <button type="button" class="btn rounded-pill px-3 py-1 size-btn @(isSoldOut ? "btn-secondary disabled" : "btn-outline-dark")"
-                                    data-size="@displaySize" @(isSoldOut ? "disabled" : "")>
-                                @displaySize
-                            </button>
-                        }
-                    </div>
-                    <input type="hidden" name="SelectedSize" id="SelectedSize" value="" />
-                </div>
-            }
-
-            @if (Model.Colors != null && Model.Colors.Any())
-            {
-                <div class="mb-3">
-                    <label class="fw-bold">Color:</label>
-                    <div class="d-flex gap-2 mt-1" id="color-options">
-                        @foreach (var color in Model.Colors)
-                        {
-                            var isSoldOut = color.ToLower().Contains("soldout");
-                            var displayColor = color.Replace("soldout", "", StringComparison.OrdinalIgnoreCase).Trim();
-
-                            string colorCode = colorMap.ContainsKey(displayColor.ToLower()) ? colorMap[displayColor.ToLower()] : displayColor;
-
-                            <div class="color-circle border @(isSoldOut ? "border-light opacity-50" : "")"
-                                 data-color="@displayColor" title="@displayColor"
-                                 style="width: 30px; height: 30px; background-color:@colorCode; border-radius: 50%; cursor: pointer;"
-                                 @(isSoldOut ? "data-soldout='true'" : "")>
-                            </div>
-                        }
-                    </div>
-                    <input type="hidden" name="SelectedColor" id="SelectedColor" value="" />
-                </div>
-            }
-
-            <div class="mb-3">
-                <label class="fw-bold">Quantity:</label>
-                <div class="input-group w-25">
-                    <button type="button" class="btn btn-outline-secondary" onclick="updateCount(-1)">-</button>
-                    <input type="text" id="countInput" class="form-control text-center" value="@Model.Count" readonly />
-                    <button type="button" class="btn btn-outline-secondary" onclick="updateCount(1)">+</button>
+                    <button onclick="prevImage()" type="button" class="btn btn-dark position-absolute"
+                            style="top: 50%; left: 10px; transform: translateY(-50%); z-index: 10; opacity: 0.7;">
+                        ⟨
+                    </button>
+                    <button onclick="nextImage()" type="button" class="btn btn-dark position-absolute"
+                            style="top: 50%; right: 10px; transform: translateY(-50%); z-index: 10; opacity: 0.7;">
+                        ⟩
+                    </button>
                 </div>
             </div>
 
-            <div class="d-flex flex-column gap-2">
-                <button class="btn text-white" style="background-color: #f06292;" type="submit">
-                    <i class="bi bi-cart-fill me-1"></i> Add to cart
-                </button>
-                <button class="btn btn-dark text-white" type="button">Buy it now</button>
+            <div class="col-md-6">
+                <h2>@Model.product.Name</h2>
+                <h4 class="text-muted">@Model.product.Price.ToString("0.00") EGP </h4>
+                <p>@Model.product.Description</p>
+
+                @if (Model.Sizes != null && Model.Sizes.Any())
+                {
+                    <div class="mb-3">
+                        <label class="fw-bold">Size:</label>
+                        <div class="d-flex gap-2 mt-1" id="size-options">
+                            @foreach (var size in Model.Sizes)
+                            {
+                                var isSoldOut = size.ToLower().Contains("soldout");
+                                var displaySize = size.Replace("soldout", "", StringComparison.OrdinalIgnoreCase).Trim();
+
+                                <button type="button" class="btn rounded-pill px-3 py-1 size-btn @(isSoldOut ? "btn-secondary disabled" : "btn-outline-dark")"
+                                        data-size="@displaySize" @(isSoldOut ? "disabled" : "")>
+                                    @displaySize
+                                </button>
+                            }
+                        </div>
+                    </div>
+                }
+
+                @if (Model.Colors != null && Model.Colors.Any())
+                {
+                    <div class="mb-3">
+                        <label class="fw-bold">Color:</label>
+                        <div class="d-flex gap-2 mt-1" id="color-options">
+                            @foreach (var color in Model.Colors)
+                            {
+                                var isSoldOut = color.ToLower().Contains("soldout");
+                                var displayColor = color.Replace("soldout", "", StringComparison.OrdinalIgnoreCase).Trim();
+
+                                string colorCode = colorMap.ContainsKey(displayColor.ToLower()) ? colorMap[displayColor.ToLower()] : displayColor;
+
+                                <div class="color-circle border @(isSoldOut ? "border-light opacity-50" : "")"
+                                     data-color="@displayColor" title="@displayColor"
+                                     style="width: 30px; height: 30px; background-color:@colorCode; border-radius: 50%; cursor: pointer;"
+                                     @(isSoldOut ? "data-soldout='true'" : "")>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+
+                <div class="mb-3">
+                    <label class="fw-bold">Quantity:</label>
+                    <div class="input-group w-25">
+                        <button type="button" class="btn btn-outline-secondary" onclick="updateCount(-1)">-</button>
+                        <input type="text" id="countInput" class="form-control text-center" value="@Model.Count" readonly />
+                        <button type="button" class="btn btn-outline-secondary" onclick="updateCount(1)">+</button>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-column gap-2">
+                    <button class="btn text-white" style="background-color: #f06292;" type="submit">
+                        <i class="bi bi-cart-fill me-1"></i> Add to cart
+                    </button>
+                    <button class="btn btn-dark text-white" type="button">Buy it now</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</form>
 
 @section Scripts {
     <script>
@@ -133,10 +139,12 @@
 
         function updateCount(change) {
             const countInput = document.getElementById("countInput");
+            const hiddenCount = document.getElementById("Count");
             let current = parseInt(countInput.value);
             let updated = current + change;
             if (updated >= 1 && updated <= 100) {
                 countInput.value = updated;
+                hiddenCount.value = updated;
             }
         }
 

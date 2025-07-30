@@ -6,6 +6,11 @@
     Layout = "~/Views/Shared/_Dashboard.cshtml";
 }
 
+@if (TempData["Errors"] != null)
+{
+    <div class="alert alert-danger">@TempData["Errors"]</div>
+}
+
 <div class="row">
     <div class="col-md-6">
         <form asp-action="Create" method="post" enctype="multipart/form-data">
@@ -30,8 +35,15 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="product.Img" class="control-label"></label>
-                <input type="file" name="file" id="imgfile" class="form-control" />
+                <label asp-for="Img" class="control-label"></label>
+                <input asp-for="Img" type="file" class="form-control" />
+                <span asp-validation-for="Img" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Images" class="control-label"></label>
+                <input asp-for="Images" type="file" class="form-control" multiple />
+                <span asp-validation-for="Images" class="text-danger"></span>
             </div>
 
             <div class="form-group">
@@ -68,5 +80,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

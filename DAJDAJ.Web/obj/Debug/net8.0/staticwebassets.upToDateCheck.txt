@@ -382,17 +382,9 @@ wwwroot\docs\layout.md
 wwwroot\docs\license.md
 wwwroot\docs\upgrade-guide.md
 wwwroot\favicon.ico
-wwwroot\Images\Products\2d3f30d8-c1d5-4a37-a946-05fdffe26f62.png
-wwwroot\Images\Products\3\9e2677ec-86e8-486b-9d10-0f75b18ef48b.png
-wwwroot\Images\Products\3\IMG-20250724-WA0059.jpg
-wwwroot\Images\Products\3\IMG-20250724-WA0062.jpg
-wwwroot\Images\Products\3\IMG-20250724-WA0063.jpg
-wwwroot\Images\Products\3\IMG-20250724-WA0064.jpg
-wwwroot\Images\Products\3\IMG-20250724-WA0065.jpg
-wwwroot\Images\Products\3\IMG-20250724-WA0066.jpg
-wwwroot\Images\Products\4\Screenshot 2025-07-25 103041.png
-wwwroot\Images\Products\4\Screenshot 2025-07-25 103733.png
-wwwroot\Images\Products\789162c1-e1d8-450a-b0a1-4ad0f0cc1cfb.png
+wwwroot\Images\Products\7854e98e-b67c-4f83-bb67-a3e35b0869f6.png
+wwwroot\Images\Products\c7042779-3746-4b7a-9ad5-1d4024dde9e7.png
+wwwroot\Images\Products\ffa0a78a-ad5c-4980-9947-23eb31816315.png
 wwwroot\Images\tiktok-brands-solid-full.svg
 wwwroot\img\AdminLTELogo.png
 wwwroot\img\avatar.png
@@ -2546,4 +2538,6 @@ wwwroot\plugins\uplot\uPlot.esm.js
 wwwroot\plugins\uplot\uPlot.iife.js
 wwwroot\plugins\uplot\uPlot.iife.min.js
 wwwroot\plugins\uplot\uPlot.min.css
+wwwroot\ShoppingCart\index.html
+wwwroot\ShoppingCart\style.css
 wwwroot\starter.html
