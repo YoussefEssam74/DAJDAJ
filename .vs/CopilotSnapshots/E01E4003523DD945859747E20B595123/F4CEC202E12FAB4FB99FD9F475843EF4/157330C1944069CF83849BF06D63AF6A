@@ -1,0 +1,163 @@
+﻿@model DAJDAJ.Entities.ViewModels.OrderVM
+@using DAJDAJ.Utilities
+@{
+    ViewData["Title"] = "Order Details";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+    var order = Model?.OrderHeader;
+    var details = Model?.OrderDetails;
+    var products = Model?.Product;
+}
+<link rel="stylesheet" href="/css/Summary.css" />
+<div class="container mt-4">
+    <div class="row">
+        <!-- Pickup Details -->
+        <div class="col-md-7">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h4 class="m-0 font-weight-bold text-primary">PickUp Details</h4>
+                </div>
+                <div class="card-body">
+                    @if (order == null)
+                    {
+                        <div class="alert alert-danger">Order not found or has been deleted.</div>
+                    }
+                    else
+                    {
+                        <form asp-area="Admin" asp-controller="Order" asp-action="UpdateOrderDetails" method="post">
+                            <input type="hidden" asp-for="OrderHeader.Id" />
+                            <div class="row my-1">
+                                <div class="col-3">Name</div>
+                                <div class="col-9">
+                                    <input asp-for="OrderHeader.Name" type="text" class="form-control" />
+                                    <span asp-validation-for="OrderHeader.Name" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Phone</div>
+                                <div class="col-9">
+                                    <input asp-for="OrderHeader.Phone" type="text" class="form-control" />
+                                    <span asp-validation-for="OrderHeader.Phone" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Address</div>
+                                <div class="col-9">
+                                    <input asp-for="OrderHeader.Address" type="text" class="form-control" />
+                                    <span asp-validation-for="OrderHeader.Address" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">City</div>
+                                <div class="col-9">
+                                    <input asp-for="OrderHeader.City" type="text" class="form-control" />
+                                    <span asp-validation-for="OrderHeader.City" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Email Id</div>
+                                <div class="col-9">
+                                    <input asp-for="OrderHeader.ApplicationUserId" type="text" class="form-control"
+                                           readonly />
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Order Date</div>
+                                <div class="col-9">
+                                    <input asp-for="OrderHeader.OrderDate" type="text" class="form-control" readonly />
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Payment Method</div>
+                                <div class="col-9">
+                                    <input asp-for="OrderHeader.PaymentMethod" type="text" class="form-control" readonly />
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Payment Status</div>
+                                <div class="col-9">
+                                    <input asp-for="OrderHeader.PaymentStatus" type="text" class="form-control" readonly />
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 mt-2">
+                                <i class="fas fa-save"></i> Update Order Details
+                            </button>
+                        </form>
+                    }
+                </div>
+            </div>
+        </div>
+        <!-- Order Summary -->
+        <div class="col-md-5 mx-auto">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 bg-white border-0">
+                    <h4 class="m-0 font-weight-bold text-primary">Order Summary</h4>
+                </div>
+                <div class="card-body">
+                    @if (order == null)
+                    {
+                        <div class="alert alert-danger text-center">Order not found or has been deleted.</div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-primary text-center mb-3 p-2" style="font-weight:bold;">
+                            Order Status - @order.OrderStatus
+                        </div>
+                        <div class="list-group mb-3">
+                            @if (details?.Any() == true)
+                            {
+                                foreach (var item in details)
+                                {
+                                    <div class="list-group-item d-flex justify-content-between align-items-center flex-wrap border-0 border-bottom">
+                                        <div>
+                                            <div class="fw-bold text-primary">@item.Product?.Name</div>
+                                            <div class="text-muted" style="font-size:13px;">Price : @item.Price.ToString("C")
+                                            </div>
+                                            <div class="text-muted" style="font-size:13px;">Quantity : @item.Count</div>
+                                        </div>
+                                        <div class="fw-bold" style="color:#28a745;font-size:18px;">
+                                            @((item.Price * item.Count).ToString("C"))
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="list-group-item text-center">No items found</div>
+                            }
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center bg-dark text-white p-3 rounded-bottom">
+                            <span class="fw-bold">TOTAL</span>
+                            <span class="fw-bold" style="font-size:18px;">@order.TotalPrice.ToString("C")</span>
+                        </div>
+                        <div class="d-flex justify-content-center gap-2 mt-4">
+                            @if (Model.OrderHeader.OrderStatus == SD.Confirmed)
+                            {
+                                <form asp-area="Admin" asp-controller="Order" asp-action="StartProcess" method="post"
+                                      class="d-inline">
+                                    <input type="hidden" asp-for="OrderHeader.Id" />
+                                    <button type="submit" class="btn btn-primary px-4">Start Process</button>
+                                </form>
+                            }
+                            @if (Model.OrderHeader.OrderStatus == SD.Proccessing)
+                            {
+                                <form asp-area="Admin" asp-controller="Order" asp-action="ShipOrder" method="post"
+                                      class="d-inline">
+                                    <input type="hidden" asp-for="OrderHeader.Id" />
+                                    <button type="submit" class="btn btn-success px-4">Ship Order</button>
+                                </form>
+                            }
+                            @if (Model.OrderHeader.OrderStatus != SD.Cancelled && Model.OrderHeader.OrderStatus != SD.Refund)
+                            {
+                                <form asp-area="Admin" asp-controller="Order" asp-action="CancelOrder" method="post"
+                                      class="d-inline">
+                                    <input type="hidden" asp-for="OrderHeader.Id" />
+                                    <button type="submit" class="btn btn-danger px-4">Cancel Order</button>
+                                </form>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

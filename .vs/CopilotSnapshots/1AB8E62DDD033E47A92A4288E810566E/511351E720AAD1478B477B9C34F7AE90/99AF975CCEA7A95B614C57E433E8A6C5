@@ -1,0 +1,356 @@
+﻿@model Shoppingcart
+@{
+    ViewData["Title"] = "Product Details";
+    var productImages = Model.ProductImages ?? new List<string>();
+
+    var colorMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    {
+        { "burgendy", "#800020" },
+        { "burgundy", "#800020" },
+        { "red", "red" },
+        { "white", "white" },
+        { "black", "black" }
+    };
+}
+
+<form method="post" id="productForm">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="ProductId" value="@Model.product.Id" />
+    <input type="hidden" name="SelectedColor" id="SelectedColor" value="" />
+    <input type="hidden" name="SelectedSize" id="SelectedSize" value="" />
+    <input type="hidden" name="Count" id="Count" value="@Model.Count" />
+
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-6">
+                <!-- Image Carousel -->
+                <div class="position-relative text-center d-inline-block" style="width: 100%; max-width: 500px; height: 500px; overflow: hidden; border-radius: 12px;">
+                    <div id="carousel-container" class="position-relative" style="width: 100%; height: 100%;">
+                        @if (productImages.Any())
+                        {
+                            @foreach (var img in productImages.Select((src, index) => (src, index)))
+                            {
+                                <img src="@img.src" alt="Product Image @(img.index + 1)"
+                                     class="img-fluid rounded border zoomable carousel-image @(img.index == 0 ? "active" : "")"
+                                     style="width: 100%; height: 100%; object-fit: cover; object-position: center; position: absolute; top: 0; left: 0; opacity: @(img.index == 0 ? "1" : "0"); transition: opacity 0.5s ease, transform 0.3s ease; cursor: pointer;"
+                                     data-bs-toggle="modal" data-bs-target="#imageModal"
+                                     onclick="showImageInModal(this.src)" />
+                            }
+
+                        }
+                        else
+                        {
+                            <img src="https://via.placeholder.com/500x500?text=No+Image" alt="No Image"
+                                 class="img-fluid rounded border zoomable"
+                                 style="width: 100%; height: 100%; object-fit: cover; object-position: center;" />
+                        }
+                    </div>
+
+                    <button onclick="prevImage()" type="button" class="btn btn-dark position-absolute"
+                            style="top: 50%; left: 10px; transform: translateY(-50%); z-index: 10; opacity: 0.7;">
+                        ⟨
+                    </button>
+                    <button onclick="nextImage()" type="button" class="btn btn-dark position-absolute"
+                            style="top: 50%; right: 10px; transform: translateY(-50%); z-index: 10; opacity: 0.7;">
+                        ⟩
+                    </button>
+
+                    <!-- Indicators -->
+                    <div class="position-absolute" style="bottom: 10px; left: 50%; transform: translateX(-50%); z-index: 10; display: flex; gap: 5px;">
+                        @for (int i = 0; i < productImages.Count; i++)
+                        {
+                            <button type="button" class="carousel-indicator btn btn-sm @(i == 0 ? "btn-dark" : "btn-outline-dark") rounded-circle p-0"
+                                    style="width: 12px; height: 12px;"
+                                    onclick="showSpecificImage(@i)"></button>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <h2>@Model.product.Name</h2>
+                <h4 class="text-muted">@Model.product.Price.ToString("0.00") EGP </h4>
+
+                <!-- Validation Summary -->
+                <div id="validationSummary" class="alert alert-danger d-none">
+                    <ul id="errorList"></ul>
+                </div>
+
+                @if (Model.Sizes != null && Model.Sizes.Any())
+                {
+                    <div class="mb-3">
+                        <label class="fw-bold">Size:</label>
+                        <div id="sizeContainer">
+                            <div class="d-flex gap-2 mt-1" id="size-options">
+                                @foreach (var size in Model.Sizes)
+                                {
+                                    var isSoldOut = size.ToLower().Contains("soldout");
+                                    var displaySize = size.Replace("soldout", "", StringComparison.OrdinalIgnoreCase).Trim();
+
+                                    <button type="button" class="btn rounded-pill px-3 py-1 size-btn @(isSoldOut ? "btn-secondary disabled" : "btn-outline-dark")"
+                                            data-size="@displaySize" @(isSoldOut ? "disabled" : "")>
+                                        @displaySize
+                                    </button>
+                                }
+                            </div>
+                            <div id="sizeError" class="text-danger mt-1 d-none">Please select a size</div>
+                        </div>
+                    </div>
+                }
+
+                @if (Model.Colors != null && Model.Colors.Any())
+                {
+                    <div class="mb-3">
+                        <label class="fw-bold">Color:</label>
+                        <div id="colorContainer">
+                            <div class="d-flex gap-2 mt-1" id="color-options">
+                                @foreach (var color in Model.Colors)
+                                {
+                                    var isSoldOut = color.ToLower().Contains("soldout");
+                                    var displayColor = color.Replace("soldout", "", StringComparison.OrdinalIgnoreCase).Trim();
+
+                                    string colorCode = colorMap.ContainsKey(displayColor.ToLower()) ? colorMap[displayColor.ToLower()] : displayColor;
+
+                                    <div class="color-circle border @(isSoldOut ? "border-light opacity-50" : "")"
+                                         data-color="@displayColor" title="@displayColor"
+                                         style="width: 30px; height: 30px; background-color:@colorCode; border-radius: 50%; cursor: pointer;"
+                                         @(isSoldOut ? "data-soldout='true'" : "")>
+                                    </div>
+                                }
+                            </div>
+                            <div id="colorError" class="text-danger mt-1 d-none">Please select a color</div>
+                        </div>
+                    </div>
+                }
+
+                <div class="mb-3">
+                    <label class="fw-bold">Quantity:</label>
+                    <div class="input-group w-25">
+                        <button type="button" class="btn btn-outline-secondary" onclick="updateCount(-1)">-</button>
+                        <input type="text" id="countInput" class="form-control text-center" value="@Model.Count" readonly />
+                        <button type="button" class="btn btn-outline-secondary" onclick="updateCount(1)">+</button>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-column gap-2">
+                    <button id="addToCartBtn" class="btn text-white" style="background-color: #f06292;" type="submit">
+                        <i class="bi bi-cart-fill me-1"></i> Add to cart
+                    </button>
+                    <button class="btn btn-dark text-white" type="button">Buy it now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<!-- Modal to show clicked image -->
+<!-- Image Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content bg-transparent border-0">
+            <div class="modal-body text-center position-relative">
+                <img id="modalImage" src="" class="img-fluid rounded shadow zoom-on-hover" style="max-height: 80vh; transition: transform 0.3s ease;" />
+                <button type="button" class="btn-close position-absolute top-0 end-0 m-3 bg-light p-2 rounded-circle" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .zoom-on-hover:hover {
+        transform: scale(1.2);
+        cursor: zoom-in;
+    }
+</style>
+
+
+@section Styles {
+    <style>
+        .carousel-image {
+            transition: opacity 0.5s ease, transform 0.3s ease;
+        }
+
+        .carousel-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            padding: 0;
+        }
+
+        .zoomable:hover {
+            transform: scale(1.05);
+        }
+
+        .validation-highlight {
+            border: 2px solid #dc3545 !important;
+        }
+
+        .validation-highlight-container {
+            border: 2px solid #dc3545;
+            border-radius: 8px;
+            padding: 10px;
+        }
+    </style>
+}
+@section Scripts {
+    <script>
+        const images = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.ProductImages));
+        let currentIndex = 0;
+        let autoSlideInterval;
+        const slideDuration = 2000;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (images.length > 0) {
+                startAutoSlide();
+
+                document.querySelectorAll('.carousel-image').forEach(img => {
+                    img.addEventListener('mouseover', function () {
+                        this.style.transform = "scale(1.05)";
+                        pauseAutoSlide();
+                    });
+
+                    img.addEventListener('mouseout', function () {
+                        this.style.transform = "scale(1)";
+                        resumeAutoSlide();
+                    });
+                });
+            }
+        });
+
+        function showImage(index) {
+            if (index < 0) index = images.length - 1;
+            if (index >= images.length) index = 0;
+
+            currentIndex = index;
+
+            document.querySelectorAll('.carousel-image').forEach((img, i) => {
+                img.style.opacity = i === index ? '1' : '0';
+                img.style.zIndex = i === index ? '1' : '0';
+            });
+
+            document.querySelectorAll('.carousel-indicator').forEach((indicator, i) => {
+                indicator.classList.toggle('btn-dark', i === index);
+                indicator.classList.toggle('btn-outline-dark', i !== index);
+            });
+        }
+
+        function prevImage() {
+            showImage(currentIndex - 1);
+            resetAutoSlide();
+        }
+
+        function nextImage() {
+            showImage(currentIndex + 1);
+            resetAutoSlide();
+        }
+
+        function showSpecificImage(index) {
+            showImage(index);
+            resetAutoSlide();
+        }
+
+        function startAutoSlide() {
+            if (images.length > 1) {
+                autoSlideInterval = setInterval(nextImage, slideDuration);
+            }
+        }
+
+        function pauseAutoSlide() {
+            clearInterval(autoSlideInterval);
+        }
+
+        function resumeAutoSlide() {
+            clearInterval(autoSlideInterval);
+            autoSlideInterval = setInterval(nextImage, slideDuration);
+        }
+
+        function resetAutoSlide() {
+            clearInterval(autoSlideInterval);
+            autoSlideInterval = setInterval(nextImage, slideDuration);
+        }
+
+        function updateCount(change) {
+            const countInput = document.getElementById("countInput");
+            const hiddenCount = document.getElementById("Count");
+            let current = parseInt(countInput.value);
+            let updated = current + change;
+            if (updated >= 1 && updated <= 100) {
+                countInput.value = updated;
+                hiddenCount.value = updated;
+            }
+        }
+
+        document.querySelectorAll('.color-circle').forEach(circle => {
+            circle.addEventListener('click', function () {
+                if (this.dataset.soldout === 'true') return;
+
+                document.querySelectorAll('.color-circle').forEach(c => {
+                    c.classList.remove('border-dark', 'border-3');
+                    c.classList.add('border');
+                });
+
+                this.classList.add('border-dark', 'border-3');
+                document.getElementById('SelectedColor').value = this.getAttribute('data-color');
+
+                document.getElementById('colorError').classList.add('d-none');
+                document.getElementById('colorContainer').classList.remove('validation-highlight-container');
+            });
+        });
+
+        document.querySelectorAll('.size-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                if (this.classList.contains('disabled')) return;
+
+                document.querySelectorAll('.size-btn').forEach(b => {
+                    b.classList.remove('btn-dark');
+                    b.classList.add('btn-outline-dark');
+                });
+
+                this.classList.remove('btn-outline-dark');
+                this.classList.add('btn-dark');
+                document.getElementById('SelectedSize').value = this.getAttribute('data-size');
+
+                document.getElementById('sizeError').classList.add('d-none');
+                document.getElementById('sizeContainer').classList.remove('validation-highlight-container');
+            });
+        });
+
+        document.getElementById('productForm').addEventListener('submit', function (e) {
+            const selectedColor = document.getElementById('SelectedColor').value;
+            const selectedSize = document.getElementById('SelectedSize').value;
+            let hasError = false;
+
+            document.getElementById('validationSummary').classList.add('d-none');
+            document.getElementById('errorList').innerHTML = '';
+            document.getElementById('colorError').classList.add('d-none');
+            document.getElementById('sizeError').classList.add('d-none');
+            document.getElementById('colorContainer').classList.remove('validation-highlight-container');
+            document.getElementById('sizeContainer').classList.remove('validation-highlight-container');
+
+            if (!selectedColor) {
+                hasError = true;
+                document.getElementById('colorError').classList.remove('d-none');
+                document.getElementById('colorContainer').classList.add('validation-highlight-container');
+                document.getElementById('errorList').innerHTML += '<li>Please select a color</li>';
+            }
+
+            if (!selectedSize) {
+                hasError = true;
+                document.getElementById('sizeError').classList.remove('d-none');
+                document.getElementById('sizeContainer').classList.add('validation-highlight-container');
+                document.getElementById('errorList').innerHTML += '<li>Please select a size</li>';
+            }
+
+            if (hasError) {
+                e.preventDefault();
+                document.getElementById('validationSummary').classList.remove('d-none');
+                document.getElementById('validationSummary').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+
+        function showImageInModal(src) {
+            document.getElementById('modalImage').src = src;
+        }
+    </script>
+}

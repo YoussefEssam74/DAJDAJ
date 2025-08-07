@@ -1,0 +1,58 @@
+﻿using DAJDAJ.DataAccess;
+using DAJDAJ.Entities.Models;
+using DAJDAJ.Entities.Repositories;
+using DAJDAJ.Entities.ViewModels;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+
+namespace DAJDAJ.Web.Areas.Admin.Controllers
+{
+    [Area("Admin")]
+    public class OrderController : Controller
+    {
+        private readonly IUntiOfWork _untiOfWork;
+        public OrderController(IUntiOfWork untiOfWork)
+        {
+            _untiOfWork = untiOfWork;
+        }
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+
+        public IActionResult GetData()
+        {
+            // Test without includes first
+            var orders = _untiOfWork.OrderHeader.GetAll()
+                .Select(o => new
+                {
+                    o.Id,
+                    o.Name,
+                    o.Address,
+                    o.City,
+                    o.Phone,
+                    o.OrderDate,
+                    o.TotalPrice,
+                    o.OrderStatus,
+                    o.PaymentStatus,
+                    o.TrackingNumber,
+                    o.Carrier,
+                    o.PaymentMethod,
+                }).ToList();
+
+            return Json(new { data = orders });
+        }
+
+        public IActionResult Details(int orderid)
+        {
+            OrderVM orderVM = new OrderVM()
+            {
+                OrderHeader = _untiOfWork.OrderHeader.GetFirstorDefault(u => u.Id == orderid),
+                OrderDetails = _untiOfWork.OrderDetails.GetAll(u => u.OrderHeaderId == orderid)
+            };
+            return View(orderVM);
+
+        }
+    }
+}

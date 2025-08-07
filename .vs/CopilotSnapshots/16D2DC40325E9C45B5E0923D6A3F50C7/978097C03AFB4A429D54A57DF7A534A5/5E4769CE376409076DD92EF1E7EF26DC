@@ -1,0 +1,263 @@
+﻿using DAJDAJ.Entities.Models;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DAJDAJ.Entities.ViewModels
+{
+    public class ProductVM
+    {
+        public Product product { get; set; } = new Product();
+        
+        [ValidateNever]
+        public IEnumerable<SelectListItem> categorylist { get; set; } = new List<SelectListItem>();
+        
+        [ValidateNever]
+        public IFormFile? Img { get; set; }
+        
+        [ValidateNever]
+        public List<IFormFile?> Images { get; set; } = new List<IFormFile?>();
+
+        [ValidateNever]
+        public List<string> ImageColors { get; set; } = new List<string>();
+        
+        [ValidateNever]
+        public List<SelectListItem> AvailableColors { get; set; } = new List<SelectListItem>
+        {
+            new SelectListItem { Text = "Black", Value = "black" },
+            new SelectListItem { Text = "White", Value = "white" },
+            new SelectListItem { Text = "Red", Value = "red" },
+            new SelectListItem { Text = "Blue", Value = "blue" },
+            new SelectListItem { Text = "Green", Value = "green" },
+            new SelectListItem { Text = "Yellow", Value = "yellow" },
+            new SelectListItem { Text = "Pink", Value = "pink" },
+            new SelectListItem { Text = "Brown", Value = "brown" },
+            new SelectListItem { Text = "Gray", Value = "gray" },
+            new SelectListItem { Text = "Purple", Value = "purple" },
+            new SelectListItem { Text = "Orange", Value = "orange" },
+            new SelectListItem { Text = "Burgundy", Value = "burgundy" },
+            new SelectListItem { Text = "Gold", Value = "gold" },
+            new SelectListItem { Text = "Silver", Value = "silver" },
+            new SelectListItem { Text = "Navy", Value = "navy" },
+            new SelectListItem { Text = "Olive", Value = "olive" }
+        };
+
+        /// <summary>
+        /// List of common product sizes
+        /// </summary>
+        [ValidateNever]
+        public List<SelectListItem> AvailableSizes { get; set; } = new List<SelectListItem>
+        {
+            new SelectListItem { Text = "XS", Value = "XS" },
+            new SelectListItem { Text = "S", Value = "S" },
+            new SelectListItem { Text = "M", Value = "M" },
+            new SelectListItem { Text = "L", Value = "L" },
+            new SelectListItem { Text = "XL", Value = "XL" },
+            new SelectListItem { Text = "XXL", Value = "XXL" },
+            new SelectListItem { Text = "XXXL", Value = "XXXL" },
+            new SelectListItem { Text = "One Size", Value = "One Size" }
+        };
+
+        /// <summary>
+        /// List of existing image paths for edit scenarios
+        /// </summary>
+        [ValidateNever]
+        public List<string> ExistingImagePaths { get; set; } = new List<string>();
+
+        /// <summary>
+        /// List of existing image IDs for edit scenarios
+        /// </summary>
+        [ValidateNever]
+        public List<int> ExistingImageIds { get; set; } = new List<int>();
+
+        /// <summary>
+        /// List of available colors for quick selection
+        /// </summary>
+        [ValidateNever]
+        public List<string> SuggestedColors
+        {
+            get
+            {
+                return AvailableColors.Select(c => c.Text).ToList();
+            }
+        }
+
+        /// <summary>
+        /// List of available sizes for quick selection
+        /// </summary>
+        [ValidateNever]
+        public List<string> SuggestedSizes
+        {
+            get
+            {
+                return AvailableSizes.Select(s => s.Text).ToList();
+            }
+        }
+
+        /// <summary>
+        /// Check if there are additional images
+        /// </summary>
+        [ValidateNever]
+        public bool HasAdditionalImages
+        {
+            get
+            {
+                return product?.ProductImages != null && product.ProductImages.Any();
+            }
+        }
+
+        /// <summary>
+        /// Number of additional images
+        /// </summary>
+        [ValidateNever]
+        public int AdditionalImagesCount
+        {
+            get
+            {
+                return product?.ProductImages?.Count ?? 0;
+            }
+        }
+
+        /// <summary>
+        /// Check if there are multiple colors
+        /// </summary>
+        [ValidateNever]
+        public bool HasMultipleColors
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(product?.Color))
+                    return false;
+                
+                return product.Color.Split(',').Length > 1;
+            }
+        }
+
+        /// <summary>
+        /// Check if there are multiple sizes
+        /// </summary>
+        [ValidateNever]
+        public bool HasMultipleSizes
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(product?.Size) || product.IsOneSize)
+                    return false;
+                
+                return product.Size.Split(',').Length > 1;
+            }
+        }
+
+        /// <summary>
+        /// Separated colors list
+        /// </summary>
+        [ValidateNever]
+        public List<string> ColorsList
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(product?.Color))
+                    return new List<string>();
+                
+                return product.Color.Split(',').Select(c => c.Trim()).Where(c => !string.IsNullOrEmpty(c)).ToList();
+            }
+        }
+
+        /// <summary>
+        /// Separated sizes list
+        /// </summary>
+        [ValidateNever]
+        public List<string> SizesList
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(product?.Size))
+                    return new List<string>();
+                
+                return product.Size.Split(',').Select(s => s.Trim()).Where(s => !string.IsNullOrEmpty(s)).ToList();
+            }
+        }
+
+        /// <summary>
+        /// Helper method to populate existing image data for edit scenarios
+        /// </summary>
+        public void PopulateExistingImageData()
+        {
+            if (product?.ProductImages != null && product.ProductImages.Any())
+            {
+                ExistingImagePaths = product.ProductImages.Select(img => img.ImagePath ?? "").ToList();
+                ExistingImageIds = product.ProductImages.Select(img => img.Id).ToList();
+                
+                // Also populate ImageColors if not already populated
+                if (!ImageColors.Any())
+                {
+                    ImageColors = product.ProductImages.Select(img => img.Color ?? "").ToList();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get display name for a color value
+        /// </summary>
+        /// <param name="colorValue">The color value to look up</param>
+        /// <returns>The display name for the color, or the original value if not found</returns>
+        public string GetColorDisplayName(string colorValue)
+        {
+            if (string.IsNullOrEmpty(colorValue))
+                return "No color specified";
+
+            var colorItem = AvailableColors.FirstOrDefault(c => 
+                string.Equals(c.Value, colorValue, StringComparison.OrdinalIgnoreCase));
+            
+            return colorItem?.Text ?? colorValue;
+        }
+
+        /// <summary>
+        /// Validate that all required fields are present
+        /// </summary>
+        public bool IsValid()
+        {
+            return product != null && 
+                   !string.IsNullOrWhiteSpace(product.Name) && 
+                   product.Price > 0 && 
+                   product.CategoryId > 0;
+        }
+
+        /// <summary>
+        /// Get summary of image and color configuration
+        /// </summary>
+        [ValidateNever]
+        public string ImageColorSummary
+        {
+            get
+            {
+                var summary = new List<string>();
+                
+                if (!string.IsNullOrEmpty(product?.Img))
+                {
+                    summary.Add("1 main image");
+                }
+                
+                var additionalCount = AdditionalImagesCount;
+                if (additionalCount > 0)
+                {
+                    summary.Add($"{additionalCount} additional image(s)");
+                }
+                
+                var colorCount = ColorsList.Count;
+                if (colorCount > 0)
+                {
+                    summary.Add($"{colorCount} color(s) available");
+                }
+                
+                return summary.Any() ? string.Join(", ", summary) : "No images configured";
+            }
+        }
+    }
+}

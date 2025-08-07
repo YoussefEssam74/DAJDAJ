@@ -17,5 +17,19 @@ namespace DAJDAJ.DataAccess
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<Shoppingcart> Shoppingcarts { get; set; }
+
+
+
+
+
+
+        public DbSet<OrderHeader> OrderHeaders { get; set; }
+        public DbSet<OrderDetails> OrderDetails { get; set; }
+
+
+
+
+
+
     }
 }

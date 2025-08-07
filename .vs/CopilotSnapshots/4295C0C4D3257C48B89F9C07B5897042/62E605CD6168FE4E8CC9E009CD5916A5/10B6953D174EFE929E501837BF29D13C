@@ -1,0 +1,272 @@
+﻿using DAJDAJ.DataAccess;
+using DAJDAJ.DataAccess.Implementation;
+using DAJDAJ.Entities.Models;
+using DAJDAJ.Entities.Repositories;
+using DAJDAJ.Entities.ViewModels;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace DAJDAJ.Web.Areas.Admin.Controllers
+{
+    [Area("Admin")]
+    public class ProductController : Controller
+    {
+        private readonly IUntiOfWork _untiOfWork;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public ProductController(IUntiOfWork untiOfWork, IWebHostEnvironment webHostEnvironment)
+        {
+            _untiOfWork = untiOfWork;
+            _webHostEnvironment = webHostEnvironment;
+        }
+        public IActionResult Index()
+        {
+            // var Products = _untiOfWork.Product.GetAll();
+            // return View(Products);
+            return View();
+        }
+        public IActionResult GetData()
+        {
+            var products= _untiOfWork.Product.GetAll(Includeword:"Category");
+            return Json(new{data=products});
+        }
+                
+            [HttpGet]
+        public IActionResult Create()
+        {
+            ProductVM productVM = new ProductVM()
+            {
+                product = new Product(),
+                categorylist = _untiOfWork.Category.GetAll().Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+
+                })
+            };
+
+            return View(productVM);
+        }
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult Create(ProductVM productVM, IFormFile Img)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                TempData["Errors"] = string.Join("<br>", errors);
+                productVM.categorylist = _untiOfWork.Category.GetAll().Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                });
+                return View(productVM);
+            }
+            string RootPath = _webHostEnvironment.WebRootPath;
+            // حفظ صورة واحدة كما كان في الكود القديم
+            if (Img != null && Img.Length > 0)
+            {
+                string filename = Guid.NewGuid().ToString();
+                var ext = Path.GetExtension(Img.FileName);
+                var uploadPath = Path.Combine(RootPath, "Images/Products");
+                if (!Directory.Exists(uploadPath))
+                    Directory.CreateDirectory(uploadPath);
+                var filePath = Path.Combine(uploadPath, filename + ext);
+                using (var filestream = new FileStream(filePath, FileMode.Create))
+                {
+                    Img.CopyTo(filestream);
+                }
+                productVM.product.Img = "Images/Products/" + filename + ext;
+            }
+            // حفظ الصور المتعددة الجديدة
+            var productImages = new List<ProductImage>();
+            if (productVM.Images != null && productVM.Images.Count > 0)
+            {
+                var uploadPath = Path.Combine(RootPath, "Images/Products");
+                if (!Directory.Exists(uploadPath))
+                    Directory.CreateDirectory(uploadPath);
+                foreach (var image in productVM.Images)
+                {
+                    if (image != null && image.Length > 0)
+                    {
+                        string filename = Guid.NewGuid().ToString();
+                        var ext = Path.GetExtension(image.FileName);
+                        var filePath = Path.Combine(uploadPath, filename + ext);
+                        using (var filestream = new FileStream(filePath, FileMode.Create))
+                        {
+                            image.CopyTo(filestream);
+                        }
+                        productImages.Add(new ProductImage
+                        {
+                            ImagePath = "Images/Products/" + filename + ext
+                        });
+                    }
+                }
+            }
+            productVM.product.ProductImages = productImages;
+            _untiOfWork.Product.Add(productVM.product);
+            _untiOfWork.Complete();
+            TempData["Create"] = "Data Has Created Successfully";
+            return RedirectToAction("Index");
+        }
+        [HttpGet]
+        public IActionResult Edit(int?id)
+        {
+            if(id==null || id==0)
+            {
+                return NotFound();
+            }
+            ProductVM productVM = new ProductVM()
+            {
+                product = _untiOfWork.Product.GetFirstorDefault(x => x.Id == id, "Category,ProductImages"),
+                categorylist = _untiOfWork.Category.GetAll().Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+
+                })
+            };
+
+            return View(productVM);
+           ////// return View(productIndb);
+        }
+
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult Edit(ProductVM productVM, IFormFile Img)
+        {
+            ModelState.Remove("product.Img");
+            if (!ModelState.IsValid)
+            {
+                productVM.categorylist = _untiOfWork.Category.GetAll().Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                });
+                return View(productVM);
+            }
+            string RootPath = _webHostEnvironment.WebRootPath;
+            // تحديث صورة واحدة إذا تم رفعها
+            if (Img != null && Img.Length > 0)
+            {
+                string filename = Guid.NewGuid().ToString();
+                var ext = Path.GetExtension(Img.FileName);
+                var uploadPath = Path.Combine(RootPath, "Images/Products");
+                if (!Directory.Exists(uploadPath))
+                    Directory.CreateDirectory(uploadPath);
+                var filePath = Path.Combine(uploadPath, filename + ext);
+                using (var filestream = new FileStream(filePath, FileMode.Create))
+                {
+                    Img.CopyTo(filestream);
+                }
+                productVM.product.Img = "Images/Products/" + filename + ext;
+            }
+            // إذا تم رفع صور جديدة، احذف الصور القديمة من المجلد وقاعدة البيانات
+            if (productVM.Images != null && productVM.Images.Count > 0)
+            {
+                var oldProduct = _untiOfWork.Product.GetFirstorDefault(x => x.Id == productVM.product.Id, "ProductImages");
+                if (oldProduct != null && oldProduct.ProductImages != null)
+                {
+                    foreach (var oldImg in oldProduct.ProductImages)
+                    {
+                        var oldImgPath = Path.Combine(RootPath, oldImg.ImagePath ?? "");
+                        if (System.IO.File.Exists(oldImgPath))
+                        {
+                            System.IO.File.Delete(oldImgPath);
+                        }
+                    }
+                    // حذف الصور القديمة من قاعدة البيانات
+                    oldProduct.ProductImages.Clear();
+                }
+                var productImages = new List<ProductImage>();
+                var uploadPath = Path.Combine(RootPath, "Images/Products");
+                if (!Directory.Exists(uploadPath))
+                    Directory.CreateDirectory(uploadPath);
+                foreach (var image in productVM.Images)
+                {
+                    if (image != null && image.Length > 0)
+                    {
+                        string filename = Guid.NewGuid().ToString();
+                        var ext = Path.GetExtension(image.FileName);
+                        var filePath = Path.Combine(uploadPath, filename + ext);
+                        using (var filestream = new FileStream(filePath, FileMode.Create))
+                        {
+                            image.CopyTo(filestream);
+                        }
+                        productImages.Add(new ProductImage
+                        {
+                            ImagePath = "Images/Products/" + filename + ext
+                        });
+                    }
+                }
+                productVM.product.ProductImages = productImages;
+            }
+            // إذا لم يتم رفع صور جديدة، احتفظ بالصور القديمة كما هي
+            else
+            {
+                var oldProduct = _untiOfWork.Product.GetFirstorDefault(x => x.Id == productVM.product.Id, "ProductImages");
+                if (oldProduct != null)
+                {
+                    productVM.product.ProductImages = oldProduct.ProductImages?.ToList();
+                }
+            }
+            _untiOfWork.Product.Update(productVM.product);
+            _untiOfWork.Complete();
+            TempData["Update"] = "Data Has Updated Successfully";
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        //public IActionResult Delete(int? id)
+        //{
+        //    if (id == null || id == 0)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    //  var productIndb = _context.categories.Find(id);
+        //    var productIndb = _untiOfWork.Product.GetFirstorDefault(x => x.Id == id);
+
+        //    return View(productIndb);
+        //}
+
+        [HttpDelete]
+
+        public IActionResult DeleteProduct(int? id)
+        {
+            var ProductIndb = _untiOfWork.Product.GetFirstorDefault(x => x.Id == id, "ProductImages");
+            if (ProductIndb == null)
+            {
+                return Json(new { success = false, message = "Error while deleting" });
+            }
+            // حذف الصورة الرئيسية
+            if (!string.IsNullOrEmpty(ProductIndb.Img))
+            {
+                var oldimg = Path.Combine(_webHostEnvironment.WebRootPath, ProductIndb.Img.Replace("/", Path.DirectorySeparatorChar.ToString()));
+                if (System.IO.File.Exists(oldimg))
+                {
+                    System.IO.File.Delete(oldimg);
+                }
+            }
+            // حذف جميع الصور المرتبطة بالمنتج من المجلد
+            if (ProductIndb.ProductImages != null)
+            {
+                foreach (var img in ProductIndb.ProductImages)
+                {
+                    if (!string.IsNullOrEmpty(img.ImagePath))
+                    {
+                        var imgPath = Path.Combine(_webHostEnvironment.WebRootPath, img.ImagePath.Replace("/", Path.DirectorySeparatorChar.ToString()));
+                        if (System.IO.File.Exists(imgPath))
+                        {
+                            System.IO.File.Delete(imgPath);
+                        }
+                    }
+                }
+            }
+            _untiOfWork.Product.Remove(ProductIndb);
+            _untiOfWork.Complete();
+            return Json(new { success = true, message = "File has been deleted" });
+        }
+
+    }
+}

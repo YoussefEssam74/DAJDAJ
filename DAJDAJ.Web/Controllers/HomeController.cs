@@ -4,11 +4,11 @@ using System.Diagnostics;
 
 namespace DAJDAJ.Web.Controllers
 {
-    public class HomeController : Controller
+    public class DefaultController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<DefaultController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public DefaultController(ILogger<DefaultController> logger)
         {
             _logger = logger;
         }

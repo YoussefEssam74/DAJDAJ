@@ -1,0 +1,26 @@
+﻿@model DAJDAJ.Entities.ViewModels.ShoppingCartVM
+@{
+    Layout = "_Customer";
+}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="checkout-section mb-4">
+                <div class="checkout-title mb-4">Shipping Details</div>
+                <div class="mb-3">
+                    <strong>Name:</strong> @Model.OrderHeaders.Name <br />
+                    <strong>Address:</strong> @Model.OrderHeaders.Address <br />
+                    <strong>City:</strong> @Model.OrderHeaders.City <br />
+                    <strong>Phone:</strong> @Model.OrderHeaders.Phone <br />
+                </div>
+                <div class="mb-3">
+                    <strong>Shipping Price:</strong> <span id="shippingPrice">@ViewBag.ShippingPrice LE</span>
+                </div>
+                <form asp-action="ConfirmShipping" method="post">
+                    <input type="hidden" name="OrderId" value="@Model.OrderHeaders.Id" />
+                    <button type="submit" class="btn btn-black px-5">Confirm Shipping</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

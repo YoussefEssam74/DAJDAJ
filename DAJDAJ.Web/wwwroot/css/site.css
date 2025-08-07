@@ -21,5 +21,76 @@ body {
   margin-bottom: 60px;
 }
 
+/* Cart badge style for mobile cart icon */
+.cart-count-badge {
+    font-size: 0.8rem;
+    padding: 0.25em 0.5em;
+}
+@media (min-width: 576px) {
+    .d-sm-none { display: none !important; }
+}
 
 
+.ekko-lightbox .modal-content,
+.ekko-lightbox .modal-body,
+.ekko-lightbox .modal-dialog,
+.ekko-lightbox .modal-header,
+.ekko-lightbox .modal-footer,
+.ekko-lightbox .modal {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+/* إزالة أي خلفية بيضاء من الصور داخل lightbox */
+.ekko-lightbox .modal-content img,
+.ekko-lightbox .modal-body img {
+    background: transparent !important;
+    box-shadow: none !important;
+}
+img {
+    background-color: transparent !important;
+}
+
+
+/* جعل جميع عناصر المودال شفافة بالكامل */
+.modal-content,
+.modal-body,
+.modal-dialog,
+.modal-header,
+.modal-footer,
+.modal {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+.modal-content,
+.modal-body {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.modal-content {
+    width: auto !important;
+    max-width: none !important;
+}
+
+.modal-body img {
+    display: block;
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 auto;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+
+/* أضف هذا في قسم الـ style */
+.modal-content {
+    pointer-events: auto; /* يسمح بالنقر على المحتوى */
+}
+
+.modal-dialog {
+    pointer-events: none; /* يجعل النقر يمر إلى الخلفية */
+}

@@ -1,0 +1,404 @@
+﻿@model DAJDAJ.Entities.ViewModels.ProductVM
+
+@{
+    ViewBag.PageTitle = "إدارة المنتجات";
+    ViewBag.CardTitle = "تعديل المنتج";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data" id="productForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="product.Id" />
+
+            <!-- معلومات أساسية -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">المعلومات الأساسية</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="product.Name" class="control-label">اسم المنتج</label>
+                                <input asp-for="product.Name" class="form-control" placeholder="أدخل اسم المنتج" />
+                                <span asp-validation-for="product.Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="product.Price" class="control-label">السعر</label>
+                                <div class="input-group">
+                                    <input asp-for="product.Price" class="form-control" placeholder="0.00" />
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">ريال</span>
+                                    </div>
+                                </div>
+                                <span asp-validation-for="product.Price" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="product.CategoryId" class="control-label">الفئة</label>
+                        <select asp-for="product.CategoryId" asp-items="Model.categorylist" class="form-control select2">
+                            <option disabled selected>-- اختر الفئة --</option>
+                        </select>
+                        <span asp-validation-for="product.CategoryId" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- إدارة الصور -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">إدارة الصور</h3>
+                </div>
+                <div class="card-body">
+                    <!-- الصورة الرئيسية -->
+                    <div class="form-group">
+                        <label asp-for="Img" class="control-label">الصورة الرئيسية</label>
+                        <div class="custom-file">
+                            <input asp-for="Img" type="file" class="custom-file-input" id="mainImageInput" accept="image/*" />
+                            <label class="custom-file-label" for="mainImageInput">اختر الصورة الرئيسية</label>
+                        </div>
+                        <span asp-validation-for="Img" class="text-danger"></span>
+                        
+                        <!-- معاينة الصورة الرئيسية -->
+                        <div class="mt-3">
+                            <img id="mainImagePreview" src="~/@Model.product.Img" class="img-thumbnail" style="max-width: 200px; max-height: 200px;" alt="معاينة الصورة الرئيسية" />
+                        </div>
+                    </div>
+
+                    <!-- عرض الصور الحالية مع الألوان -->
+                    @if (Model.product.ProductImages != null && Model.product.ProductImages.Any())
+                    {
+                        <div class="form-group">
+                            <label class="control-label">الصور الحالية مع الألوان</label>
+                            <div class="row" id="currentImagesContainer">
+                                @foreach (var img in Model.product.ProductImages)
+                                {
+                                    <div class="col-md-4 col-sm-6 mb-3">
+                                        <div class="card border">
+                                            <img src="~/@img.ImagePath" class="card-img-top" style="height: 150px; object-fit: cover;" />
+                                            <div class="card-body p-2 text-center">
+                                                <small class="text-muted d-block">
+                                                    <i class="fas fa-palette mr-1"></i>
+                                                    اللون: @(string.IsNullOrEmpty(img.Color) ? "غير محدد" : img.Color)
+                                                </small>
+                                                <button type="button" class="btn btn-danger btn-sm mt-2 delete-existing-image" 
+                                                        data-image-id="@img.Id" data-image-path="@img.ImagePath">
+                                                    <i class="fas fa-trash mr-1"></i>حذف
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    <!-- قسم الصور الجديدة مع الألوان -->
+                    <div class="form-group">
+                        <label class="control-label">إضافة صور جديدة مع الألوان</label>
+                        <div id="imageColorContainer">
+                            <div class="image-color-row card border mb-3">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>الصورة</label>
+                                            <div class="custom-file">
+                                                <input name="Images" type="file" class="custom-file-input image-input" accept="image/*" />
+                                                <label class="custom-file-label">اختر صورة</label>
+                                            </div>
+                                            <div class="image-preview mt-2" style="display: none;">
+                                                <img class="img-thumbnail" style="max-width: 100px; max-height: 100px;" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label>اللون</label>
+                                            <select name="ImageColors" class="form-control color-select">
+                                                <option value="">اختر اللون</option>
+                                                @foreach (var color in Model.AvailableColors)
+                                                {
+                                                    <option value="@color.Value">@color.Text</option>
+                                                }
+                                            </select>
+                                            <div class="color-preview mt-2" style="display: none;">
+                                                <div class="color-box" style="width: 30px; height: 30px; border: 1px solid #ccc; border-radius: 50%;"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 d-flex align-items-end">
+                                            <button type="button" class="btn btn-danger remove-image-row" style="display:none;">
+                                                <i class="fas fa-trash mr-1"></i>حذف
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" id="addImageRow" class="btn btn-success btn-sm">
+                            <i class="fas fa-plus mr-1"></i>إضافة صورة أخرى
+                        </button>
+                        <small class="form-text text-muted">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            ملاحظة: إضافة صور جديدة سيستبدل جميع الصور الحالية
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- خصائص المنتج -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">خصائص المنتج</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="product.Color" class="control-label">الألوان المتاحة</label>
+                                <input asp-for="product.Color" class="form-control" placeholder="مثال: أسود,أبيض,أحمر" />
+                                <small class="form-text text-muted">افصل الألوان بفاصلة</small>
+                                <span asp-validation-for="product.Color" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="product.Size" class="control-label">الأحجام المتاحة</label>
+                                <input asp-for="product.Size" class="form-control" placeholder="مثال: S,M,L,XL" 
+                                       id="sizeInput" />
+                                <small class="form-text text-muted">افصل الأحجام بفاصلة</small>
+                                <span asp-validation-for="product.Size" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input asp-for="product.IsOneSize" class="custom-control-input" id="isOneSizeCheck" />
+                            <label asp-for="product.IsOneSize" class="custom-control-label" for="isOneSizeCheck">
+                                مقاس واحد فقط (One Size)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- أزرار التحكم -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <button type="submit" class="btn btn-success btn-lg mr-2" id="saveBtn">
+                                <i class="fas fa-save mr-1"></i>حفظ التغييرات
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary btn-lg">
+                                <i class="fas fa-arrow-left mr-1"></i>العودة للقائمة
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- قسم المعاينة -->
+    <div class="col-md-4">
+        <div class="card sticky-top">
+            <div class="card-header">
+                <h3 class="card-title">معاينة المنتج</h3>
+            </div>
+            <div class="card-body text-center">
+                <img id="productPreview" src="~/@Model.product.Img" 
+                     class="img-fluid rounded border shadow-sm" 
+                     style="max-width: 100%; height: auto; min-height: 200px;" 
+                     alt="معاينة المنتج" />
+                
+                <div class="mt-3">
+                    <h5 class="product-name-preview">@Model.product.Name</h5>
+                    <h4 class="text-success product-price-preview">
+                        @Model.product.Price.ToString("C", new System.Globalization.CultureInfo("ar-SA"))
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $(document).ready(function() {
+            let imageRowCount = 1;
+            
+            // معاينة الصورة الرئيسية
+            $('#mainImageInput').change(function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#mainImagePreview, #productPreview').attr('src', e.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // معاينة اسم المنتج والسعر
+            $('input[name="product.Name"]').on('input', function() {
+                $('.product-name-preview').text($(this).val() || 'اسم المنتج');
+            });
+
+            $('input[name="product.Price"]').on('input', function() {
+                const price = parseFloat($(this).val()) || 0;
+                $('.product-price-preview').text(price.toLocaleString('ar-SA', {
+                    style: 'currency',
+                    currency: 'SAR'
+                }));
+            });
+
+            // تحديث تسميات الملفات
+            $('.custom-file-input').on('change', function() {
+                const fileName = $(this).val().split('\\').pop();
+                $(this).siblings('.custom-file-label').addClass('selected').html(fileName || 'اختر ملف');
+            });
+
+            // إدارة checkbox مقاس واحد
+            $('#isOneSizeCheck').change(function() {
+                const isChecked = $(this).is(':checked');
+                $('#sizeInput').prop('disabled', isChecked);
+                if (isChecked) {
+                    $('#sizeInput').val('One Size');
+                } else {
+                    $('#sizeInput').val('');
+                }
+            });
+
+            // إضافة صف جديد للصور والألوان
+            $('#addImageRow').click(function() {
+                const container = $('#imageColorContainer');
+                const newRow = container.find('.image-color-row').first().clone();
+                
+                // مسح القيم
+                newRow.find('.image-input').val('');
+                newRow.find('.color-select').val('');
+                newRow.find('.custom-file-label').removeClass('selected').text('اختر صورة');
+                newRow.find('.image-preview').hide();
+                newRow.find('.color-preview').hide();
+                
+                // إظهار زر الحذف
+                newRow.find('.remove-image-row').show();
+                
+                container.append(newRow);
+                imageRowCount++;
+                updateRemoveButtons();
+            });
+
+            // حذف صف
+            $(document).on('click', '.remove-image-row', function() {
+                $(this).closest('.image-color-row').remove();
+                imageRowCount--;
+                updateRemoveButtons();
+            });
+
+            // معاينة الصور الجديدة
+            $(document).on('change', '.image-input', function() {
+                const file = this.files[0];
+                const preview = $(this).closest('.image-color-row').find('.image-preview');
+                const img = preview.find('img');
+                
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        img.attr('src', e.target.result);
+                        preview.show();
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.hide();
+                }
+            });
+
+            // معاينة الألوان
+            $(document).on('change', '.color-select', function() {
+                const colorValue = $(this).val();
+                const preview = $(this).closest('.image-color-row').find('.color-preview');
+                const colorBox = preview.find('.color-box');
+                
+                if (colorValue) {
+                    const colorMap = {
+                        'black': '#000000',
+                        'white': '#ffffff',
+                        'red': '#ff0000',
+                        'blue': '#0000ff',
+                        'green': '#008000',
+                        'yellow': '#ffff00',
+                        'pink': '#ffc0cb',
+                        'brown': '#a52a2a',
+                        'gray': '#808080',
+                        'purple': '#800080',
+                        'orange': '#ffa500',
+                        'burgundy': '#800020'
+                    };
+                    
+                    colorBox.css('background-color', colorMap[colorValue] || '#cccccc');
+                    preview.show();
+                } else {
+                    preview.hide();
+                }
+            });
+
+            // حذف الصور الموجودة
+            $('.delete-existing-image').click(function() {
+                const imageCard = $(this).closest('.col-md-4');
+                const imagePath = $(this).data('image-path');
+                
+                Swal.fire({
+                    title: 'هل أنت متأكد؟',
+                    text: 'سيتم حذف هذه الصورة نهائياً',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'نعم، احذف',
+                    cancelButtonText: 'إلغاء'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        imageCard.fadeOut(300, function() {
+                            $(this).remove();
+                        });
+                        
+                        toastr.success('تم حذف الصورة بنجاح');
+                    }
+                });
+            });
+
+            function updateRemoveButtons() {
+                const rows = $('.image-color-row');
+                rows.each(function(index) {
+                    const removeBtn = $(this).find('.remove-image-row');
+                    if (rows.length > 1) {
+                        removeBtn.show();
+                    } else {
+                        removeBtn.hide();
+                    }
+                });
+            }
+
+            // تأثيرات بصرية للنموذج
+            $('#productForm').on('submit', function() {
+                $('#saveBtn').prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-1"></i>جاري الحفظ...');
+            });
+
+            // تهيئة الأزرار
+            updateRemoveButtons();
+
+            // تهيئة المقاس الواحد عند التحميل
+            if ($('#isOneSizeCheck').is(':checked')) {
+                $('#sizeInput').prop('disabled', true);
+            }
+        });
+    </script>
+}

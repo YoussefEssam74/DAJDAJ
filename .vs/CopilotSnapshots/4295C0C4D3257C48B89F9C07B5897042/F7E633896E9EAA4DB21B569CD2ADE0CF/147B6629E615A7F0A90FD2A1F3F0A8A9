@@ -1,0 +1,24 @@
+﻿using DAJDAJ.DataAccess;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+
+namespace DAJDAJ.Web.Areas.Admin.Controllers
+{
+    [Area("Admin")]
+    public class UsersController : Controller
+    {
+        private readonly ApplicationDbContext _context;
+        public UsersController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+        public IActionResult Index()
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity; 
+            var cliam = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
+            string userid = cliam?.Value ?? string.Empty;
+            return View(_context.ApplicationUsers.Where(x => x.Id != userid).ToList());
+        }
+    }
+}
+ 

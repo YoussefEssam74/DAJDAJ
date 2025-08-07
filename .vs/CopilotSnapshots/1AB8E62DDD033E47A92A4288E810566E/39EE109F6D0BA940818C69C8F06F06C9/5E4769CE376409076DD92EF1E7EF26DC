@@ -1,0 +1,43 @@
+﻿using DAJDAJ.Entities.Models;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DAJDAJ.Entities.ViewModels
+{
+    public class ProductVM
+    {
+        public Product product { get; set; }
+        [ValidateNever]
+        public IEnumerable<SelectListItem> categorylist { get; set; }
+        [Required(ErrorMessage = "The Image field is required.")]
+        public IFormFile Img { get; set; }
+        [ValidateNever]
+        public List<IFormFile> Images { get; set; } = new();
+
+        public List<string> ImageColors { get; set; } = new();
+        
+        [ValidateNever]
+        public List<SelectListItem> AvailableColors { get; set; } = new()
+        {
+            new SelectListItem { Text = "أسود", Value = "black" },
+            new SelectListItem { Text = "أبيض", Value = "white" },
+            new SelectListItem { Text = "أحمر", Value = "red" },
+            new SelectListItem { Text = "أزرق", Value = "blue" },
+            new SelectListItem { Text = "أخضر", Value = "green" },
+            new SelectListItem { Text = "أصفر", Value = "yellow" },
+            new SelectListItem { Text = "وردي", Value = "pink" },
+            new SelectListItem { Text = "بني", Value = "brown" },
+            new SelectListItem { Text = "رمادي", Value = "gray" },
+            new SelectListItem { Text = "بنفسجي", Value = "purple" },
+            new SelectListItem { Text = "برتقالي", Value = "orange" },
+            new SelectListItem { Text = "بورجندي", Value = "burgundy" }
+        };
+    }
+}

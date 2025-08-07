@@ -1,0 +1,327 @@
+﻿@model Shoppingcart
+@{
+    ViewData["Title"] = "Product Details";
+    var productImages = Model.ProductImages ?? new List<string>();
+    var imageColorMap = ViewBag.ImageColorMap as Dictionary<string, string> ?? new Dictionary<string, string>();
+
+    var colorMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    {
+        { "burgendy", "#800020" },
+        { "burgundy", "#800020" },
+        { "red", "red" },
+        { "white", "white" },
+        { "black", "black" },
+        { "blue", "blue" },
+        { "green", "green" },
+        { "yellow", "yellow" },
+        { "pink", "pink" },
+        { "brown", "brown" },
+        { "gray", "gray" },
+        { "purple", "purple" },
+        { "orange", "orange" }
+    };
+}
+
+<form method="post" id="productForm">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="ProductId" value="@Model.product.Id" />
+    <input type="hidden" name="SelectedColor" id="SelectedColor" value="" />
+    <input type="hidden" name="SelectedSize" id="SelectedSize" value="" />
+    <input type="hidden" name="Count" id="Count" value="@Model.Count" />
+
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-6">
+                <!-- Image Carousel -->
+                <div class="position-relative text-center d-inline-block" style="width: 100%; max-width: 500px; height: 500px; overflow: hidden; border-radius: 12px;">
+                    <div id="carousel-container" class="position-relative" style="width: 100%; height: 100%;">
+                        @if (productImages.Any())
+                        {
+                            @foreach (var img in productImages.Select((src, index) => (src, index)))
+                            {
+                                <img src="@img.src" alt="Product Image @(img.index + 1)"
+                                     class="img-fluid rounded border zoomable carousel-image @(img.index == 0 ? "active" : "")"
+                                     style="width: 100%; height: 100%; object-fit: cover; object-position: center; position: absolute; top: 0; left: 0; opacity: @(img.index == 0 ? "1" : "0"); transition: opacity 0.5s ease, transform 0.3s ease; cursor: pointer;"
+                                     data-bs-toggle="modal" data-bs-target="#imageModal"
+                                     onclick="showImageInModal(this.src)" />
+                            }
+
+                        }
+                        else
+                        {
+                            <img src="https://via.placeholder.com/500x500?text=No+Image" alt="No Image"
+                                 class="img-fluid rounded border zoomable"
+                                 style="width: 100%; height: 100%; object-fit: cover; object-position: center;" />
+                        }
+                    </div>
+
+                    <!-- Previous/Next buttons -->
+                    @if (productImages.Count > 1)
+                    {
+                        <button onclick="prevImage()" type="button" class="btn btn-dark position-absolute"
+                            style="top: 50%; left: 10px; transform: translateY(-50%); opacity: 0.8; border-radius: 50%; width: 40px; height: 40px; z-index: 10;">
+                            &#8249;
+                        </button>
+                        <button onclick="nextImage()" type="button" class="btn btn-dark position-absolute"
+                            style="top: 50%; right: 10px; transform: translateY(-50%); opacity: 0.8; border-radius: 50%; width: 40px; height: 40px; z-index: 10;">
+                            &#8250;
+                        </button>
+                    }
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="product-details">
+                    <h1 class="product-title mb-3">@Model.product.Name</h1>
+                    <div class="product-price mb-4">
+                        <span class="price-current">$@Model.product.Price</span>
+                    </div>
+
+                    @if (Model.Colors != null && Model.Colors.Any())
+                    {
+                        <div class="color-selection mb-4">
+                            <label class="form-label fw-bold">اللون:</label>
+                            <div class="color-options d-flex flex-wrap gap-2 mt-2">
+                                @foreach (var color in Model.Colors)
+                                {
+                                    var hexColor = colorMap.ContainsKey(color) ? colorMap[color] : "#000000";
+                                    var hasImage = imageColorMap.ContainsKey(color);
+                                    
+                                    <div class="color-option" data-color="@color" data-has-image="@hasImage.ToString().ToLower()" @(hasImage ? $"data-image=\"{imageColorMap[color]}\"" : "")>
+                                        <div class="color-circle" style="background-color: @hexColor; width: 40px; height: 40px; border-radius: 50%; border: 2px solid #ddd; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center;">
+                                            @if (hasImage)
+                                            {
+                                                <i class="fas fa-image text-white" style="font-size: 12px; opacity: 0.7;"></i>
+                                            }
+                                        </div>
+                                        <small class="color-name text-center mt-1 d-block">@color</small>
+                                    </div>
+                                }
+                            </div>
+                            <div id="selectedColorDisplay" class="mt-2 text-muted"></div>
+                        </div>
+                    }
+
+                    @if (Model.Sizes != null && Model.Sizes.Any() && !Model.product.IsOneSize)
+                    {
+                        <div class="size-selection mb-4">
+                            <label class="form-label fw-bold">الحجم:</label>
+                            <div class="size-options d-flex flex-wrap gap-2 mt-2">
+                                @foreach (var size in Model.Sizes)
+                                {
+                                    <div class="size-option" data-size="@size">
+                                        <div class="size-box">@size</div>
+                                    </div>
+                                }
+                            </div>
+                            <div id="selectedSizeDisplay" class="mt-2 text-muted"></div>
+                        </div>
+                    }
+
+                    <div class="quantity-selection mb-4">
+                        <label class="form-label fw-bold">الكمية:</label>
+                        <div class="quantity-controls d-flex align-items-center gap-3 mt-2">
+                            <button type="button" class="btn btn-outline-secondary" onclick="changeQuantity(-1)">-</button>
+                            <span id="quantityDisplay" class="fw-bold fs-5">1</span>
+                            <button type="button" class="btn btn-outline-secondary" onclick="changeQuantity(1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button type="submit" class="btn btn-primary btn-lg me-3" style="min-width: 200px;">
+                            <i class="fas fa-shopping-cart me-2"></i>
+                            إضافة إلى السلة
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- Modal للصورة المكبرة -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">@Model.product.Name</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" class="img-fluid" alt="Product Image" />
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let currentImageIndex = 0;
+            let selectedColor = '';
+            let selectedSize = '';
+            let quantity = 1;
+            const images = @Html.Raw(Json.Serialize(productImages));
+            const imageColorMap = @Html.Raw(Json.Serialize(imageColorMap));
+
+            // معالجة اختيار الألوان
+            document.querySelectorAll('.color-option').forEach(function(option) {
+                option.addEventListener('click', function() {
+                    // إزالة التحديد السابق
+                    document.querySelectorAll('.color-option .color-circle').forEach(function(circle) {
+                        circle.style.border = '2px solid #ddd';
+                        circle.style.transform = 'scale(1)';
+                    });
+                    
+                    // تحديد اللون الجديد
+                    const colorCircle = this.querySelector('.color-circle');
+                    colorCircle.style.border = '3px solid #007bff';
+                    colorCircle.style.transform = 'scale(1.1)';
+                    
+                    selectedColor = this.getAttribute('data-color');
+                    document.getElementById('SelectedColor').value = selectedColor;
+                    document.getElementById('selectedColorDisplay').innerHTML = 'اللون المختار: <strong>' + selectedColor + '</strong>';
+                    
+                    // تغيير الصورة إذا كان هناك صورة مربوطة بهذا اللون
+                    const hasImage = this.getAttribute('data-has-image') === 'true';
+                    if (hasImage) {
+                        const imageUrl = this.getAttribute('data-image');
+                        showImageForColor(imageUrl);
+                    }
+                });
+            });
+
+            // معالجة اختيار الأحجام
+            document.querySelectorAll('.size-option').forEach(function(option) {
+                option.addEventListener('click', function() {
+                    // إزالة التحديد السابق
+                    document.querySelectorAll('.size-option .size-box').forEach(function(box) {
+                        box.classList.remove('selected');
+                    });
+                    
+                    // تحديد الحجم الجديد
+                    const sizeBox = this.querySelector('.size-box');
+                    sizeBox.classList.add('selected');
+                    
+                    selectedSize = this.getAttribute('data-size');
+                    document.getElementById('SelectedSize').value = selectedSize;
+                    document.getElementById('selectedSizeDisplay').innerHTML = 'الحجم المختار: <strong>' + selectedSize + '</strong>';
+                });
+            });
+
+            // دالة تغيير الصورة عند اختيار اللون
+            function showImageForColor(imageUrl) {
+                const activeImage = document.querySelector('.carousel-image.active');
+                if (activeImage) {
+                    activeImage.style.opacity = '0';
+                    activeImage.classList.remove('active');
+                }
+                
+                // البحث عن الصورة المطلوبة أو إنشاء صورة جديدة
+                let targetImage = document.querySelector(`img[src="${imageUrl}"]`);
+                if (!targetImage) {
+                    // إنشاء صورة جديدة إذا لم توجد
+                    targetImage = document.createElement('img');
+                    targetImage.src = imageUrl;
+                    targetImage.alt = 'Color Image';
+                    targetImage.className = 'img-fluid rounded border zoomable carousel-image';
+                    targetImage.style.cssText = 'width: 100%; height: 100%; object-fit: cover; object-position: center; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.5s ease, transform 0.3s ease; cursor: pointer;';
+                    targetImage.setAttribute('data-bs-toggle', 'modal');
+                    targetImage.setAttribute('data-bs-target', '#imageModal');
+                    targetImage.onclick = function() { showImageInModal(this.src); };
+                    document.getElementById('carousel-container').appendChild(targetImage);
+                }
+                
+                setTimeout(() => {
+                    targetImage.style.opacity = '1';
+                    targetImage.classList.add('active');
+                }, 50);
+            }
+
+            // تحديث الكمية
+            window.changeQuantity = function(change) {
+                quantity = Math.max(1, Math.min(100, quantity + change));
+                document.getElementById('quantityDisplay').textContent = quantity;
+                document.getElementById('Count').value = quantity;
+            };
+
+            // عرض الصورة في المودال
+            window.showImageInModal = function(src) {
+                document.getElementById('modalImage').src = src;
+            };
+
+            // التنقل بين الصور
+            window.nextImage = function() {
+                if (images.length > 1) {
+                    currentImageIndex = (currentImageIndex + 1) % images.length;
+                    showImage(currentImageIndex);
+                }
+            };
+
+            window.prevImage = function() {
+                if (images.length > 1) {
+                    currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+                    showImage(currentImageIndex);
+                }
+            };
+
+            function showImage(index) {
+                document.querySelectorAll('.carousel-image').forEach((img, i) => {
+                    img.style.opacity = i === index ? '1' : '0';
+                    if (i === index) {
+                        img.classList.add('active');
+                    } else {
+                        img.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+
+    <style>
+        .color-option {
+            text-align: center;
+            margin: 5px;
+        }
+        
+        .color-circle:hover {
+            transform: scale(1.05);
+        }
+        
+        .size-option .size-box {
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .size-option .size-box:hover,
+        .size-option .size-box.selected {
+            border-color: #007bff;
+            background-color: #007bff;
+            color: white;
+        }
+        
+        .carousel-image.active {
+            z-index: 2;
+        }
+        
+        .product-details {
+            padding: 20px;
+        }
+        
+        .product-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .price-current {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #28a745;
+        }
+    </style>
+}

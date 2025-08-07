@@ -11,6 +11,11 @@ namespace DAJDAJ.Entities.Repositories
         ICategoryRepository Category{ get; }
         IProductRepository Product { get; }
         IShoppingCartRepository ShoppingCart { get; }
+        IOrderHeaderRepository OrderHeader { get; } 
+        IOrderDetailsRepository OrderDetails { get; }
+        
+        IProductImageRepository ProductImage { get; }
+        IApplicationUserRepository ApplicationUser { get; }
         int Complete();
     }
 }

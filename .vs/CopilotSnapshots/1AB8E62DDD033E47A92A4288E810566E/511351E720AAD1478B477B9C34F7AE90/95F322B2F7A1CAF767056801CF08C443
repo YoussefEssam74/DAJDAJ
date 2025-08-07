@@ -1,0 +1,134 @@
+﻿using DAJDAJ.DataAccess.Implementation;
+using DAJDAJ.Entities.Models;
+using DAJDAJ.Entities.Repositories;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using static DAJDAJ.Entities.Models.Shoppingcart;
+
+namespace DAJDAJ.Web.Areas.Customer.Controllers
+{
+    [Area("Customer")]
+    public class HomeController : Controller
+    {
+        private readonly IUntiOfWork _unitOfWork;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        public HomeController(IUntiOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
+        {
+            _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
+        }
+
+        public IActionResult Index()
+        {
+            var products = _unitOfWork.Product.GetAll();
+            return View(products);
+        }
+
+        public IActionResult Details(int id)
+        {
+            var product = _unitOfWork.Product.GetFirstorDefault(x => x.Id == id, "Category,ProductImages");
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            List<string> sizes = new List<string>();
+            List<string> colors = new List<string>();
+
+            if (!string.IsNullOrWhiteSpace(product.Size))
+            {
+                sizes = product.Size
+                            .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                            .Select(s => s.Trim())
+                            .Distinct()
+                            .ToList();
+            }
+
+            if (!string.IsNullOrWhiteSpace(product.Color))
+            {
+                colors = product.Color
+                            .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                            .Select(c => c.Trim())
+                            .Distinct()
+                            .ToList();
+            }
+
+            List<string> productImages = new();
+            if (product.ProductImages != null && product.ProductImages.Any())
+            {
+                productImages = product.ProductImages.Select(img => "/" + img.ImagePath.Replace("\\", "/")).ToList();
+            }
+            else if (!string.IsNullOrWhiteSpace(product.Img))
+            {
+                productImages.Add("/" + product.Img.Replace("\\", "/"));
+            }
+
+            var shoppingcart = new Shoppingcart()
+            {
+                product = product,
+                Sizes = sizes,
+                Colors = colors,
+                Count = 1,
+                ProductImages = productImages
+            };
+
+            return View(shoppingcart);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public IActionResult Details(Shoppingcart model)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (claim == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var existingCart = _unitOfWork.ShoppingCart.GetFirstorDefault(
+                u => u.ApplicationUserId == claim.Value &&
+                     u.ProductId == model.ProductId &&
+                     u.SelectedColor == model.SelectedColor &&
+                     u.SelectedSize == model.SelectedSize
+            );
+
+            if (existingCart == null)
+            {
+                var newCartItem = new Shoppingcart
+                {
+                    ApplicationUserId = claim.Value,
+                    ProductId = model.ProductId,
+                    SelectedColor = model.SelectedColor,
+                    SelectedSize = model.SelectedSize,
+                    Count = model.Count
+                };
+
+                if (newCartItem.Count < 1) newCartItem.Count = 1;
+                if (newCartItem.Count > 100) newCartItem.Count = 100;
+
+                _unitOfWork.ShoppingCart.Add(newCartItem);
+            }
+            else
+            {
+                int newCount = existingCart.Count + model.Count;
+
+                if (newCount > 100) newCount = 100;
+
+                _unitOfWork.ShoppingCart.IncreaseCount(existingCart, model.Count);
+            }
+
+            _unitOfWork.Complete();
+            return RedirectToAction("Index");
+        }
+        public IActionResult Returns()
+        {
+            return View();
+        }
+    }
+}

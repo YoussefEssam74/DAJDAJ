@@ -1,0 +1,33 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DAJDAJ.Utilities
+{
+    public static class SD
+    {
+        public static string AdminRole = "Admin";
+        public static string EditorRole = "Editor";
+        public static string CustomerRole = "Customer";
+
+        public const string Pending = "Pending";
+        public const string Approve = "Approved";
+        public const string Proccessing = "Proccessing";
+        public const string Cancelled = "Cancelled";
+        public const string Shipped = "Shipped";
+        public const string Refund = "Refund";
+        public const string Rejected = "Rejected";
+
+
+        public const string PaymentMethod_Cash = "Cash";
+        public const string PaymentMethod_CreditCard = "CreditCard";
+
+
+        public const string PaymentStatusPending = "Pending";
+        public const string PaymentStatusApproved = "Approved";
+        public const string PaymentStatusRejected = "Rejected";
+        public const string PaymentStatusRefunded = "Refunded";
+    }
+}

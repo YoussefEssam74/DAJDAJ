@@ -1,0 +1,29 @@
+﻿using DAJDAJ.DataAccess;
+using DAJDAJ.DataAccess.Implementation;
+using DAJDAJ.Entities.Models;
+using DAJDAJ.Entities.Repositories;
+using Microsoft.AspNetCore.Mvc;
+
+namespace DAJDAJ.Web.Areas.Admin.Controllers
+{
+    [Area("Admin")]
+    public class OrderController : Controller
+    {
+        private readonly IUntiOfWork _untiOfWork;
+        public OrderController(IUntiOfWork untiOfWork)
+        {
+            _untiOfWork = untiOfWork;
+        }
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        public IActionResult GetData()
+        {
+            IEnumerable<OrderHeader> orderHeaders;
+            orderHeaders = _untiOfWork.OrderHeader.GetAll(includeWord: "ApplicationUser");
+            return Json(new { data = orderHeaders });
+        }
+    }
+}

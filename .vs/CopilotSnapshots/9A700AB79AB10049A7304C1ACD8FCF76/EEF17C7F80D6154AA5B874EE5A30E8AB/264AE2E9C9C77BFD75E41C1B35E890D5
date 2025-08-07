@@ -1,0 +1,306 @@
+﻿using DAJDAJ.DataAccess.Implementation;
+using DAJDAJ.Entities.Models;
+using DAJDAJ.Entities.Repositories;
+using DAJDAJ.Entities.ViewModels;
+using DAJDAJ.Utilities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+
+namespace DAJDAJ.Web.Areas.Customer.Controllers
+{
+    [Area("Customer")]
+    // [Authorize] // تم التعليق حتى يستطيع الزائر رؤية العربة الفارغة
+    public class CartController : Controller
+    {
+        private readonly IUntiOfWork _unitOfWork;
+        private readonly IEmailSender _emailSender;
+        public ShoppingCartVM ShoppingCartVM { get; set; }
+        public int TotalCarts { get; set; }
+        public CartController(IUntiOfWork unitOfWork, IEmailSender emailSender)
+        {
+            _unitOfWork = unitOfWork;
+            _emailSender = emailSender;
+        }
+        public IActionResult Index()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                // المستخدم غير مسجل الدخول، أظهر صفحة العربة الفارغة
+                return View("EmptyCart");
+            }
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var cliam = claimsIdentity.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+            ShoppingCartVM = new ShoppingCartVM
+            {
+                CartsList = _unitOfWork.ShoppingCart.GetAll(perdicate: u => u.ApplicationUserId == cliam.Value, "product.ProductImages")
+            };
+
+            // إذا كانت السلة فاضية، أظهر صفحة العربة الفارغة
+            if (ShoppingCartVM.CartsList == null || !ShoppingCartVM.CartsList.Any())
+            {
+                return View("EmptyCart");
+            }
+
+            foreach (var item in ShoppingCartVM.CartsList)
+            {
+                ShoppingCartVM.TotalCarts += (item.Count * item.product.Price);
+                // إضافة معلومات الصور المربوطة بالألوان
+                if (item.product.ProductImages != null && item.product.ProductImages.Any())
+                {
+                    var colorImage = item.product.ProductImages.FirstOrDefault(pi => 
+                        !string.IsNullOrEmpty(pi.Color) && 
+                        pi.Color.Equals(item.SelectedColor, System.StringComparison.OrdinalIgnoreCase));
+                    if (colorImage != null)
+                    {
+                        item.ProductImages = new List<string> { "/" + colorImage.ImagePath.Replace("\\", "/") };
+                    }
+                    else
+                    {
+                        item.ProductImages = item.product.ProductImages
+                            .Select(pi => "/" + pi.ImagePath.Replace("\\", "/"))
+                            .ToList();
+                    }
+                }
+                else if (!string.IsNullOrWhiteSpace(item.product.Img))
+                {
+                    item.ProductImages = new List<string> { "/" + item.product.Img.Replace("\\", "/") };
+                }
+            }
+
+            return View(ShoppingCartVM);
+        }
+
+        public IActionResult Summary()
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var cliam = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            ShoppingCartVM = new ShoppingCartVM
+            {
+                CartsList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == cliam.Value, "product"),
+                OrderHeaders = new OrderHeader()
+            };
+
+            foreach (var item in ShoppingCartVM.CartsList)
+            {
+                ShoppingCartVM.OrderHeaders.TotalPrice += (item.Count * item.product.Price);
+            }
+
+            return View(ShoppingCartVM);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActionName("Summary")]
+        public IActionResult PostSummary(ShoppingCartVM shoppingCartVM, string PaymentMethod, decimal ShippingPrice)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var cliam = claimsIdentity.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+            shoppingCartVM.CartsList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == cliam.Value, "product");
+
+            // إعداد بيانات OrderHeader
+            shoppingCartVM.OrderHeaders.ApplicationUserId = cliam.Value;
+            shoppingCartVM.OrderHeaders.OrderDate = DateTime.Now;
+            shoppingCartVM.OrderHeaders.PaymentMethod = PaymentMethod;
+            shoppingCartVM.OrderHeaders.OrderStatus = SD.Pending;
+            shoppingCartVM.OrderHeaders.PaymentStatus = SD.Pending;
+            shoppingCartVM.OrderHeaders.TotalPrice = 0;
+
+            // اجمع الاسم من FirstName و LastName المرسلين من الفورم
+            string firstName = Request.Form["FirstName"];
+            string lastName = Request.Form["LastName"];
+            if (!string.IsNullOrWhiteSpace(firstName) || !string.IsNullOrWhiteSpace(lastName))
+            {
+                shoppingCartVM.OrderHeaders.Name = $"{firstName} {lastName}".Trim();
+            }
+            else if (string.IsNullOrWhiteSpace(shoppingCartVM.OrderHeaders.Name))
+            {
+                shoppingCartVM.OrderHeaders.Name = "-";
+            }
+            string city = Request.Form["City"];
+            if (!string.IsNullOrWhiteSpace(city))
+            {
+                shoppingCartVM.OrderHeaders.City = city;
+            }
+            else
+            {
+                shoppingCartVM.OrderHeaders.City = "-";
+            }
+            string address = Request.Form["Address"];
+            if (!string.IsNullOrWhiteSpace(address))
+            {
+                shoppingCartVM.OrderHeaders.Address = address;
+            }
+            else
+            {
+                shoppingCartVM.OrderHeaders.Address = "-";
+            }
+            string phone = Request.Form["Phone"];
+            if (!string.IsNullOrWhiteSpace(phone))
+            {
+                shoppingCartVM.OrderHeaders.Phone = phone;
+            }
+            else
+            {
+                shoppingCartVM.OrderHeaders.Phone = "-";
+            }
+
+            foreach (var item in shoppingCartVM.CartsList)
+            {
+                shoppingCartVM.OrderHeaders.TotalPrice += (item.Count * item.product.Price);
+            }
+            shoppingCartVM.OrderHeaders.TotalPrice += ShippingPrice;
+
+            if (PaymentMethod == "CashOnDelivery")
+            {
+                shoppingCartVM.OrderHeaders.PaymentStatus = SD.Pending;
+                shoppingCartVM.OrderHeaders.OrderStatus = SD.Proccessing;
+            }
+
+            // حفظ OrderHeader أولاً
+            _unitOfWork.OrderHeader.Add(shoppingCartVM.OrderHeaders);
+            var saveResult = _unitOfWork.Complete();
+            if (shoppingCartVM.OrderHeaders.Id == 0 || saveResult == 0)
+            {
+                ModelState.AddModelError("", "حدث خطأ أثناء حفظ الطلب. الرجاء التأكد من صحة البيانات والمحاولة مرة أخرى.");
+                return View("Summary");
+            }
+
+            // إضافة OrderDetails بعد التأكد من حفظ OrderHeader
+            foreach (var item in shoppingCartVM.CartsList)
+            {
+                OrderDetails orderDetails = new OrderDetails()
+                {
+                    ProductId = item.ProductId,
+                    OrderHeaderId = shoppingCartVM.OrderHeaders.Id,
+                    Price = item.product.Price,
+                    Count = item.Count,
+                };
+                _unitOfWork.OrderDetails.Add(orderDetails);
+            }
+            _unitOfWork.Complete();
+
+            // حذف السلة بعد الطلب
+            _unitOfWork.ShoppingCart.RemoveRange(shoppingCartVM.CartsList.ToList());
+            _unitOfWork.Complete();
+
+            // إرسال إيميل إشعار بوجود طلب جديد
+            var adminEmail = "youssefessam1293@gmail.com";
+            var subject = "New Order Placed";
+
+            // Build product details table
+            var productDetails = "<table border='1' cellpadding='5' cellspacing='0'><tr><th>Product Name</th><th>Quantity</th></tr>";
+            foreach (var cartItem in shoppingCartVM.CartsList)
+            {
+                productDetails += $"<tr><td>{cartItem.product?.Name ?? "-"}</td><td>{cartItem.Count}</td></tr>";
+            }
+            productDetails += "</table>";
+
+            var message = $@"<h3>A new order has been placed</h3>
+                <p>Order Number: {shoppingCartVM.OrderHeaders.Id}</p>
+                <p>Customer Name: {shoppingCartVM.OrderHeaders.Name}</p>
+                <p>Phone: {shoppingCartVM.OrderHeaders.Phone}</p>
+                <p>Address: {shoppingCartVM.OrderHeaders.Address}, {shoppingCartVM.OrderHeaders.City}</p>
+                <p>Total Price: {shoppingCartVM.OrderHeaders.TotalPrice} EGP</p>
+                <h4>Order Details:</h4>
+                {productDetails}";
+            _emailSender.SendEmailAsync(adminEmail, subject, message);
+
+            return RedirectToAction("OrderConfirmation", new { id = shoppingCartVM.OrderHeaders.Id });
+        }
+
+        public ActionResult OrderConfirmation(int id)
+        {
+            OrderHeader orderHeader = _unitOfWork.OrderHeader.GetFirstorDefault(u => u.Id == id);
+            return View(id);
+        }
+
+        public IActionResult Plus(int cartid)
+        {
+            var shoppingcart = _unitOfWork.ShoppingCart.GetFirstorDefault(x => x.Id == cartid);
+            _unitOfWork.ShoppingCart.IncreaseCount(shoppingcart, 1);
+            _unitOfWork.Complete();
+            return RedirectToAction("Index");
+        }
+        public IActionResult Minus(int cartid)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            
+            var shoppingcart = _unitOfWork.ShoppingCart.GetFirstorDefault(x => x.Id == cartid);
+            
+            if (shoppingcart.Count <= 1)
+            {
+                _unitOfWork.ShoppingCart.Remove(shoppingcart);
+                _unitOfWork.Complete();
+                var count = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId).Count();
+                HttpContext.Session.SetInt32(SD.SessionKey, count);
+
+                var remainingCartItems = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId);
+                
+                if (!remainingCartItems.Any())
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+            else
+            {
+                _unitOfWork.ShoppingCart.DecreaseCount(shoppingcart, 1);
+                _unitOfWork.Complete();
+                return RedirectToAction("Index");
+            }
+        }
+
+        public IActionResult Remove(int cartid)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            
+            var shoppingcart = _unitOfWork.ShoppingCart.GetFirstorDefault(x => x.Id == cartid);
+            _unitOfWork.ShoppingCart.Remove(shoppingcart);
+            _unitOfWork.Complete();
+
+            var count = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId).Count();
+            HttpContext.Session.SetInt32(SD.SessionKey, count);
+            var remainingCartItems = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId);
+            
+            if (!remainingCartItems.Any())
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdateColor([FromBody] UpdateCartColorVM model)
+        {
+            if (model == null || model.cartId == 0 || string.IsNullOrWhiteSpace(model.color))
+                return BadRequest();
+            var cart = _unitOfWork.ShoppingCart.GetAll(x => x.Id == model.cartId).FirstOrDefault();
+            if (cart == null)
+                return NotFound();
+            cart.SelectedColor = model.color;
+            _unitOfWork.ShoppingCart.Update(cart);
+            _unitOfWork.Complete();
+            return Ok();
+        }
+
+        public class UpdateCartColorVM
+        {
+            public int cartId { get; set; }
+            public string color { get; set; }
+        }
+    }
+}

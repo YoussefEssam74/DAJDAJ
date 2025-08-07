@@ -25,7 +25,7 @@ namespace DAJDAJ.DataAccess.Implementation
             _dbSet.Add(entity);
         }
 
-        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? perdicate=null, string? Includeword= null)
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? perdicate = null, string? Includeword = null)
         {
             IQueryable<T> query = _dbSet;
             if (perdicate != null)
@@ -43,7 +43,7 @@ namespace DAJDAJ.DataAccess.Implementation
             }
             return query.ToList();
         }
-            
+
 
         public T GetFirstorDefault(Expression<Func<T, bool>>? perdicate=null, string? Includeword=null)
         {

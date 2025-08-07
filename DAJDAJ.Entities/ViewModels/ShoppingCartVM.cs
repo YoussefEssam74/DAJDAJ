@@ -11,5 +11,8 @@ namespace DAJDAJ.Entities.ViewModels
     {
        public IEnumerable<Shoppingcart> CartsList { get; set; }
          public decimal TotalCarts { get; set; }
-    }   
+        public OrderHeader OrderHeaders { get; set; } = new OrderHeader();
+
+        public OrderDetails OrderDetails { get; set; } = new OrderDetails();    
+    }
 }

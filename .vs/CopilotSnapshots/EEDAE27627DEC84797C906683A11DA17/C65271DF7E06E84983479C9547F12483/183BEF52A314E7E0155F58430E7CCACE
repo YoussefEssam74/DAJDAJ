@@ -1,0 +1,8 @@
+﻿@model int
+
+@if (Model > 0)
+{
+    <span style="position: absolute; top: 0; right: 0; transform: translate(40%,-40%); min-width: 1.3rem; height: 1.3rem; font-size: 0.95rem; padding:0;" class="badge rounded-circle bg-dark d-flex align-items-center justify-content-center">
+        @Model
+    </span>
+}

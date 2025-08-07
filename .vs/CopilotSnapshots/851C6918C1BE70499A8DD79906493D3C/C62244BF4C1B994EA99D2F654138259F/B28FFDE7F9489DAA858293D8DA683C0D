@@ -1,0 +1,78 @@
+﻿using DAJDAJ.Entities.Models;
+using DAJDAJ.Entities.Repositories;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+
+namespace DAJDAJ.DataAccess.Implementation
+{
+    public class ProductRepository : GenericRepository<Product>, IProductRepository
+    {
+        private readonly ApplicationDbContext _context;
+        
+        public ProductRepository(ApplicationDbContext context) : base(context) 
+        {
+            _context = context;
+        }
+
+        public void Update(Product product)
+        {
+            var productInDb = _context.products
+                .Include(p => p.ProductImages)
+                .FirstOrDefault(x => x.Id == product.Id);
+                
+            if (productInDb != null)
+            {
+                // Update basic properties
+                productInDb.Name = product.Name;
+                productInDb.Price = product.Price;
+                productInDb.Size = product.Size;
+                productInDb.Color = product.Color;
+                productInDb.Img = product.Img;
+                productInDb.IsOneSize = product.IsOneSize;
+                productInDb.CategoryId = product.CategoryId;
+                
+                // Handle ProductImages update (add, keep, or remove)
+                if (product.ProductImages != null)
+                {
+                    // Remove images that are not in the updated list (by Id)
+                    var updatedIds = product.ProductImages.Where(x => x.Id != 0).Select(x => x.Id).ToList();
+                    var toRemove = productInDb.ProductImages.Where(x => !updatedIds.Contains(x.Id)).ToList();
+                    if (toRemove.Any())
+                    {
+                        _context.ProductImages.RemoveRange(toRemove);
+                    }
+
+                    // Update existing and add new images
+                    foreach (var img in product.ProductImages)
+                    {
+                        if (img.Id == 0)
+                        {
+                            // New image
+                            img.ProductId = productInDb.Id;
+                            productInDb.ProductImages.Add(img);
+                        }
+                        else
+                        {
+                            // Update color if changed
+                            var existing = productInDb.ProductImages.FirstOrDefault(x => x.Id == img.Id);
+                            if (existing != null)
+                            {
+                                existing.Color = img.Color;
+                                existing.ImagePath = img.ImagePath;
+                            }
+                        }
+                    }
+                }
+                
+                // Mark the entity as modified
+                _context.Entry(productInDb).State = EntityState.Modified;
+                
+                // Don't call SaveChanges here - let the Unit of Work handle it
+            }
+        }
+    }
+}

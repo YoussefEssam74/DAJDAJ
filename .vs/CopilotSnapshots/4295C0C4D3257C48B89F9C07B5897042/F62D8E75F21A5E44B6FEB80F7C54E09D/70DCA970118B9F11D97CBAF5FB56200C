@@ -1,0 +1,192 @@
+﻿using DAJDAJ.DataAccess;
+using DAJDAJ.DataAccess.Implementation;
+using DAJDAJ.Entities.Models;
+using DAJDAJ.Entities.Repositories;
+using DAJDAJ.Entities.ViewModels;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace DAJDAJ.Web.Areas.Admin.Controllers
+{
+    [Area("Admin")]
+    public class ProductController : Controller
+    {
+        private readonly IUntiOfWork _untiOfWork;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public ProductController(IUntiOfWork untiOfWork, IWebHostEnvironment webHostEnvironment)
+        {
+            _untiOfWork = untiOfWork;
+            _webHostEnvironment = webHostEnvironment;
+        }
+        public IActionResult Index()
+        {
+            // var Products = _untiOfWork.Product.GetAll();
+            // return View(Products);
+            return View();
+        }
+        public IActionResult GetData()
+        {
+            var products= _untiOfWork.Product.GetAll(Includeword:"Category");
+            return Json(new{data=products});
+        }
+                
+            [HttpGet]
+        public IActionResult Create()
+        {
+            ProductVM productVM = new ProductVM()
+            {
+                product = new Product(),
+                categorylist = _untiOfWork.Category.GetAll().Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+
+                })
+            };
+
+            return View(productVM);
+        }
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult Create(ProductVM productVM)
+        {
+            if (ModelState.IsValid)
+            {
+                string RootPath = _webHostEnvironment.WebRootPath;
+                var productImages = new List<ProductImage>();
+                if (productVM.Images != null && productVM.Images.Count > 0)
+                {
+                    var uploadPath = Path.Combine(RootPath, "Images/Products");
+                    if (!Directory.Exists(uploadPath))
+                        Directory.CreateDirectory(uploadPath);
+                    foreach (var image in productVM.Images)
+                    {
+                        string filename = Guid.NewGuid().ToString();
+                        var ext = Path.GetExtension(image.FileName);
+                        var filePath = Path.Combine(uploadPath, filename + ext);
+                        using (var filestream = new FileStream(filePath, FileMode.Create))
+                        {
+                            image.CopyTo(filestream);
+                        }
+                        productImages.Add(new ProductImage
+                        {
+                            ImagePath = "Images/Products/" + filename + ext
+                        });
+                    }
+                }
+                productVM.product.ProductImages = productImages;
+                _untiOfWork.Product.Add(productVM.product);
+                _untiOfWork.Complete();
+                TempData["Create"] = "Data Has Created Successfully";
+                return RedirectToAction("Index");
+            }
+            productVM.categorylist = _untiOfWork.Category.GetAll().Select(x => new SelectListItem
+            {
+                Text = x.Name,
+                Value = x.Id.ToString()
+            });
+            return View(productVM);
+        }
+        [HttpGet]
+        public IActionResult Edit(int?id)
+        {
+            if(id==null | id==0)
+            {
+                NotFound();
+
+            }
+            //var productIndb = _context.categories.Find(id);
+           // var productIndb = _untiOfWork.Product.GetFirstorDefault(x => x.Id == id);
+
+            ProductVM productVM = new ProductVM()
+            {
+                product = _untiOfWork.Product.GetFirstorDefault(x => x.Id == id),
+                categorylist = _untiOfWork.Category.GetAll().Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+
+                })
+            };
+
+            return View(productVM);
+           ////// return View(productIndb);
+        }
+
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult Edit(ProductVM productVM,IFormFile? file)
+        {
+            if (ModelState.IsValid)
+            {
+                //  _context.categories.Update(product);
+                string RootPath = _webHostEnvironment.WebRootPath;
+                if (file != null)
+                {
+                    string filename = Guid.NewGuid().ToString();
+                    var Upload = Path.Combine(RootPath, @"Images\Products");
+                    var ext = Path.GetExtension(file.FileName);
+                    if (productVM.product.Img != null)
+                    {
+                        var oldimg = Path.Combine(RootPath, productVM.product.Img.TrimStart('\\'));
+                        if (System.IO.File.Exists(oldimg))
+                        {
+                            System.IO.File.Delete(oldimg);
+                        }
+                    }
+                            using (var filestream = new FileStream(Path.Combine(Upload, filename + ext), FileMode.Create))
+                    {
+                        file.CopyTo(filestream);
+                    }
+                    productVM.product.Img = @"Images\Products\" + filename + ext;
+                }
+
+                _untiOfWork.Product.Update(productVM.product);
+                //  _context.SaveChanges();
+                _untiOfWork.Complete();
+                TempData["Update"] = "Data Has Updated Successfully";
+                return RedirectToAction("Index");
+            }
+            return View(productVM.product);
+        }
+
+        [HttpGet]
+        //public IActionResult Delete(int? id)
+        //{
+        //    if (id == null || id == 0)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    //  var productIndb = _context.categories.Find(id);
+        //    var productIndb = _untiOfWork.Product.GetFirstorDefault(x => x.Id == id);
+
+        //    return View(productIndb);
+        //}
+
+        [HttpDelete]
+
+        public IActionResult DeleteProduct(int? id)
+        {
+            var ProductIndb = _untiOfWork.Product.GetFirstorDefault(x => x.Id == id);
+
+            if (ProductIndb == null)
+            {
+                return Json(new { success = false, message = "Error while deleting" });
+            }
+
+            var oldimg = Path.Combine(_webHostEnvironment.WebRootPath, ProductIndb.Img.TrimStart('\\'));
+            if (System.IO.File.Exists(oldimg))
+            {
+                System.IO.File.Delete(oldimg);
+            }
+
+            _untiOfWork.Product.Remove(ProductIndb);
+            _untiOfWork.Complete();
+
+            return Json(new { success = true, message = "File has been deleted" });
+        }
+
+    }
+}

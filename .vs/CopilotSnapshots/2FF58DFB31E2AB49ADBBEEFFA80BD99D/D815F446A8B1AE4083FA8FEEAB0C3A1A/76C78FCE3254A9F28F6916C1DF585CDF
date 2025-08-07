@@ -1,0 +1,36 @@
+﻿using System.Collections.Generic;
+using DAJDAJ.Entities.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace DAJDAJ.Entities.ViewModels
+{
+    public class ProductVM
+    {
+        public Product product { get; set; }
+        public IEnumerable<SelectListItem> categorylist { get; set; }
+        public string Img { get; set; }
+        public List<IFormFile> Images { get; set; } = new List<IFormFile>();
+        public List<string> ImageColors { get; set; } = new List<string>();
+        public List<SelectListItem> AvailableColors { get; set; } = new List<SelectListItem> {
+            new SelectListItem { Text = "Black", Value = "Black" },
+            new SelectListItem { Text = "White", Value = "White" },
+            new SelectListItem { Text = "Red", Value = "Red" },
+            new SelectListItem { Text = "Blue", Value = "Blue" },
+            new SelectListItem { Text = "Green", Value = "Green" },
+            new SelectListItem { Text = "Yellow", Value = "Yellow" },
+            new SelectListItem { Text = "Pink", Value = "Pink" },
+            new SelectListItem { Text = "Brown", Value = "Brown" },
+            new SelectListItem { Text = "Gray", Value = "Gray" },
+            new SelectListItem { Text = "Purple", Value = "Purple" },
+            new SelectListItem { Text = "Orange", Value = "Orange" },
+        };
+        public List<SelectListItem> AvailableSizes { get; set; } = new List<SelectListItem> {
+            new SelectListItem { Text = "S", Value = "S" },
+            new SelectListItem { Text = "M", Value = "M" },
+            new SelectListItem { Text = "L", Value = "L" },
+            new SelectListItem { Text = "XL", Value = "XL" },
+            new SelectListItem { Text = "XXL", Value = "XXL" },
+            new SelectListItem { Text = "One Size", Value = "One Size" },
+        };
+    }
+}

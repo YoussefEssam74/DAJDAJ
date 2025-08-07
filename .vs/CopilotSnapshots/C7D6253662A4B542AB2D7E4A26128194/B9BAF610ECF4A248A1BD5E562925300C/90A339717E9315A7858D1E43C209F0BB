@@ -1,0 +1,104 @@
+﻿@model DAJDAJ.Entities.ViewModels.OrderVM
+@{
+    ViewData["Title"] = "Order Details";
+    var order = Model.OrderHeader;
+    var details = Model.OrderDetails;
+}
+<link rel="stylesheet" href="/css/Summary.css" />
+<div class="container mt-4">
+    <div class="row">
+        <!-- Pickup Details -->
+        <div class="col-md-7">
+            <h4>PickUp Details</h4>
+            <form method="post">
+                <div class="form-group mb-2">
+                    <label>Name</label>
+                    <input class="form-control" value="@order.Name" name="Name" />
+                </div>
+                <div class="form-group mb-2">
+                    <label>Phone</label>
+                    <input class="form-control" value="@order.Phone" name="Phone" />
+                </div>
+                <div class="form-group mb-2">
+                    <label>Address</label>
+                    <input class="form-control" value="@order.Address" name="Address" />
+                </div>
+                <div class="form-group mb-2">
+                    <label>City</label>
+                    <input class="form-control" value="@order.City" name="City" />
+                </div>
+                <div class="form-group mb-2">
+                    <label>Email</label>
+                    <input class="form-control" value="@order.ApplicationUser?.Email" name="Email" />
+                </div>
+                <div class="form-group mb-2">
+                    <label>Order Date</label>
+                    <input class="form-control" value="@order.OrderDate.ToString("yyyy-MM-dd HH:mm")" name="OrderDate" readonly />
+                </div>
+                <div class="form-group mb-2">
+                    <label>Carrier</label>
+                    <input class="form-control" value="@order.Carrier" name="Carrier" />
+                </div>
+                <div class="form-group mb-2">
+                    <label>Tracking Number</label>
+                    <input class="form-control" value="@order.TrackingNumber" name="TrackingNumber" />
+                </div>
+                <div class="form-group mb-2">
+                    <label>Shipping Date</label>
+                    <input class="form-control" value="@order.ShippingDate.ToString("yyyy-MM-dd")" name="ShippingDate" />
+                </div>
+                <div class="form-group mb-2">
+                    <label>Session ID</label>
+                    <input class="form-control" value="@order.PaymentMethod" name="SessionId" readonly />
+                </div>
+                <div class="form-group mb-2">
+                    <label>Payment Intent ID</label>
+                    <input class="form-control" value="" name="PaymentIntentId" readonly />
+                </div>
+                <div class="form-group mb-2">
+                    <label>Payment Date</label>
+                    <input class="form-control" value="@order.PaymentDate.ToString("yyyy-MM-dd")" name="PaymentDate" />
+                </div>
+                <div class="form-group mb-2">
+                    <label>Payment Status</label>
+                    <input class="form-control" value="@order.PaymentStatus" name="PaymentStatus" />
+                </div>
+                <button type="submit" class="btn btn-primary w-100 mt-2">Update Pickup Details</button>
+            </form>
+        </div>
+        <!-- Order Summary -->
+        <div class="col-md-5">
+            <h4>Order Summary</h4>
+            <div class="card mb-2">
+                <div class="card-header text-center">
+                    <b>Order Status - @order.OrderStatus</b>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var item in details)
+                        {
+                            <tr>
+                                <td>@item.Product?.Name</td>
+                                <td>@item.Price.ToString("C")</td>
+                                <td>@item.Count</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-between border-top pt-2">
+                        <span><b>TOTAL</b></span>
+                        <span><b>@order.TotalPrice.ToString("C")</b></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "My Cart";
+    Layout = "~/Views/Shared/_Customer.cshtml";
+}
+<div class="container py-5 text-center">
+    <h2 class="mb-4" style="font-weight:700;">My Cart</h2>
+    <div class="mb-4">
+        <svg width="120" height="100" fill="#e0e0e0" viewBox="0 0 24 24">
+            <path d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm-12.293-2.707l1.414 1.414c.195.195.451.293.707.293h12.586c.256 0 .512-.098.707-.293l1.414-1.414c.391-.391.391-1.023 0-1.414l-1.414-1.414c-.195-.195-.451-.293-.707-.293h-12.586c-.256 0-.512.098-.707.293l-1.414 1.414c-.391.391-.391 1.023 0 1.414zm15.293-7.293v-2c0-1.104-.896-2-2-2h-10c-1.104 0-2 .896-2 2v2h14zm-2-4c2.209 0 4 1.791 4 4v2c0 1.104-.896 2-2 2h-16c-1.104 0-2-.896-2-2v-2c0-2.209 1.791-4 4-4h12z"/>
+        </svg>
+    </div>
+    <h5 class="mb-3">No products in the cart.</h5>
+    <a href="/" class="btn btn-dark px-5 py-2 fw-bold" style="letter-spacing:2px;">RETURN TO SHOP</a>
+</div>

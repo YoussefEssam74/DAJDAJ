@@ -1,17 +1,42 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace DAJDAJ.Utilities
 {
     public class EmailSender : IEmailSender
     {
-        public Task SendEmailAsync(string email, string subject, string htmlMessage)
+        public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            return Task.CompletedTask; // Placeholder for actual email sending logic
+            try
+            {
+                // Gmail SMTP settings
+                var smtpClient = new SmtpClient("smtp.gmail.com")
+                {
+                    Port = 587,
+                    Credentials = new NetworkCredential("youssefessam1293@gmail.com", "okni yeiz ostg cdsk "),
+                    EnableSsl = true,
+                };
+
+                var mailMessage = new MailMessage
+                {
+                    From = new MailAddress("youssefessam1293@gmail.com", "DAJDAJ Shop"),
+                    Subject = subject,
+                    Body = htmlMessage,
+                    IsBodyHtml = true,
+                };
+                mailMessage.To.Add(email);
+
+                await smtpClient.SendMailAsync(mailMessage);
+            }
+            catch (System.Exception ex)
+            {
+                // Log the error to Debug output (or you can log to a file)
+                Debug.WriteLine($"Email send error: {ex.Message}");
+                throw; // Optional: rethrow to see the error in the app
+            }
         }
     }
 }

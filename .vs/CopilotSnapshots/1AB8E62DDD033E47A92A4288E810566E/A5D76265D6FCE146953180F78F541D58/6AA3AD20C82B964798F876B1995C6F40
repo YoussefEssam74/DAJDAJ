@@ -1,0 +1,96 @@
+﻿@model IEnumerable<Product>
+
+@section Styles {
+    <style>
+        .image-container {
+            overflow: hidden;
+        }
+
+        .product-image {
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .image-container:hover .product-image {
+            transform: scale(1.1);
+        }
+
+        .egp-price {
+            font-size: 14px;
+            font-weight: 500;
+            color: #666; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin-top: 5px;
+        }
+
+        .no-products {
+            text-align: center;
+            padding: 100px 20px;
+            color: #666;
+        }
+
+        .no-products i {
+            font-size: 80px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+    </style>
+}
+
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        @if (Model != null && Model.Any())
+        {
+            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                @foreach (var item in Model)
+                {
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Product image-->
+                            <a href="/Customer/Home/Details/@item.Id">
+                                <div class="image-container">
+                                    @if (!string.IsNullOrEmpty(item.Img))
+                                    {
+                                        <img class="product-image" src="~/@item.Img" alt="Product Image" />
+                                    }
+                                    else
+                                    {
+                                        <img class="product-image" src="https://via.placeholder.com/300x300?text=No+Image" alt="No Image" />
+                                    }
+                                </div>
+                            </a>
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">@item.Name</h5>
+                                    <!-- Product price-->
+                                    <h4 class="egp-price">@item.Price.ToString("0.00") EGP</h4>
+                                </div>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center">
+                                    <a class="btn btn-outline-dark mt-auto" href="/Customer/Home/Details/@item.Id">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="no-products">
+                <i class="fas fa-box-open"></i>
+                <h3>No Products Available</h3>
+                <p>@ViewBag.Message</p>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a href="/Admin/Product/Create" class="btn btn-primary">Add New Product</a>
+                }
+            </div>
+        }
+    </div>
+</section>

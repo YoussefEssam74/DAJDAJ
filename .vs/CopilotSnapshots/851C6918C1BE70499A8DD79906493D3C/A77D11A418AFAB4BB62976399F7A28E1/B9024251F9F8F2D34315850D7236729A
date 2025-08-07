@@ -1,0 +1,64 @@
+﻿using DAJDAJ.Entities.Models;
+using DAJDAJ.Entities.Repositories;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+
+namespace DAJDAJ.DataAccess.Implementation
+{
+    public class ProductRepository : GenericRepository<Product>, IProductRepository
+    {
+        private readonly ApplicationDbContext _context;
+        
+        public ProductRepository(ApplicationDbContext context) : base(context) 
+        {
+            _context = context;
+        }
+
+        public void Update(Product product)
+        {
+            var productInDb = _context.products
+                .Include(p => p.ProductImages)
+                .FirstOrDefault(x => x.Id == product.Id);
+                
+            if (productInDb != null)
+            {
+                // Update basic properties
+                productInDb.Name = product.Name;
+                productInDb.Price = product.Price;
+                productInDb.Size = product.Size;
+                productInDb.Color = product.Color;
+                productInDb.Img = product.Img;
+                productInDb.IsOneSize = product.IsOneSize;
+                productInDb.CategoryId = product.CategoryId;
+                
+                // Handle ProductImages update
+                if (product.ProductImages != null)
+                {
+                    // Remove existing images if new ones are provided
+                    if (product.ProductImages.Count > 0)
+                    {
+                        // Clear existing product images
+                        productInDb.ProductImages.Clear();
+                        
+                        // Add new product images
+                        foreach (var img in product.ProductImages)
+                        {
+                            img.ProductId = productInDb.Id; // Ensure foreign key is set
+                            productInDb.ProductImages.Add(img);
+                        }
+                    }
+                }
+                
+                // Mark the entity as modified
+                _context.Entry(productInDb).State = EntityState.Modified;
+                
+                // Don't call SaveChanges here - let the Unit of Work handle it
+                // _context.SaveChanges(); // Removed this line
+            }
+        }
+    }
+}

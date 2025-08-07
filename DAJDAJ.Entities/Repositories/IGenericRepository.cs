@@ -12,7 +12,7 @@ namespace DAJDAJ.Entities.Repositories
             //_Context.Categories. Include("Products").ToList();
             //_Context.Categories. Where(x=>x.Id == id).ToList();
 
-            IEnumerable<T> GetAll(Expression<Func<T, bool>>? perdicate=null, string? Includeword= null);
+            IEnumerable<T> GetAll(Expression<Func<T, bool>>? perdicate=null, string? includeword= null);
             //_Context.Categories.Include("Products").ToSingleOrDefault();
             //_Context.Categories. Where(x=>x.Id == id). ToSingleOrDefault();
 

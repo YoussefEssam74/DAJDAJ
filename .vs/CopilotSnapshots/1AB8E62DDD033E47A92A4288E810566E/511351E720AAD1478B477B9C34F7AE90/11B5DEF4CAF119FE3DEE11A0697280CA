@@ -1,0 +1,167 @@
+﻿@model ShoppingCartVM
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Shopping Cart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .product-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+
+        .product-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .product-name a {
+            font-weight: 600;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .summary {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+            .summary h3 {
+                font-size: 1.5rem;
+                margin-bottom: 20px;
+            }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+
+        .btn-qty {
+            width: 35px;
+        }
+
+        .price {
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .color-thumb {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            margin-right: 8px;
+            cursor: pointer;
+            object-fit: cover;
+        }
+
+        .color-thumb.selected {
+            border: 2px solid #007bff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container py-5">
+        <h2 class="mb-4 text-center">Your Shopping Cart</h2>
+        <div class="row">
+            <div class="col-lg-8">
+                @foreach (var item in Model.CartsList)
+                {
+                    var productImages = item.product.ProductImages?.Where(img => !string.IsNullOrEmpty(img.Color)).ToList() ?? new List<DAJDAJ.Entities.Models.ProductImage>();
+                    var colorImages = productImages.GroupBy(img => img.Color.Trim().ToLower()).ToDictionary(g => g.Key, g => g.First().ImagePath);
+                    var selectedColor = item.SelectedColor?.Trim().ToLower();
+                    var selectedImg = colorImages.ContainsKey(selectedColor) ? colorImages[selectedColor] : item.product.Img;
+                <div class="product-card row align-items-center">
+                    <div class="col-md-3 text-center">
+                        <img class="product-image main-product-image-@item.Id" src="~/@selectedImg" alt="@item.product.Name" />
+                        <div class="d-flex justify-content-center mt-2">
+                            @foreach (var color in colorImages.Keys)
+                            {
+                                <img src="~/@colorImages[color]" class="color-thumb @(color == selectedColor ? "selected" : "")" data-cartid="@item.Id" data-color="@color" alt="@color" title="@color" />
+                            }
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="product-name mb-2">
+                            <a href="#">@item.product.Name</a>
+                        </div>
+                        <div class="text-muted">
+                            <div>Size: <strong>@item.SelectedSize</strong></div>
+                            <div>Color: <strong class="selected-color-text-@item.Id">@item.SelectedColor</strong></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-end">
+                        <div class="d-flex align-items-center justify-content-end mb-2">
+                            <a class="btn btn-outline-primary btn-sm btn-qty" asp-action="Minus" asp-route-cartid="@item.Id">-</a>
+                            <span class="mx-2">@item.Count</span>
+                            <a class="btn btn-outline-primary btn-sm btn-qty" asp-action="Plus" asp-route-cartid="@item.Id">+</a>
+                        </div>
+                        <div class="price mb-2">$@item.product.Price</div>
+                        <a asp-action="Remove" asp-route-cartid="@item.Id" class="btn btn-sm btn-danger">Remove</a>
+                    </div>
+                </div>
+                }
+            </div>
+
+            <div class="col-lg-4">
+                <div class="summary shadow-sm">
+                    <h3>Order Summary</h3>
+                    <div class="summary-item"><span>Subtotal</span><span>$360</span></div>
+                    <div class="summary-item"><span>Discount</span><span>$0</span></div>
+                    <div class="summary-item"><span>Shipping</span><span>$0</span></div>
+                    <hr />
+                    <div class="summary-item"><strong>Total</strong><strong>$@Model.TotalCarts</strong></div>
+                    <a asp-action="Summary" class="btn btn-success w-100 mt-3">Proceed to Checkout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.querySelectorAll('.color-thumb').forEach(function (el) {
+            el.addEventListener('click', function () {
+                var cartId = this.getAttribute('data-cartid');
+                var color = this.getAttribute('data-color');
+                var imgSrc = this.getAttribute('src');
+                // Update main image
+                document.querySelector('.main-product-image-' + cartId).setAttribute('src', imgSrc);
+                // Update selected color text
+                document.querySelector('.selected-color-text-' + cartId).textContent = color;
+                // Update selected class
+                document.querySelectorAll('[data-cartid="' + cartId + '"]').forEach(function (thumb) {
+                    thumb.classList.remove('selected');
+                });
+                this.classList.add('selected');
+                // AJAX: Update selected color in cart
+                fetch('/Customer/Cart/UpdateColor', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    },
+                    body: JSON.stringify({ cartId: cartId, color: color })
+                });
+            });
+        });
+    </script>
+</body>
+</html>
