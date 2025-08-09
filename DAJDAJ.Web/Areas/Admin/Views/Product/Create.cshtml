@@ -113,7 +113,7 @@
                 <div class="mt-3">
                     <h5 class="product-name-preview text-primary">@(Model?.product?.Name ?? "Product Name")</h5>
                     <h4 class="text-success product-price-preview">
-                        $@(Model?.product?.Price.ToString("0.00") ?? "0.00")
+                        @(Model?.product?.Price.ToString("0.00") ?? "0.00") EGP
                     </h4>
                 </div>
             </div>
@@ -125,6 +125,25 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    
+    @* Toastr notifications using TempData *@
+    <script type="text/javascript">
+        $(function() {
+            if ('@TempData["Create"]' && '@TempData["Create"]' !== '') {
+                toastr["success"]('@TempData["Create"]');
+            }
+            if ('@TempData["Update"]' && '@TempData["Update"]' !== '') {
+                toastr["info"]('@TempData["Update"]');
+            }
+            if ('@TempData["Delete"]' && '@TempData["Delete"]' !== '') {
+                toastr["error"]('@TempData["Delete"]');
+            }
+        });
+    </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

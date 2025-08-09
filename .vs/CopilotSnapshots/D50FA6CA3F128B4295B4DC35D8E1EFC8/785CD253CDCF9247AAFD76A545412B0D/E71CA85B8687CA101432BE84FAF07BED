@@ -1,0 +1,61 @@
+﻿@{
+    ViewBag.PageTitle = "Product Management";
+    ViewBag.CardTitle = "Create Product";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+<a class="btn btn-primary mb-3" href="/Admin/Product/Create">Create</a>
+
+<table id="mytable" class="table table-hover" width="100%">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Variants</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="~/js/product.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#mytable').DataTable({
+                "ajax": {
+                    "url": "/Admin/Product/GetData",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "name" },
+                    { "data": "price" },
+                    { "data": "category.name" },
+                    {
+                        "data": "id",
+                        "render": function (data, type, row) {
+                            // عرض كل الفاريانتات في سطر واحد
+                            if (row.productVariants && row.productVariants.length > 0) {
+                                return row.productVariants.map(function(v) {
+                                    return v.color + "/" + v.size + ":" + v.quantity;
+                                }).join(", ");
+                            }
+                            return "-";
+                        },
+                        "orderable": false
+                    },
+                    {
+                        "data": "id",
+                        "render": function (data) {
+                            return `<a href="/Admin/Product/Edit/${data}" class="btn btn-sm btn-warning">Edit</a>`;
+                        },
+                        "orderable": false
+                    }
+                ]
+            });
+        });
+    </script>
+}

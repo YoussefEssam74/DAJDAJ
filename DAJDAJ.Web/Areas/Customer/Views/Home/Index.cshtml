@@ -106,16 +106,16 @@
                 {
                     <div class="col mb-5">
                         <div class="card h-100">
-                            <!-- Product image -->
+                            <!-- Product image ssssss-->
                             <a href="/Customer/Home/Details/@item.Id">
-                                <div class="image-container">
+                                <div class="image-container" style="padding:12px">
                                     @if (!string.IsNullOrEmpty(item.Img))
                                     {
-                                        <img class="product-image" src="~/@item.Img" alt="Product Image" />
+                                        <img class="product-image" src="~/@item.Img" alt="Product Image" style="border-radius:4px"/>
                                     }
                                     else
                                     {
-                                        <img class="product-image" src="https://via.placeholder.com/300x300?text=No+Image" alt="No Image" />
+                                        <img class="product-image" src="https://placehold.co/600x400/png" alt="No Image" />
                                     }
                                 </div>
                             </a>

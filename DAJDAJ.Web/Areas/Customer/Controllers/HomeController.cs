@@ -27,7 +27,7 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
         public IActionResult Index(int ? page)
         {
             var PageNumber = page ?? 1;
-            var PageSize = 2;
+            var PageSize = 4;
             var products = _unitOfWork.Product.GetAll().ToPagedList(PageNumber, PageSize);   
             return View(products);
         }
@@ -103,7 +103,8 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
 
             // إضافة خريطة الألوان والصور إلى ViewBag
             ViewBag.ImageColorMap = imageColorMap;
-            
+            ViewBag.Viewers = new Random().Next(37, 54);
+
             // تسجيل البيانات للتصحيح
             System.Diagnostics.Debug.WriteLine($"Product Colors from ProductImages: {string.Join(", ", colors)}");
             System.Diagnostics.Debug.WriteLine($"ImageColorMap Count: {imageColorMap.Count}");

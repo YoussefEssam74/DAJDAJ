@@ -31,9 +31,11 @@ namespace DAJDAJ.Web
 
             builder.Services.AddIdentity<IdentityUser, IdentityRole>
                 (options=>options.Lockout.DefaultLockoutTimeSpan=TimeSpan.FromMinutes(30))
-                .AddDefaultTokenProviders()
-                .AddDefaultUI()
+                .AddDefaultTokenProviders().AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+
+
 
             builder.Services.AddAuthentication(options =>
             {

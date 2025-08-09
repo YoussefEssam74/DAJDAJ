@@ -2,11 +2,14 @@
 using DAJDAJ.DataAccess.Implementation;
 using DAJDAJ.Entities.Models;
 using DAJDAJ.Entities.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DAJDAJ.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = ("Admin"))]
+
     public class CategoryController : Controller
     {
         private IUntiOfWork _untiOfWork;

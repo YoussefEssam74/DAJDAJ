@@ -3,16 +3,17 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace DAJDAJ.Utilities
 {
     public class EmailSender : IEmailSender
     {
-        public async Task SendEmailAsync(string email, string subject, string htmlMessage)
+        // New overload to send to multiple emails
+        public async Task SendEmailAsync(IEnumerable<string> emails, string subject, string htmlMessage)
         {
             try
             {
-                // Gmail SMTP settings
                 var smtpClient = new SmtpClient("smtp.gmail.com")
                 {
                     Port = 587,
@@ -22,21 +23,29 @@ namespace DAJDAJ.Utilities
 
                 var mailMessage = new MailMessage
                 {
-                    From = new MailAddress("youssefessam1293@gmail.com", "DAJDAJ Shop"),
+                    From = new MailAddress("youssefessam1293@gmail.com", "DAJDAJ"),
                     Subject = subject,
                     Body = htmlMessage,
                     IsBodyHtml = true,
                 };
-                mailMessage.To.Add(email);
+                foreach (var email in emails)
+                {
+                    mailMessage.To.Add(email);
+                }
 
                 await smtpClient.SendMailAsync(mailMessage);
             }
             catch (System.Exception ex)
             {
-                // Log the error to Debug output (or you can log to a file)
                 Debug.WriteLine($"Email send error: {ex.Message}");
-                throw; // Optional: rethrow to see the error in the app
+                throw;
             }
+        }
+
+        // Keep the original single-email method for compatibility
+        public async Task SendEmailAsync(string email, string subject, string htmlMessage)
+        {
+            await SendEmailAsync(new List<string> { email }, subject, htmlMessage);
         }
     }
 }

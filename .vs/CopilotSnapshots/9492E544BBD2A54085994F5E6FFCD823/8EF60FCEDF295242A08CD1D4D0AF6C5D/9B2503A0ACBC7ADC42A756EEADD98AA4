@@ -1,0 +1,51 @@
+﻿using Microsoft.AspNetCore.Identity.UI.Services;
+using System.Net;
+using System.Net.Mail;
+using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Collections.Generic;
+
+namespace DAJDAJ.Utilities
+{
+    public class EmailSender : IEmailSender
+    {
+        // New overload to send to multiple emails
+        public async Task SendEmailAsync(IEnumerable<string> emails, string subject, string htmlMessage)
+        {
+            try
+            {
+                var smtpClient = new SmtpClient("smtp.gmail.com")
+                {
+                    Port = 587,
+                    Credentials = new NetworkCredential("youssefessam1293@gmail.com", "okni yeiz ostg cdsk "),
+                    EnableSsl = true,
+                };
+
+                var mailMessage = new MailMessage
+                {
+                    From = new MailAddress("youssefessam1293@gmail.com", "DAJDAJ Shop"),
+                    Subject = subject,
+                    Body = htmlMessage,
+                    IsBodyHtml = true,
+                };
+                foreach (var email in emails)
+                {
+                    mailMessage.To.Add(email);
+                }
+
+                await smtpClient.SendMailAsync(mailMessage);
+            }
+            catch (System.Exception ex)
+            {
+                Debug.WriteLine($"Email send error: {ex.Message}");
+                throw;
+            }
+        }
+
+        // Keep the original single-email method for compatibility
+        public async Task SendEmailAsync(string email, string subject, string htmlMessage)
+        {
+            await SendEmailAsync(new List<string> { email }, subject, htmlMessage);
+        }
+    }
+}

@@ -3,6 +3,7 @@ using DAJDAJ.DataAccess.Implementation;
 using DAJDAJ.Entities.Models;
 using DAJDAJ.Entities.Repositories;
 using DAJDAJ.Entities.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -17,6 +18,8 @@ using System.Threading.Tasks;
 namespace DAJDAJ.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = ("Admin"))]
+
     public class ProductController : Controller
     {
         private readonly IUntiOfWork _untiOfWork;
@@ -129,7 +132,7 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
 
                 if (result > 0)
                 {
-                    TempData["Success"] = "Product created successfully";
+                    TempData["Create"] = "Product created successfully";
                     return RedirectToAction("Index");
                 }
                 else
@@ -310,7 +313,7 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
                 int result = _untiOfWork.Complete();
                 if (result > 0)
                 {
-                    TempData["Success"] = "Product updated successfully";
+                    TempData["Update"] = "Product updated successfully";
                     return RedirectToAction("Index");
                 }
                 else
@@ -346,7 +349,27 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
 
                 string RootPath = _webHostEnvironment.WebRootPath;
 
-                // TODO: Delete main image and additional images from disk if needed
+                // حذف الصورة الرئيسية إذا كانت موجودة
+                if (!string.IsNullOrEmpty(product.Img))
+                {
+                    var mainImgPath = Path.Combine(RootPath, product.Img.Replace("/", Path.DirectorySeparatorChar.ToString()));
+                    if (System.IO.File.Exists(mainImgPath))
+                        System.IO.File.Delete(mainImgPath);
+                }
+
+                // حذف كل الصور الإضافية المرتبطة بالمنتج
+                if (product.ProductImages != null && product.ProductImages.Count > 0)
+                {
+                    foreach (var img in product.ProductImages)
+                    {
+                        if (!string.IsNullOrEmpty(img.ImagePath))
+                        {
+                            var imgPath = Path.Combine(RootPath, img.ImagePath.Replace("/", Path.DirectorySeparatorChar.ToString()));
+                            if (System.IO.File.Exists(imgPath))
+                                System.IO.File.Delete(imgPath);
+                        }
+                    }
+                }
 
                 // Delete product
                 _untiOfWork.Product.Remove(product);
@@ -366,7 +389,7 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
             try
             {
                 var fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
-                var imagesFolder = Path.Combine(rootPath, "images");
+                var imagesFolder = Path.Combine(rootPath, "Images", "Products");
                 if (!Directory.Exists(imagesFolder))
                 {
                     Directory.CreateDirectory(imagesFolder);
@@ -376,7 +399,7 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
                 {
                     imageFile.CopyTo(stream);
                 }
-                return "images/" + fileName;
+                return "Images/Products/" + fileName;
             }
             catch (Exception ex)
             {
@@ -400,7 +423,14 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
                 new SelectListItem { Text = "Purple", Value = "Purple" },
                 new SelectListItem { Text = "Gray", Value = "Gray" },
                 new SelectListItem { Text = "Brown", Value = "Brown" },
-                new SelectListItem { Text = "Orange", Value = "Orange" }
+                new SelectListItem { Text = "Orange", Value = "Orange" },
+                new SelectListItem { Text = "Gold", Value = "Gold" },
+                new SelectListItem { Text = "Silver", Value = "Silver" },
+                new SelectListItem { Text = "Beige", Value = "Beige" },
+                new SelectListItem { Text = "Navy", Value = "Navy" },
+                new SelectListItem { Text = "Burgundy", Value = "Burgundy" },
+                new SelectListItem { Text = "Olive", Value = "Olive" },
+
             };
         }
     }
