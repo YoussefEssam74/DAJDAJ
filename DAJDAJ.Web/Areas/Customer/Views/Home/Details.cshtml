@@ -47,7 +47,19 @@
 
             <div class="col-md-6" style="position: sticky; top: 14px; align-self: start;">
                 <h2>@Model.product.Name</h2>
-                <h4 class="text-muted">@Model.product.Price.ToString("0.00") EGP</h4>
+                <div class="d-flex align-items-center gap-1 ">
+                    @if (Model.product.OldPrice.HasValue && Model.product.OldPrice > Model.product.Price)
+                    {
+                        <span class="text-muted text-decoration-line-through">@Model.product.OldPrice.Value.ToString("0.00")</span>
+                        <span class="text fw-bold">@Model.product.Price.ToString("0.00") EGP</span>
+                    }
+                    else
+                    {
+                        <span class="text-danger fw-bold">@Model.product.Price.ToString("0.00") EGP</span>
+                    }
+                </div>
+
+
 
                 @if (Model.Sizes != null && Model.Sizes.Any())
                 {
@@ -66,18 +78,6 @@
                             }
                         </div>
                         <div id="sizeValidationMsg" class="text-danger mt-2" style="display:none;">Please select a size</div>
-                    </div>
-                }
-                else if (Model.product.IsOneSize)
-                {
-                    <div class="mb-3">
-                        <label class="fw-bold">Size:</label>
-                        <div class="d-flex gap-2 mt-1">
-                            <button type="button" class="btn rounded-pill px-3 py-1 btn-dark size-btn selected"
-                                    data-size="One Size">
-                                One Size
-                            </button>
-                        </div>
                     </div>
                 }
 
@@ -442,7 +442,9 @@
             }
         });
     </script>
-    <style>
+}
+
+<style>
         .color-image-option {
             cursor: pointer;
             margin: 3px;
@@ -560,4 +562,3 @@
             margin: 0 auto;
         }
     </style>
-}

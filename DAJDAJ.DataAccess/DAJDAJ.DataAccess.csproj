@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DAJDAJ.Entities\DAJDAJ.Entities.csproj" />
+    <ProjectReference Include="..\DAJDAJ.Utilities\DAJDAJ.Utilities.csproj" />
   </ItemGroup>
 
 </Project>

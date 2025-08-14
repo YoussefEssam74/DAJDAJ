@@ -1,0 +1,287 @@
+﻿@model DAJDAJ.Entities.ViewModels.ProductVM
+
+@{
+    ViewBag.PageTitle = "Product Management";
+    ViewBag.CardTitle = "Create Product";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create" method="post" enctype="multipart/form-data" id="productForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="product.Name" class="control-label">Product Name</label>
+                <input asp-for="product.Name" class="form-control" placeholder="Enter product name" />
+                <span asp-validation-for="product.Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="product.Price" class="control-label">Price</label>
+                <input asp-for="product.Price" class="form-control" placeholder="0.00" />
+                <span asp-validation-for="product.Price" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Old Price</label>
+                <input name="OldPrice" class="form-control" placeholder="0.00" value="@Context.Request.Query["OldPrice"]" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Img" class="control-label">Main Image</label>
+                <input asp-for="Img" type="file" class="form-control" accept="image/*" />
+                <span asp-validation-for="Img" class="text-danger"></span>
+            </div>
+
+            <!-- Images with Colors Section -->
+            <div class="form-group">
+                <label class="control-label"><i class="fas fa-images"></i> Images with Colors</label>
+                <div id="imageColorContainer">
+                    <div class="image-color-row row mb-3">
+                        <div class="col-md-6">
+                            <label>Image</label>
+                            <input name="Images" type="file" class="form-control image-input" accept="image/*" />
+                            <div class="image-preview mt-2">
+                                <img src="/images/placeholder.jpg" class="img-thumbnail" style="max-width: 100px; max-height: 100px;" alt="Preview" />
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <label>Color</label>
+                            <select name="ImageColors" class="form-control color-select">
+                                <option value="">Select Color</option>
+                                @if (Model.AvailableColors != null)
+                                {
+                                    @foreach (var color in Model.AvailableColors)
+                                    {
+                                        <option value="@color.Value">@color.Text</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-1 d-flex align-items-end">
+                            <button type="button" class="btn btn-danger remove-image-row" style="display:none;">Delete</button>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" id="addImageRow" class="btn btn-success btn-sm">Add Another Image</button>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="product.CategoryId" class="control-label">Category</label>
+                <select asp-for="product.CategoryId" asp-items="Model.categorylist" class="form-control">
+                    <option disabled selected>-- Select Category --</option>
+                </select>
+                <span asp-validation-for="product.CategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="product.Color" class="control-label">Available Colors (comma separated)</label>
+                <input asp-for="product.Color" class="form-control" placeholder="Example: Black,White,Red" />
+                <span asp-validation-for="product.Color" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="product.Size" class="control-label">Available Sizes (comma separated)</label>
+                <input asp-for="product.Size" class="form-control" placeholder="Example: S,M,L,XL" id="sizeInput" />
+                <span asp-validation-for="product.Size" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-3">
+                <input type="submit" value="Create Product" class="btn btn-primary" id="saveBtn" />
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Preview Section -->
+    <div class="col-md-4">
+        <div class="card sticky-top">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0"><i class="fas fa-eye"></i> Product Preview</h5>
+            </div>
+            <div class="card-body text-center">
+                <img id="productPreview" src="/images/placeholder.jpg"
+                     class="img-fluid rounded border shadow-sm"
+                     style="max-width: 100%; height: auto; min-height: 200px;"
+                     alt="Product preview" />
+                <div class="mt-3">
+                    <h5 class="product-name-preview text-primary">@(Model?.product?.Name ?? "Product Name")</h5>
+                    <h4 class="text-success product-price-preview">
+                        @(Model?.product?.Price.ToString("0.00") ?? "0.00") EGP
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    
+    @* Toastr notifications using TempData *@
+    <script type="text/javascript">
+        $(function() {
+            if ('@TempData["Create"]' && '@TempData["Create"]' !== '') {
+                toastr["success"]('@TempData["Create"]');
+            }
+            if ('@TempData["Update"]' && '@TempData["Update"]' !== '') {
+                toastr["info"]('@TempData["Update"]');
+            }
+            if ('@TempData["Delete"]' && '@TempData["Delete"]' !== '') {
+                toastr["error"]('@TempData["Delete"]');
+            }
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Create Product page loaded');
+            let imageRowCount = 1;
+
+            // تحقق من وجود العناصر
+            const isOneSizeCheck = document.getElementById('isOneSizeCheck');
+            const sizeInput = document.getElementById('sizeInput');
+            const addImageRowBtn = document.getElementById('addImageRow');
+            const productForm = document.getElementById('productForm');
+            const saveBtn = document.getElementById('saveBtn');
+
+            // Main image preview
+            const imgInput = document.querySelector('input[name="Img"]');
+            const productPreview = document.getElementById('productPreview');
+            if (imgInput && productPreview) {
+                imgInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            productPreview.src = e.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
+            // Images with Colors preview
+            function bindImagePreviewEvents() {
+                document.querySelectorAll('.image-input').forEach(function(input) {
+                    input.addEventListener('change', function(e) {
+                        const file = e.target.files[0];
+                        const previewImg = e.target.closest('.col-md-6').querySelector('.image-preview img');
+                        if (file && previewImg) {
+                            const reader = new FileReader();
+                            reader.onload = function(e) {
+                                previewImg.src = e.target.result;
+                            };
+                            reader.readAsDataURL(file);
+                        } else if (previewImg) {
+                            previewImg.src = '/images/placeholder.jpg';
+                        }
+                    });
+                });
+            }
+            bindImagePreviewEvents();
+
+            // Add new row for images and colors
+            if (addImageRowBtn) {
+                addImageRowBtn.addEventListener('click', function() {
+                    console.log('Add image row clicked');
+                    const container = document.getElementById('imageColorContainer');
+                    if (container) {
+                        const newRow = container.querySelector('.image-color-row').cloneNode(true);
+
+                        // Clear values
+                        const imageInput = newRow.querySelector('.image-input');
+                        const colorSelect = newRow.querySelector('.color-select');
+                        const previewImg = newRow.querySelector('.image-preview img');
+                        if (imageInput) imageInput.value = '';
+                        if (colorSelect) colorSelect.value = '';
+                        if (previewImg) previewImg.src = '/images/placeholder.jpg';
+
+                        // Show delete button
+                        const removeBtn = newRow.querySelector('.remove-image-row');
+                        if (removeBtn) removeBtn.style.display = 'block';
+
+                        container.appendChild(newRow);
+                        imageRowCount++;
+                        updateRemoveButtons();
+                        bindImagePreviewEvents();
+                    }
+                });
+            }
+
+            // Delete row
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('remove-image-row')) {
+                    console.log('Remove image row clicked');
+                    e.target.closest('.image-color-row').remove();
+                    imageRowCount--;
+                    updateRemoveButtons();
+                }
+            });
+
+            function updateRemoveButtons() {
+                const rows = document.querySelectorAll('.image-color-row');
+                rows.forEach((row, index) => {
+                    const removeBtn = row.querySelector('.remove-image-row');
+                    if (removeBtn) {
+                        if (rows.length > 1) {
+                            removeBtn.style.display = 'block';
+                        } else {
+                            removeBtn.style.display = 'none';
+                        }
+                    }
+                });
+            }
+
+            // Form validation and submission
+            if (productForm && saveBtn) {
+                productForm.addEventListener('submit', function(e) {
+                    console.log('Form submitted');
+
+                    // Basic validation
+                    const nameInput = document.querySelector('input[name="product.Name"]');
+                    const priceInput = document.querySelector('input[name="product.Price"]');
+
+                    if (nameInput && !nameInput.value.trim()) {
+                        e.preventDefault();
+                        alert('Product name is required');
+                        nameInput.focus();
+                        return false;
+                    }
+
+                    if (priceInput && (!priceInput.value || parseFloat(priceInput.value) <= 0)) {
+                        e.preventDefault();
+                        alert('Product price must be greater than 0');
+                        priceInput.focus();
+                        return false;
+                    }
+
+                    // Show loading state
+                    saveBtn.disabled = true;
+                    saveBtn.value = 'Creating...';
+
+                    return true;
+                });
+            }
+
+            console.log('Create Product page initialization complete');
+        });
+    </script>
+}

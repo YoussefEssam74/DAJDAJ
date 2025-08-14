@@ -1,0 +1,248 @@
+﻿@model IPagedList<Product>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+
+@section Styles {
+    <style>
+        .image-container {
+            overflow: hidden;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .image-container:hover .product-image {
+            transform: scale(1.1);
+        }
+
+        .egp-price {
+            font-size: 14px;
+            font-weight: 500;
+            color: #666;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin-top: 5px;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: 0.3s ease-in-out;
+        }
+
+        .btn-outline-dark {
+            border-radius: 30px;
+            font-weight: 500;
+            transition: all 0.3s ease-in-out;
+        }
+
+            .btn-outline-dark:hover {
+                background-color: #000;
+                color: #fff;
+            }
+
+        .pagination .page-link {
+            border-radius: 0.5rem !important;
+            padding: 4px 10px;
+            margin: 0 2px;
+            font-size: 0.8rem;
+            color: #e83e8c;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .pagination .page-item.active .page-link {
+            background: #e83e8c;
+            color: #fff;
+            border-color: #e83e8c;
+        }
+
+        .pagination .page-link:hover {
+            background: #fce4ec;
+            color: #ad1457;
+        }
+
+
+        .no-products {
+            text-align: center;
+            padding: 100px 20px;
+            color: #666;
+        }
+
+            .no-products i {
+                font-size: 80px;
+                color: #ddd;
+                margin-bottom: 20px;
+            }
+
+            .no-products h3 {
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+
+            .no-products p {
+                font-size: 1rem;
+                color: #999;
+            }
+
+            .no-products a.btn {
+                margin-top: 15px;
+                border-radius: 25px;
+                padding: 10px 25px;
+            }
+
+        #home .hero {
+            position: relative;
+            background-image: url('/Images/IMG-20250724-WA0059.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            width: 100%;
+            object-fit: cover;
+            border-radius:24px;
+            /* aspect-ratio: 6/3; */
+            height:70vh;
+            z-index: 0;
+        }
+
+
+        .fc-white {
+            color: #FFFFFF;
+        }
+
+        .btn-custom {
+            border-radius: 999999px;
+            background-color: black;
+            color: white;
+            border: none;
+            transition: .2s;
+        }
+
+            .btn-custom:hover {
+                background-color: #222;
+            }
+
+       
+    </style>
+}
+
+
+<!-- Hero Section -->
+<section id="home" class="pt-4 pb-5">
+    <div class="container ">
+        <div class="hero p-4">
+            <div class="row fc-white align-content-end h-100 z-3">
+                <div class="row justify-content-between align-items-center">
+                    <div class="col-12">
+                        <h1 class="fw-bolder">TOLUS SPRING COLLECTION</h1>
+                    </div>
+                </div>
+                <div class="row justify-content-between align-items-center">
+                    <div class="col-12 col-lg-7">
+
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis voluptatem autem nesciunt
+                            obcaecati fugiat.
+                        </p>
+                    </div>
+                    @* <div class="col-12 col-lg-5 text-lg-end text-start">
+                        <button class="btn-custom px-5 py-2 fw-bolder">Buy Now</button>
+                    </div> *@
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Main Product Section -->
+<section class="pb-5 pt-2">
+    <div class="container px-4 px-lg-5 mt-0">
+        @if (Model != null && Model.Any())
+        {
+            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                @foreach (var item in Model)
+                {
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Product image ssssss-->
+                            <a href="/Customer/Home/Details/@item.Id">
+                                <div class="image-container" style="padding:12px">
+                                    @if (!string.IsNullOrEmpty(item.Img))
+                                    {
+                                        <img class="product-image" src="~/@item.Img" alt="Product Image" style="border-radius:4px"/>
+                                    }
+                                    else
+                                    {
+                                        <img class="product-image" src="https://placehold.co/600x400/png" alt="No Image" />
+                                    }
+                                </div>
+                            </a>
+                            <!-- Product details -->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <h5 class="fw-bolder">@item.Name</h5>
+                                    <div class="d-flex align-items-center gap-1 justify-content-center">
+                                @if (item.OldPrice > 0)
+                                        {
+                                            <h4 class="egp-price text-decoration-line-through text-body-tertiary fw-lighter"> @item.OldPrice EGP</h4>
+                                        <h4 class="egp-price">@item.Price.ToString("0.00") EGP</h4>
+                                        }
+                                        else
+                                        {
+                                            <h4 class="egp-price">@item.Price.ToString("0.00") EGP</h4>
+                                        }
+                                      
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                            <!-- Product actions -->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center">
+                                    <a class="btn btn-outline-dark mt-auto" href="/Customer/Home/Details/@item.Id">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Pagination -->
+            <div class="d-flex justify-content-center mt-4">
+                @Html.PagedListPager(
+                Model,
+                        page => Url.Action("Index", new { page }),
+                        new PagedListRenderOptions
+                        {
+                            LiElementClasses = new[] { "page-item" },
+                            PageClasses = new[] { "page-link", "rounded-pill", "shadow-sm", "text-dark" },
+                            UlElementClasses = new[] { "pagination", "pagination-lg", "gap-2", "border-0" },
+                            DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+                            DisplayLinkToLastPage = PagedListDisplayMode.Always,
+                            DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+                            DisplayLinkToNextPage = PagedListDisplayMode.Always,
+                            LinkToFirstPageFormat = "<i class='bi bi-chevron-double-left'></i>",
+                            LinkToPreviousPageFormat = "<i class='bi bi-chevron-left'></i>",
+                            LinkToNextPageFormat = "<i class='bi bi-chevron-right'></i>",
+                            LinkToLastPageFormat = "<i class='bi bi-chevron-double-right'></i>"
+                        }
+                        )
+        </div>
+                }
+        else
+        {
+            <div class="no-products">
+                <i class="fas fa-box-open"></i>
+                <h3>No Products Available</h3>
+                <p>@ViewBag.Message</p>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a href="/Admin/Product/Create" class="btn btn-primary">Add New Product</a>
+                }
+            </div>
+        }
+    </div>
+</section>

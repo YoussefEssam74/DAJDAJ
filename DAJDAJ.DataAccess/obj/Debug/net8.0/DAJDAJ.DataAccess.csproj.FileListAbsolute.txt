@@ -4,7 +4,9 @@ C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.DataAccess\bin\Debug\net8.0\DAJDAJ.Dat
 C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.DataAccess\bin\Debug\net8.0\DAJDAJ.DataAccess.dll
 C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.DataAccess\bin\Debug\net8.0\DAJDAJ.DataAccess.pdb
 C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.DataAccess\bin\Debug\net8.0\DAJDAJ.Entities.dll
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.DataAccess\bin\Debug\net8.0\DAJDAJ.Utilities.dll
 C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.DataAccess\bin\Debug\net8.0\DAJDAJ.Entities.pdb
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.DataAccess\bin\Debug\net8.0\DAJDAJ.Utilities.pdb
 C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.DataAccess\obj\Debug\net8.0\DAJDAJ.DataAccess.csproj.AssemblyReference.cache
 C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.DataAccess\obj\Debug\net8.0\DAJDAJ.DataAccess.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.DataAccess\obj\Debug\net8.0\DAJDAJ.DataAccess.AssemblyInfoInputs.cache

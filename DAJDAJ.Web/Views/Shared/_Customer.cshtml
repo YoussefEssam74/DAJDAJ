@@ -1,4 +1,4 @@
-﻿@using Microsoft.AspNetCore.Http
+﻿﻿@using Microsoft.AspNetCore.Http
 @using DAJDAJ.Utilities
 @inject IHttpContextAccessor httpContextAccessor
 
@@ -47,6 +47,15 @@
     @RenderSection("Styles", required: false)
 </head>
 <body>
+
+    <header id="header" class="bg-dark-custom-animated  py-3">
+        <div class="d-flex text-white align-items-center justify-content-center flex-column">
+            <p class="display-6 fw-bolder mb-0 pb-0">DAJDAJ</p>
+            <p class="lead fw-normal text-white-50 my-0">By women to women ♡</p>
+        </div>
+       
+    </header>
+
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container px-4 px-lg-5">
@@ -72,15 +81,23 @@
                     <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                               data-bs-toggle="dropdown" aria-expanded="false">Setting</a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#!">My Orders</a></li>
-                                <li><hr class="dropdown-divider" /></li>
-                                <li><a class="dropdown-item" href="#!">Edit Profile</a></li>
-                            </ul>
-                        </li>
+                       @if(User.IsInRole(SD.AdminRole))
+                        {
+                            <li class="nav-item"><a class="nav-link active" href="Admin/Dashboard/Index">Dashboard</a></li>
+
+                        }
+                        else
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">Setting</a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" href="#!">My Orders</a></li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li><a class="dropdown-item" href="Identity/Account/Manage">Edit Profile</a></li>
+                                </ul>
+                            </li>
+                        }
                     }
                 </ul>
                 <div class="d-flex align-items-center">
@@ -90,14 +107,14 @@
     </nav>
 
     <!-- Header -->
-    <header class="bg-dark-custom-animated py-5">
+    @* <header class="bg-dark-custom-animated py-5">
         <div class="container px-4 px-lg-5 my-5">
             <div class="text-center text-white">
                 <h1 class="display-4 fw-bolder">DAJDAJ</h1>
                 <p class="lead fw-normal text-white-50 mb-0">By women to women ♡</p>
             </div>
         </div>
-    </header>
+    </header> *@
 
     <!-- Page Content -->
     @RenderBody()

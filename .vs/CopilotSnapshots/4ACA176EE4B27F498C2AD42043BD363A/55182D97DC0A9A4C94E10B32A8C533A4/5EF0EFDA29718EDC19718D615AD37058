@@ -1,0 +1,78 @@
+﻿var dtble;
+
+$(document).ready(function () {
+    dtble = $('#mytable').DataTable({
+        "ajax": {
+            "url": "/Admin/Product/GetData",
+            "type": "GET",
+            "datatype": "json"
+        },
+        "columns": [
+            { "data": "name" },
+            { "data": "size" },
+            { "data": "price" },
+            { "data": "color" },
+            { "data": "category.name" },
+            {
+                "data": "id",
+                "render": function (data, type, row) {
+                    // Get OldPrice from the input field if available, else fallback to price
+                    return `
+                        <a href="/Admin/Product/Edit/${data}" class="btn btn-sm btn-warning">Edit</a>
+                        <button class="btn btn-sm btn-info" onclick="openDetailsWithOldPrice(${data}, ${row.price})">Details</button>
+                        <button onclick="DeleteItem('/Admin/Product/Delete/${data}')" class="btn btn-sm btn-danger">Delete</button>
+                    `;
+                },
+                "orderable": false,
+                "searchable": false
+            }
+        ],
+        "language": {
+            "emptyTable": "No products found"
+        }
+    });
+});
+
+function openDetailsWithOldPrice(id, price) {
+    // Try to get OldPrice from the Edit/Create page if open, else fallback to price
+    let oldPrice = price;
+    // Try to get value from a visible input[name=OldPrice] if it exists
+    var oldPriceInput = document.querySelector('input[name="OldPrice"]');
+    if (oldPriceInput && oldPriceInput.value && !isNaN(oldPriceInput.value)) {
+        oldPrice = oldPriceInput.value;
+    }
+    window.open(`/Customer/Home/Details/${id}?OldPrice=${oldPrice}`, '_blank');
+}
+
+function DeleteItem(url) {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: url,
+                type: "DELETE",
+                headers: {
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function (data) {
+                    if (data.success) {
+                        dtble.ajax.reload();
+                        toastr.error(data.message); // Show delete message in red
+                    } else {
+                        toastr.error(data.message);
+                    }
+                },
+                error: function () {
+                    toastr.error("An error occurred while deleting the product.");
+                }
+            });
+        }
+    });
+}

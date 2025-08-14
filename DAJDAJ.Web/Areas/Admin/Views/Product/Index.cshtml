@@ -4,21 +4,27 @@
     Layout = "~/Views/Shared/_Dashboard.cshtml";
 }
 
+@Html.AntiForgeryToken()
+
 <a class="btn btn-primary mb-3" href="/Admin/Product/Create">Create</a>
 
-<table id="mytable" class="table table-hover" width="100%">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Size</th>
-            <th>Price</th>
-            <th>Color</th>
-            <th>Category</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-</table>
+<div class="table-responsive">
+    <table id="mytable" class="table table-hover" width="100%">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Size</th>
+                <th>Price</th>
+                <th>Color</th>
+                <th>Category</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+    </table>
+    </div>
+
+
 
 @section Scripts {
-    <script src="~/js/product.js"></script>
+    <script src="~/js/Product.js"></script>
 }

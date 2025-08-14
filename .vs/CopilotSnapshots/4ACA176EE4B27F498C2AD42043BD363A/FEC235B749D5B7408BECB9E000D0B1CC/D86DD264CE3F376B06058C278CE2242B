@@ -1,0 +1,67 @@
+﻿var dtble;
+
+$(document).ready(function () {
+    dtble = $('#mytable').DataTable({
+        "ajax": {
+            "url": "/Admin/Product/GetData",
+            "type": "GET",
+            "datatype": "json"
+        },
+        "columns": [
+            { "data": "name" },
+            { "data": "size" },
+            { "data": "price" },
+            { "data": "color" },
+            { "data": "category.name" },
+            {
+                "data": "id",
+                "render": function (data, type, row) {
+                    // Use row.price as OldPrice in the details link
+                    return `
+                        <a href="/Admin/Product/Edit/${data}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="/Customer/Home/Details/${data}?OldPrice=${row.price}" class="btn btn-sm btn-info" target="_blank">Details</a>
+                        <button onclick="DeleteItem('/Admin/Product/Delete/${data}')" class="btn btn-sm btn-danger">Delete</button>
+                    `;
+                },
+                "orderable": false,
+                "searchable": false
+            }
+        ],
+        "language": {
+            "emptyTable": "No products found"
+        }
+    });
+});
+
+function DeleteItem(url) {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: url,
+                type: "DELETE",
+                headers: {
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function (data) {
+                    if (data.success) {
+                        dtble.ajax.reload();
+                        toastr.error(data.message); // Show delete message in red
+                    } else {
+                        toastr.error(data.message);
+                    }
+                },
+                error: function () {
+                    toastr.error("An error occurred while deleting the product.");
+                }
+            });
+        }
+    });
+}

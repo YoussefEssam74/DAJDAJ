@@ -383,10 +383,10 @@ wwwroot\docs\layout.md
 wwwroot\docs\license.md
 wwwroot\docs\upgrade-guide.md
 wwwroot\favicon.ico
-wwwroot\Images\products\0c882783-5801-471b-8b76-3ac5f4feda40.png
-wwwroot\Images\products\aae177c8-b7ec-4c0d-a821-269708d7b4f9.jpg
-wwwroot\Images\products\f22df724-6f8f-42a2-b8af-b1b355aa3be3.png
-wwwroot\Images\products\fe37280c-6299-48ed-b434-aacc4ec6eee7.png
+wwwroot\Images\IMG-20250724-WA0059.jpg
+wwwroot\Images\products\30286a24-11de-443d-82d3-0643bb2b5342.jpg
+wwwroot\Images\products\38aceab1-6ec9-46e0-8a0a-40b505adc109.jpg
+wwwroot\Images\products\9f7f9f78-600b-4a75-a2fd-12a6569b4e8b.jpg
 wwwroot\Images\tiktok-brands-solid-full.svg
 wwwroot\img\AdminLTELogo.png
 wwwroot\img\avatar.png

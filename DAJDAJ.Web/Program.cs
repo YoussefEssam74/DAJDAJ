@@ -1,4 +1,5 @@
 using DAJDAJ.DataAccess;
+using DAJDAJ.DataAccess.DbIntializer;
 using DAJDAJ.DataAccess.Implementation;
 using DAJDAJ.Entities.Repositories;
 using DAJDAJ.Utilities;
@@ -58,7 +59,7 @@ namespace DAJDAJ.Web
 
             builder.Services.AddSingleton<IEmailSender, EmailSender>();
             builder.Services.AddScoped<IUntiOfWork, UnitOfWork>();
-
+            builder.Services.AddScoped<IDbIntializar,DbIntializar>();
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession();
 
@@ -77,7 +78,7 @@ namespace DAJDAJ.Web
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            SeedDb();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSession();
@@ -93,6 +94,16 @@ namespace DAJDAJ.Web
                 pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
+
+            void SeedDb()
+            {
+                using (var scope = app.Services.CreateScope())
+                {
+                    var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbIntializar>();
+                    dbInitializer.Initialize();
+                }
+            }
+
         }
     }
 }

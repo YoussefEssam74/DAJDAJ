@@ -34,6 +34,9 @@
             "projectReferences": {
               "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Entities\\DAJDAJ.Entities.csproj": {
                 "projectPath": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Entities\\DAJDAJ.Entities.csproj"
+              },
+              "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Utilities\\DAJDAJ.Utilities.csproj": {
+                "projectPath": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Utilities\\DAJDAJ.Utilities.csproj"
               }
             }
           }

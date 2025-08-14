@@ -29,8 +29,24 @@
 
             <div class="form-group">
                 <label asp-for="product.Price" class="control-label">Price</label>
-                <input asp-for="product.Price" class="form-control" placeholder="0.00" />
+
+                @if (Model.product.Price == 0)
+                {
+                    <input name="product.Price" class="form-control" placeholder="0.00" />
+                }
+                else
+                {
+                    <input asp-for="product.Price" class="form-control" placeholder="0.00" />
+                }
+
                 <span asp-validation-for="product.Price" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="product.OldPrice" class="control-label">Old Price (optional)</label>
+                <input asp-for="product.OldPrice" class="form-control" placeholder="0.00" />
+                <span asp-validation-for="product.OldPrice" class="text-danger"></span>
             </div>
 
             <div class="form-group">

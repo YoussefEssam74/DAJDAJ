@@ -1,0 +1,41 @@
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DAJDAJ.Entities.Models
+{
+    public class Product
+    {
+        public int Id { get; set; }
+        [Required]
+
+        public string Name { get; set; }
+        [DisplayName("Image")]
+        [ValidateNever]
+        public string Img { get; set; } // Removed [Required] to allow edit without forcing image upload
+        [Required]
+
+        public decimal Price { get; set; }
+
+        [DisplayName("Old Price")]
+        public decimal? OldPrice { get; set; }
+        [Required]
+
+        [DisplayName("Category")]
+        public int CategoryId { get; set; }
+        [ValidateNever]
+
+        public Category Category { get; set; }
+        public string Color { get; set; }
+
+        public string Size { get; set; } // E.g., "S", "M", "L", "XL", or "One Size"
+
+        [ValidateNever]
+        public ICollection<ProductImage> ProductImages { get; set; }
+    }
+}
