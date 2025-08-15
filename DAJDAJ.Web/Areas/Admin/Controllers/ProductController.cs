@@ -120,7 +120,7 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
                 }
                 productVM.product.ProductImages = productImages;
 
-             
+
 
                 // Add product to database
                 _untiOfWork.Product.Add(productVM.product);
@@ -191,17 +191,10 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
         // Only keep one Edit POST action to avoid ambiguous matches
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public IActionResult Edit(int id, ProductVM productVM, IFormFile? Img, List<int>? ImagesToDelete, List<int>? ExistingImageIds, List<string>? ExistingImageColors, List<string>? NewImageColors)
+        public IActionResult Edit(int id, ProductVM productVM, IFormFile? Img, List<int>? ExistingImageIds, List<string>? ExistingImageColors, List<string>? NewImageColors)
         {
             if (!ModelState.IsValid)
             {
-                var product = _untiOfWork.Product
-                    .GetFirstorDefault(p => p.Id == id, "ProductImages");
-                if (product != null)
-                {
-                    productVM.product = product;
-                }
-
                 productVM.categorylist = _untiOfWork.Category.GetAll().Select(x => new SelectListItem
                 {
                     Text = x.Name,
@@ -209,55 +202,18 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
                     Selected = x.Id == productVM.product.CategoryId
                 });
                 productVM.AvailableColors = GetAvailableColors();
-
                 return View(productVM);
             }
 
             try
             {
                 string rootPath = _webHostEnvironment.WebRootPath;
-                var productFromDb = _untiOfWork.Product.GetFirstorDefault(x => x.Id == id, "ProductImages");
+
+                var productFromDb = _untiOfWork.Product.GetFirstorDefault(p => p.Id == id, "ProductImages");
                 if (productFromDb == null)
                 {
                     TempData["Error"] = "Product not found";
                     return RedirectToAction("Index");
-                }
-
-                // حذف الصور الإضافية المطلوبة
-                if (ImagesToDelete != null && ImagesToDelete.Count > 0)
-                {
-                    // احصل على الصور من DbSet مباشرة لضمان التتبع
-                    var imagesToRemove = _context.ProductImages.Where(img => ImagesToDelete.Contains(img.Id)).ToList();
-                    foreach (var img in imagesToRemove)
-                    {
-                        if (!string.IsNullOrEmpty(img.ImagePath))
-                        {
-                            var imgPath = Path.Combine(rootPath, img.ImagePath.Replace("/", Path.DirectorySeparatorChar.ToString()));
-                            if (System.IO.File.Exists(imgPath))
-                                System.IO.File.Delete(imgPath);
-                        }
-                        _context.ProductImages.Remove(img); // حذف من DbSet
-                    }
-                    _untiOfWork.Complete(); // حفظ التغييرات في الداتا بيز
-                    // أزل الصور من مجموعة المنتج في الذاكرة
-                    productFromDb.ProductImages = productFromDb.ProductImages
-                        .Where(img => !ImagesToDelete.Contains(img.Id))
-                        .ToList();
-                }
-
-                // تعديل ألوان الصور القديمة
-                if (ExistingImageIds != null && ExistingImageColors != null)
-                {
-                    for (int i = 0; i < ExistingImageIds.Count; i++)
-                    {
-                        int imgId = ExistingImageIds[i];
-                        string? color = (i < ExistingImageColors.Count) ? ExistingImageColors[i] : null;
-                        var img = productFromDb.ProductImages.FirstOrDefault(x => x.Id == imgId);
-                        if (img != null && color != null && img.Color != color)
-                        {
-                            img.Color = color;
-                        }
-                    }
                 }
 
                 // تحديث الصورة الرئيسية
@@ -272,7 +228,35 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
                     productFromDb.Img = SaveImage(Img, rootPath);
                 }
 
-                // إضافة الصور الجديدة مع ربط كل صورة بلونها الصحيح
+                // حذف الصور القديمة التي لم تعد موجودة
+                if (ExistingImageIds != null)
+                {
+                    var imagesToRemove = productFromDb.ProductImages.Where(img => !ExistingImageIds.Contains(img.Id)).ToList();
+                    foreach (var img in imagesToRemove)
+                    {
+                        var imgPath = Path.Combine(rootPath, img.ImagePath.Replace("/", Path.DirectorySeparatorChar.ToString()));
+                        if (System.IO.File.Exists(imgPath))
+                            System.IO.File.Delete(imgPath);
+                        _context.ProductImages.Remove(img);
+                    }
+                }
+
+                // تحديث ألوان الصور القديمة
+                if (ExistingImageIds != null && ExistingImageColors != null)
+                {
+                    for (int i = 0; i < ExistingImageIds.Count; i++)
+                    {
+                        int imgId = ExistingImageIds[i];
+                        string? color = (i < ExistingImageColors.Count) ? ExistingImageColors[i] : null;
+                        var img = productFromDb.ProductImages.FirstOrDefault(x => x.Id == imgId);
+                        if (img != null && color != null && img.Color != color)
+                        {
+                            img.Color = color;
+                        }
+                    }
+                }
+
+                // إضافة الصور الجديدة مع ألوانها
                 if (productVM.Images != null && productVM.Images.Count > 0)
                 {
                     int newColorIndex = 0;
@@ -281,34 +265,29 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
                         var image = productVM.Images[i];
                         if (image != null && image.Length > 0)
                         {
+                            string color = (NewImageColors != null && newColorIndex < NewImageColors.Count) ? NewImageColors[newColorIndex] : "";
                             string imagePath = SaveImage(image, rootPath);
-                            string color = "";
-                            if (NewImageColors != null && newColorIndex < NewImageColors.Count)
-                            {
-                                color = NewImageColors[newColorIndex];
-                                newColorIndex++;
-                            }
                             var newImage = new ProductImage
                             {
                                 ImagePath = imagePath,
                                 Color = color,
                                 ProductId = productFromDb.Id
                             };
-                            _context.ProductImages.Add(newImage); // إضافة صريحة للـ DbSet
+                            _context.ProductImages.Add(newImage);
                             productFromDb.ProductImages.Add(newImage);
+                            newColorIndex++;
                         }
                     }
                 }
 
+                // تحديث باقي البيانات
                 productFromDb.Name = productVM.product.Name;
                 productFromDb.Price = productVM.product.Price;
+                productFromDb.OldPrice = productVM.product.OldPrice;
                 productFromDb.CategoryId = productVM.product.CategoryId;
                 productFromDb.Color = productVM.product.Color;
                 productFromDb.Size = productVM.product.Size;
-                productFromDb.OldPrice= productVM.product.OldPrice;
 
-
-                _untiOfWork.Product.Update(productFromDb);
                 int result = _untiOfWork.Complete();
                 if (result > 0)
                 {
@@ -334,10 +313,15 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
                 return View(productVM);
             }
         }
-        [HttpDelete]
 
+        [HttpDelete]
         public IActionResult Delete(int? id)
         {
+            if (id == null || id == 0)
+            {
+                return Json(new { success = false, message = "Invalid product ID" });
+            }
+
             try
             {
                 var product = _untiOfWork.Product.GetFirstorDefault(x => x.Id == id, "ProductImages");
@@ -370,10 +354,11 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
                     }
                 }
 
-                // Delete product
+                // حذف المنتج
                 _untiOfWork.Product.Remove(product);
                 _untiOfWork.Complete();
 
+                TempData["Delete"] = "Product deleted successfully";
                 return Json(new { success = true, message = "Product deleted successfully" });
             }
             catch (Exception ex)
@@ -381,6 +366,7 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
                 return Json(new { success = false, message = "Error deleting product: " + ex.Message });
             }
         }
+
 
         // Helper method to save an image and return its relative path
         private string SaveImage(IFormFile imageFile, string rootPath)

@@ -187,7 +187,6 @@ namespace DAJDAJ.DataAccess.Migrations
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Size = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsOneSize = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

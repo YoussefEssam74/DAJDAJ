@@ -1,0 +1,429 @@
+﻿using DAJDAJ.DataAccess;
+using DAJDAJ.DataAccess.Implementation;
+using DAJDAJ.Entities.Models;
+using DAJDAJ.Entities.Repositories;
+using DAJDAJ.Entities.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace DAJDAJ.Web.Areas.Admin.Controllers
+{
+    [Area("Admin")]
+    [Authorize(Roles = ("Admin"))]
+
+    public class ProductController : Controller
+    {
+        private readonly IUntiOfWork _untiOfWork;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly ApplicationDbContext _context;
+
+        public ProductController(
+            IUntiOfWork untiOfWork,
+            IWebHostEnvironment webHostEnvironment,
+            ApplicationDbContext context)
+        {
+            _untiOfWork = untiOfWork;
+            _webHostEnvironment = webHostEnvironment;
+            _context = context;
+        }
+
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        public IActionResult GetData()
+        {
+            var products = _untiOfWork.Product.GetAll(includeword: "Category");
+            return Json(new { data = products });
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            ProductVM productVM = new ProductVM()
+            {
+                product = new Product(),
+                categorylist = _untiOfWork.Category.GetAll().Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }),
+                Images = new List<IFormFile>(),
+                ImageColors = new List<string>(),
+                AvailableColors = GetAvailableColors()
+            };
+
+            return View(productVM);
+        }
+
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult Create(ProductVM productVM, IFormFile Img)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList();
+
+                TempData["Error"] = "Please correct the following errors: " + string.Join(", ", errors);
+
+                productVM.categorylist = _untiOfWork.Category.GetAll().Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                });
+                productVM.AvailableColors = GetAvailableColors();
+
+                return View(productVM);
+            }
+
+            try
+            {
+                string RootPath = _webHostEnvironment.WebRootPath;
+
+                // Process main image
+                if (Img != null && Img.Length > 0)
+                {
+                    productVM.product.Img = SaveImage(Img, RootPath);
+                }
+
+                // Always process additional images, even if some are empty
+                var productImages = new List<ProductImage>();
+                if (productVM.Images != null && productVM.Images.Count > 0)
+                {
+                    for (int i = 0; i < productVM.Images.Count; i++)
+                    {
+                        var image = productVM.Images[i];
+                        if (image != null && image.Length > 0)
+                        {
+                            string color = (productVM.ImageColors != null && i < productVM.ImageColors.Count) ? productVM.ImageColors[i] : "";
+                            string imagePath = SaveImage(image, RootPath);
+                            productImages.Add(new ProductImage
+                            {
+                                ImagePath = imagePath,
+                                Color = color
+                            });
+                        }
+                    }
+                }
+                productVM.product.ProductImages = productImages;
+
+
+                // Add product to database
+                _untiOfWork.Product.Add(productVM.product);
+                int result = _untiOfWork.Complete();
+
+                if (result > 0)
+                {
+                    TempData["Create"] = "Product created successfully";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["Error"] = "Failed to save product";
+                    return View(productVM);
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Error creating product: " + ex.Message;
+
+                // Rebind dropdowns
+                productVM.categorylist = _untiOfWork.Category.GetAll().Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                });
+                productVM.AvailableColors = GetAvailableColors();
+
+                return View(productVM);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                TempData["Error"] = "Invalid product ID";
+                return RedirectToAction("Index");
+            }
+
+            // Load product with related data
+            var product = _untiOfWork.Product
+                .GetFirstorDefault(p => p.Id == id, "ProductImages");
+            if (product == null)
+            {
+                TempData["Error"] = "Product not found";
+                return RedirectToAction("Index");
+            }
+
+            ProductVM productVM = new ProductVM()
+            {
+                product = product,
+                categorylist = _untiOfWork.Category.GetAll().Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString(),
+                    Selected = x.Id == product.CategoryId
+                }),
+                Images = new List<IFormFile>(),
+                ImageColors = new List<string>(),
+                AvailableColors = GetAvailableColors()
+            };
+
+            return View(productVM);
+        }
+
+        // Only keep one Edit POST action to avoid ambiguous matches
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult Edit(int id, ProductVM productVM, IFormFile? Img, List<int>? ImagesToDelete, List<int>? ExistingImageIds, List<string>? ExistingImageColors, List<string>? NewImageColors)
+        {
+            if (!ModelState.IsValid)
+            {
+                var product = _untiOfWork.Product
+                    .GetFirstorDefault(p => p.Id == id, "ProductImages");
+                if (product != null)
+                {
+                    productVM.product = product;
+                }
+
+                productVM.categorylist = _untiOfWork.Category.GetAll().Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString(),
+                    Selected = x.Id == productVM.product.CategoryId
+                });
+                productVM.AvailableColors = GetAvailableColors();
+
+                return View(productVM);
+            }
+
+            try
+            {
+                string rootPath = _webHostEnvironment.WebRootPath;
+                var productFromDb = _untiOfWork.Product.GetFirstorDefault(x => x.Id == id, "ProductImages");
+                if (productFromDb == null)
+                {
+                    TempData["Error"] = "Product not found";
+                    return RedirectToAction("Index");
+                }
+
+                // حذف الصور الإضافية المطلوبة
+                if (ImagesToDelete != null && ImagesToDelete.Count > 0)
+                {
+                    var imagesToRemove = productFromDb.ProductImages.Where(img => ImagesToDelete.Contains(img.Id)).ToList();
+                    foreach (var img in imagesToRemove)
+                    {
+                        if (!string.IsNullOrEmpty(img.ImagePath))
+                        {
+                            var imgPath = Path.Combine(rootPath, img.ImagePath.Replace("/", Path.DirectorySeparatorChar.ToString()));
+                            if (System.IO.File.Exists(imgPath))
+                                System.IO.File.Delete(imgPath);
+                        }
+                        productFromDb.ProductImages.Remove(img);
+                    }
+                }
+
+                // تعديل ألوان الصور القديمة
+                if (ExistingImageIds != null && ExistingImageColors != null)
+                {
+                    for (int i = 0; i < ExistingImageIds.Count; i++)
+                    {
+                        int imgId = ExistingImageIds[i];
+                        string? color = (i < ExistingImageColors.Count) ? ExistingImageColors[i] : null;
+                        var img = productFromDb.ProductImages.FirstOrDefault(x => x.Id == imgId);
+                        if (img != null && color != null && img.Color != color)
+                        {
+                            img.Color = color;
+                        }
+                    }
+                }
+
+                // تحديث الصورة الرئيسية
+                if (Img != null && Img.Length > 0)
+                {
+                    if (!string.IsNullOrEmpty(productFromDb.Img))
+                    {
+                        var oldMainImgPath = Path.Combine(rootPath, productFromDb.Img.Replace("/", Path.DirectorySeparatorChar.ToString()));
+                        if (System.IO.File.Exists(oldMainImgPath))
+                            System.IO.File.Delete(oldMainImgPath);
+                    }
+                    productFromDb.Img = SaveImage(Img, rootPath);
+                }
+
+                // إضافة الصور الجديدة مع ربط كل صورة بلونها الصحيح
+                if (productVM.Images != null && productVM.Images.Count > 0)
+                {
+                    int newColorIndex = 0;
+                    for (int i = 0; i < productVM.Images.Count; i++)
+                    {
+                        var image = productVM.Images[i];
+                        if (image != null && image.Length > 0)
+                        {
+                            string imagePath = SaveImage(image, rootPath);
+                            string color = "";
+                            if (NewImageColors != null && newColorIndex < NewImageColors.Count)
+                            {
+                                color = NewImageColors[newColorIndex];
+                                newColorIndex++;
+                            }
+                            var newImage = new ProductImage
+                            {
+                                ImagePath = imagePath,
+                                Color = color,
+                                ProductId = productFromDb.Id
+                            };
+                            _context.ProductImages.Add(newImage); // إضافة صريحة للـ DbSet
+                            productFromDb.ProductImages.Add(newImage);
+                        }
+                    }
+                }
+
+                // تحديث باقي خصائص المنتج فقط
+                productFromDb.Name = productVM.product.Name;
+                productFromDb.Price = productVM.product.Price;
+                productFromDb.CategoryId = productVM.product.CategoryId;
+                productFromDb.Color = productVM.product.Color;
+                productFromDb.Size = productVM.product.Size;
+                productFromDb.OldPrice = productVM.product.OldPrice;
+                
+                _untiOfWork.Product.Update(productFromDb);
+                int result = _untiOfWork.Complete();
+                if (result > 0)
+                {
+                    TempData["Update"] = "Product updated successfully";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["Error"] = "Failed to update product";
+                    return View(productVM);
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Error updating product: " + ex.Message;
+                productVM.categorylist = _untiOfWork.Category.GetAll().Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString(),
+                    Selected = x.Id == productVM.product.CategoryId
+                });
+                productVM.AvailableColors = GetAvailableColors();
+                return View(productVM);
+            }
+        }
+        [HttpDelete]
+
+        public IActionResult Delete(int? id)
+        {
+            try
+            {
+                var product = _untiOfWork.Product.GetFirstorDefault(x => x.Id == id, "ProductImages");
+                if (product == null)
+                {
+                    return Json(new { success = false, message = "Product not found" });
+                }
+
+                string RootPath = _webHostEnvironment.WebRootPath;
+
+                // حذف الصورة الرئيسية إذا كانت موجودة
+                if (!string.IsNullOrEmpty(product.Img))
+                {
+                    var mainImgPath = Path.Combine(RootPath, product.Img.Replace("/", Path.DirectorySeparatorChar.ToString()));
+                    if (System.IO.File.Exists(mainImgPath))
+                        System.IO.File.Delete(mainImgPath);
+                }
+
+                // حذف كل الصور الإضافية المرتبطة بالمنتج
+                if (product.ProductImages != null && product.ProductImages.Count > 0)
+                {
+                    foreach (var img in product.ProductImages)
+                    {
+                        if (!string.IsNullOrEmpty(img.ImagePath))
+                        {
+                            var imgPath = Path.Combine(RootPath, img.ImagePath.Replace("/", Path.DirectorySeparatorChar.ToString()));
+                            if (System.IO.File.Exists(imgPath))
+                                System.IO.File.Delete(imgPath);
+                        }
+                    }
+                }
+
+                // Delete product
+                _untiOfWork.Product.Remove(product);
+                _untiOfWork.Complete();
+
+                return Json(new { success = true, message = "Product deleted successfully" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error deleting product: " + ex.Message });
+            }
+        }
+
+        // Helper method to save an image and return its relative path
+        private string SaveImage(IFormFile imageFile, string rootPath)
+        {
+            try
+            {
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+                var imagesFolder = Path.Combine(rootPath, "Images", "Products");
+                if (!Directory.Exists(imagesFolder))
+                {
+                    Directory.CreateDirectory(imagesFolder);
+                }
+                var filePath = Path.Combine(imagesFolder, fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    imageFile.CopyTo(stream);
+                }
+                return "Images/Products/" + fileName;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error saving image: {ex.Message}");
+                return null;
+            }
+        }
+
+        // Helper to provide color options
+        private IEnumerable<SelectListItem> GetAvailableColors()
+        {
+            return new List<SelectListItem>
+            {
+                new SelectListItem { Text = "Black", Value = "Black" },
+                new SelectListItem { Text = "White", Value = "White" },
+                new SelectListItem { Text = "Red", Value = "Red" },
+                new SelectListItem { Text = "Blue", Value = "Blue" },
+                new SelectListItem { Text = "Green", Value = "Green" },
+                new SelectListItem { Text = "Yellow", Value = "Yellow" },
+                new SelectListItem { Text = "Pink", Value = "Pink" },
+                new SelectListItem { Text = "Purple", Value = "Purple" },
+                new SelectListItem { Text = "Gray", Value = "Gray" },
+                new SelectListItem { Text = "Brown", Value = "Brown" },
+                new SelectListItem { Text = "Orange", Value = "Orange" },
+                new SelectListItem { Text = "Gold", Value = "Gold" },
+                new SelectListItem { Text = "Silver", Value = "Silver" },
+                new SelectListItem { Text = "Beige", Value = "Beige" },
+                new SelectListItem { Text = "Navy", Value = "Navy" },
+                new SelectListItem { Text = "Burgundy", Value = "Burgundy" },
+                new SelectListItem { Text = "Olive", Value = "Olive" },
+
+            };
+        }
+    }
+}

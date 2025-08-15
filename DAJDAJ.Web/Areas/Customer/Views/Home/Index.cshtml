@@ -157,9 +157,16 @@
                         </p>
                     </div>
                     <div class="col-12 col-lg-5 text-lg-end text-start">
-                        <a href="/Customer/Home/Details/29" class="btn-custom px-5 py-2 fw-bolder" style="background-color: #f06292; color: white; border: none; border-radius: 8px;">
+                        @{
+                            var firstProductId = Model.FirstOrDefault()?.Id ?? 0;
+                        }
+                        <a href="@Url.Action("Details", "Home", new { id = firstProductId })"
+                           class="btn-custom px-5 py-2 fw-bolder"
+                           style="background-color: #f06292; color: white; border: none; border-radius: 8px;">
                             Shop Now
                         </a>
+                    </div>
+
                     </div>
                 </div>
             </div>

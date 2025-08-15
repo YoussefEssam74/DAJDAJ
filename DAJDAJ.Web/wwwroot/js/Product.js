@@ -17,7 +17,7 @@ $(document).ready(function () {
                 "data": "id",
                 "render": function (data, type, row) {
                     return `<a href="/Admin/Product/Edit/${data}" class="btn btn-sm btn-warning">Edit</a> ` +
-                        `<a href="/Admin/Product/Delete/${data}" class="btn btn-sm btn-danger">Delete</a>`;
+                        `<a onclick="DeleteItem('/Admin/Product/Delete/${data}')" class="btn btn-sm btn-danger">Delete</a>`
                 },
                 "orderable": false,
                 "searchable": false
