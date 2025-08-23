@@ -394,14 +394,12 @@
                     var showError = false;
                     // Only validate if Add to Cart button was clicked
                     if (lastClickedBtn && lastClickedBtn.id === 'addToCartBtn') {
-                        // تحقق من اللون
                         if (!selectedColor && (document.querySelectorAll('.color-image-option').length > 0 || document.querySelectorAll('.color-circle-option').length > 0)) {
                             document.getElementById('colorValidationMsg').style.display = 'block';
                             showError = true;
                         } else {
                             document.getElementById('colorValidationMsg').style.display = 'none';
                         }
-                        // تحقق من المقاس
                         if (!selectedSize && document.querySelectorAll('.size-btn').length > 0) {
                             document.getElementById('sizeValidationMsg').style.display = 'block';
                             showError = true;
@@ -415,7 +413,6 @@
                     // If Buy it Now or other button, allow submit without validation
                 });
             });
-            // عند اختيار اللون أو المقاس أخفِ الرسالة
             document.querySelectorAll('.color-image-option, .color-circle-option').forEach(function(option) {
                 option.addEventListener('click', function() {
                     document.getElementById('colorValidationMsg').style.display = 'none';
@@ -434,7 +431,6 @@
             if (nextBtn) nextBtn.addEventListener('click', () => stopAutoplay());
         });
 
-        // إغلاق المودال عند النقر في أي مكان داخل نافذة المودال (بما في ذلك الصورة)
         document.getElementById('imageModal').addEventListener('click', function (e) {
             const modalInstance = bootstrap.Modal.getInstance(this);
             if (modalInstance) {
@@ -500,7 +496,6 @@
             margin-bottom: 8px;
         }
         
-        /* تأثير التحديد */
         .color-image-container.selected {
             border: 2px solid #f06292 !important;
             transform: scale(1.05);
@@ -532,7 +527,6 @@
             justify-content: center;
         }
 
-        /* تبسيط تصميم المودال ليكون الخلفية شفافة بدون حدود أو ظل */
         .modal-content,
         .modal-header,
         .modal-body {

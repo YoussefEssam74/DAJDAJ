@@ -13,7 +13,7 @@ using System.Security.Claims;
 namespace DAJDAJ.Web.Areas.Customer.Controllers
 {
     [Area("Customer")]
-    // [Authorize] // تم التعليق حتى يستطيع الز visitor رؤية العربة الفارغة
+    // [Authorize] // Commented so that visitors can see the empty cart
     public class CartController : Controller
     {
         private readonly IUntiOfWork _unitOfWork;
@@ -29,7 +29,7 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
         {
             if (!User.Identity.IsAuthenticated)
             {
-                // المستخدم غير مسجل الدخول، أظهر صفحة العربة الفارغة
+                // User is not logged in, show empty cart page
                 return View("EmptyCart");
             }
             var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -39,7 +39,7 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
                 CartsList = _unitOfWork.ShoppingCart.GetAll(perdicate: u => u.ApplicationUserId == cliam.Value, "product.ProductImages")
             };
 
-            // إذا كانت السلة فاضية، أظهر صفحة العربة الفارغة
+            // If the cart is empty, show empty cart page
             if (ShoppingCartVM.CartsList == null || !ShoppingCartVM.CartsList.Any())
             {
                 return View("EmptyCart");
@@ -48,7 +48,7 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
             foreach (var item in ShoppingCartVM.CartsList)
             {
                 ShoppingCartVM.TotalCarts += (item.Count * item.product.Price);
-                // إضافة معلومات الصور المربوطة بالألوان
+                // Add color-related image info
                 if (item.product.ProductImages != null && item.product.ProductImages.Any())
                 {
                     var colorImage = item.product.ProductImages.FirstOrDefault(pi => 
@@ -105,7 +105,7 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
             var cliam = claimsIdentity.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
             shoppingCartVM.CartsList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == cliam.Value, "product");
 
-            // إعداد بيانات OrderHeader
+            // Prepare OrderHeader data
             shoppingCartVM.OrderHeaders.ApplicationUserId = cliam.Value;
             shoppingCartVM.OrderHeaders.OrderDate = DateTime.Now;
             shoppingCartVM.OrderHeaders.PaymentMethod = PaymentMethod;
@@ -113,7 +113,7 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
             shoppingCartVM.OrderHeaders.PaymentStatus = SD.Pending;
             shoppingCartVM.OrderHeaders.TotalPrice = 0;
 
-            // اجمع الاسم من FirstName و LastName المرسلين من الفورم
+            // Combine FirstName and LastName from form
             string firstName = Request.Form["FirstName"];
             string lastName = Request.Form["LastName"];
             if (!string.IsNullOrWhiteSpace(firstName) || !string.IsNullOrWhiteSpace(lastName))
@@ -151,6 +151,16 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
             {
                 shoppingCartVM.OrderHeaders.Phone = "-";
             }
+             string InstegramUserName = Request.Form["InstegramUserName"];
+
+            if (!string.IsNullOrWhiteSpace(InstegramUserName))
+            {
+                shoppingCartVM.OrderHeaders.InstgramUserName = InstegramUserName;
+            }
+            else
+            {
+                shoppingCartVM.OrderHeaders.InstgramUserName = "-";
+            }
 
             foreach (var item in shoppingCartVM.CartsList)
             {
@@ -164,16 +174,16 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
                 shoppingCartVM.OrderHeaders.OrderStatus = SD.Proccessing;
             }
 
-            // حفظ OrderHeader أولاً
+            // Save OrderHeader first
             _unitOfWork.OrderHeader.Add(shoppingCartVM.OrderHeaders);
             var saveResult = _unitOfWork.Complete();
             if (shoppingCartVM.OrderHeaders.Id == 0 || saveResult == 0)
             {
-                ModelState.AddModelError("", "حدث خطأ أثناء حفظ الطلب. الرجاء التأكد من صحة البيانات والمحاولة مرة أخرى.");
+                ModelState.AddModelError("", "An error occurred while saving the order. Please check the data and try again.");
                 return View("Summary");
             }
 
-            // إضافة OrderDetails بعد التأكد من حفظ OrderHeader
+            // Add OrderDetails after ensuring OrderHeader is saved
             foreach (var item in shoppingCartVM.CartsList)
             {
                 OrderDetails orderDetails = new OrderDetails()
@@ -187,11 +197,11 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
             }
             _unitOfWork.Complete();
 
-            // حذف السلة بعد الطلب
+            // Remove cart after order
             _unitOfWork.ShoppingCart.RemoveRange(shoppingCartVM.CartsList.ToList());
             _unitOfWork.Complete();
 
-            // إرسال إيميل إشعار بوجود طلب جديد
+            // Send email notification for new order
             var adminEmails = new List<string> { "youssefessam1293@gmail.com", "nouraessam301@gmail.com", "mayaressam814@gmail.com" };
             var subject = "New Order Placed";
 

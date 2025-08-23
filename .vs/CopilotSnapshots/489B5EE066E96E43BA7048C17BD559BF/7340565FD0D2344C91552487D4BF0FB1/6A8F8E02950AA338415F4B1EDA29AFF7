@@ -1,0 +1,332 @@
+﻿@{
+    Layout = "_Customer";
+    var totalPrice = ViewData["TotalPrice"] != null ? Convert.ToDecimal(ViewData["TotalPrice"]) : 0;
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Checkout</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <style>
+        .checkout-label {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .checkout-input {
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .checkout-select {
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            height: 48px;
+            line-height: normal;
+        }
+
+        .checkout-input:focus,
+        .checkout-select:focus {
+            border-color: #000;
+            box-shadow: none;
+        }
+
+        .phone-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .phone-flag {
+            width: 32px;
+            height: 22px;
+            border-radius: 4px;
+            margin-right: 8px;
+            border: 1px solid #eee;
+        }
+
+        .country-code {
+            font-size: 1rem;
+            margin-right: 6px;
+            color: #333;
+        }
+
+        .btn-black {
+            background: #000;
+            color: #fff;
+            border-radius: 8px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            font-size: 1.1rem;
+            border: none;
+            padding: 0.9rem 0;
+            transition: background 0.2s;
+        }
+
+        .btn-black:hover {
+            background: #222;
+            color: #fff;
+        }
+
+        .btn-link {
+            color: #444;
+            font-weight: 600;
+            text-decoration: none;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .btn-link i {
+            margin-right: 6px;
+        }
+
+        .checkout-section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 2rem 2.5rem;
+            box-shadow: 0 2px 8px #0001;
+        }
+
+        .checkout-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        /* Order Summary Card Styles */
+        .order-summary-card {
+            background: #fff0f5;
+            border-radius: 16px;
+            box-shadow: 0 2px 16px #e1306c22;
+            padding: 2rem 2rem 1.5rem 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .order-summary-title {
+            color: #e1306c;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+        }
+
+        .order-summary-hr {
+            border: none;
+            border-top: 1px solid #e9c6d1;
+            margin: 0.5rem 0 1.2rem 0;
+        }
+
+        .order-summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .order-summary-label {
+            font-size: 1.08rem;
+            color: #444;
+        }
+
+        .order-summary-value {
+            font-size: 1.08rem;
+            font-weight: 700;
+            color: #222;
+        }
+
+        .order-summary-total-label {
+            font-size: 1.15rem;
+            color: #222;
+        }
+
+        .order-summary-total-value {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #222;
+        }
+
+        .order-summary-btn {
+            background: #e1306c;
+            color: #fff;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border: none;
+            padding: 0.9rem 0;
+            width: 100%;
+            margin-top: 1.2rem;
+            transition: background 0.2s;
+        }
+
+        .order-summary-btn:hover {
+            background: #c2185b;
+            color: #fff;
+        }
+
+        /* Responsive for order summary card */
+        @media screen and (max-width: 991.98px) {
+            .order-summary-card {
+                margin-top: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-7">
+                <div class="checkout-section mb-4">
+                    <div class="checkout-title mb-4">Contact information</div>
+                    <form asp-action="Summary" method="post">
+                        <div class="form-group mb-4">
+                            <label class="checkout-label">Email address <span class="required">*</span></label>
+                            <input type="email" name="Email" class="form-control checkout-input" required placeholder="Email address *" />
+                        </div>
+                        <div class="checkout-title mb-3">Billing &amp; Shipping</div>
+                        <div class="form-row mb-3">
+                            <div class="form-group col-md-6">
+                                <label class="checkout-label">First name <span class="required">*</span></label>
+                                <input type="text" name="FirstName" class="form-control checkout-input" required placeholder="First name *" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="checkout-label">Last name <span class="required">*</span></label>
+                                <input type="text" name="LastName" class="form-control checkout-input" required placeholder="Last name *" />
+                            </div>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label class="checkout-label">Instagram Username <span class="required">*</span></label>
+                            <div class="d-flex align-items-center">
+                                <span class="mr-2" style="font-size: 1.2rem; color: #E1306C;">
+                                    <i class="fab fa-instagram"></i>
+                                </span>
+                                <input type="text" name="InstegramUserName" class="form-control checkout-input" required placeholder="@@yourusername *" />
+                            </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="checkout-label">Country / Region</label>
+                            <input type="text" class="form-control checkout-input text font-weight-bold pt-2" value="Egypt" readonly />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="checkout-label">Street address <span class="required">*</span></label>
+                            <input type="text" name="Address" class="form-control checkout-input" required placeholder="House number and street name *" />
+                        </div>
+                        <div class="form-row mb-3">
+                            <div class="form-group col-md-12">
+                                <label class="checkout-label">State <span class="required">*</span></label>
+                                <select name="City" class="form-control checkout-select" required id="citySelect" onchange="updateShipping()">
+                                    <option value="">State</option>
+                                    <option value="Cairo">Cairo</option>
+                                    <option value="Giza">Giza</option>
+                                    <option value="Alexandria">Alexandria</option>
+                                    <option value="Dakahlia">Dakahlia</option>
+                                    <option value="Sharqia">Sharqia</option>
+                                    <option value="Monufia">Monufia</option>
+                                    <option value="Qalyubia">Qalyubia</option>
+                                    <option value="Kafr El Sheikh">Kafr El Sheikh</option>
+                                    <option value="Gharbia">Gharbia</option>
+                                    <option value="Beheira">Beheira</option>
+                                    <option value="Damietta">Damietta</option>
+                                    <option value="Port Said">Port Said</option>
+                                    <option value="Ismailia">Ismailia</option>
+                                    <option value="Suez">Suez</option>
+                                    <option value="Fayoum">Fayoum</option>
+                                    <option value="Beni Suef">Beni Suef</option>
+                                    <option value="Minya">Minya</option>
+                                    <option value="Assiut">Assiut</option>
+                                    <option value="Sohag">Sohag</option>
+                                    <option value="Qena">Qena</option>
+                                    <option value="Luxor">Luxor</option>
+                                    <option value="Aswan">Aswan</option>
+                                    <option value="New Valley">New Valley</option>
+                                    <option value="Matrouh">Matrouh</option>
+                                    <option value="Red Sea">Red Sea</option>
+                                    <option value="Sharm El Sheikh">Sharm El Sheikh</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="checkout-label">Payment Method <span class="required">*</span></label>
+                            <select name="PaymentMethod" class="form-control checkout-select" required>
+                                <option value="CashOnDelivery">Cash on Delivery</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label class="checkout-label">Phone <span class="required">*</span></label>
+                            <div class="phone-group">
+                                <img src="https://flagcdn.com/eg.svg" class="phone-flag" alt="EG" />
+                                <span class="country-code">+20</span>
+                                <input type="text" name="Phone" class="form-control checkout-input"
+                                    style="max-width:200px;" maxlength="11" pattern="[0-9]{10,11}" required
+                                    placeholder="1012345678 *" />
+                            </div>
+                        </div>
+                        <!-- Hidden fields for shipping and total price -->
+                        <input type="hidden" id="shippingPriceValue" name="ShippingPrice" value="" />
+                        <input type="hidden" id="totalPriceValue" name="TotalPrice" value="@totalPrice" />
+                        <div class="d-flex flex-row justify-content-between align-items-center mt-4 gap-2 flex-wrap">
+                            <a href="/Customer/Cart/Index" class="btn btn-outline-secondary btn-sm d-flex align-items-center">
+                                <i class="fas fa-chevron-left me-2"></i> Return To Cart
+                            </a>
+                            <button type="submit" class="btn btn-dark btn-sm px-3 py-1">
+                                Confirm Your Order!
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- Order Summary Card -->
+            <div class="col-lg-5 d-flex align-items-start">
+                <div class="order-summary-card w-100">
+                    <div class="order-summary-title">Order Summary</div>
+                    <hr class="order-summary-hr" />
+                    <div class="order-summary-row">
+                        <span class="order-summary-label">Shipping</span>
+                        <span class="order-summary-value" id="orderSummaryShipping">--</span>
+                    </div>
+                    <div class="order-summary-row mb-2">
+                        <span class="order-summary-total-label">Total</span>
+                        <span class="order-summary-total-value" id="orderSummaryTotal">@totalPrice EGP</span>
+                    </div>
+                    <button type="submit" form="" class="order-summary-btn">
+                        Proceed to Checkout <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                    <small class="form-text text-muted mt-2">(Order processing takes 4 to 5 days 🚚)</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function updateShipping() {
+            var city = document.getElementById('citySelect').value;
+            var shipping = (city && (city.toLowerCase() === 'cairo' || city.toLowerCase() === 'giza')) ? 60 : (city ? 70 : '');
+            document.getElementById('shippingPriceValue').value = shipping;
+            document.getElementById('orderSummaryShipping').textContent = shipping ? shipping + ' EGP' : '--';
+            updateTotalPrice();
+        }
+        function updateTotalPrice() {
+            var total = parseFloat('@totalPrice');
+            var shipping = parseFloat(document.getElementById('shippingPriceValue').value) || 0;
+            var grand = total + shipping;
+            document.getElementById('orderSummaryTotal').textContent = grand > 0 ? grand + ' EGP' : '';
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTotalPrice();
+        });
+    </script>
+</body>
+
+</html>

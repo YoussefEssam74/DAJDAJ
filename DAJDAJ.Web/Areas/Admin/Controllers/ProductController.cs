@@ -216,7 +216,7 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
                     return RedirectToAction("Index");
                 }
 
-                // تحديث الصورة الرئيسية
+                // Update main image
                 if (Img != null && Img.Length > 0)
                 {
                     if (!string.IsNullOrEmpty(productFromDb.Img))
@@ -228,7 +228,7 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
                     productFromDb.Img = SaveImage(Img, rootPath);
                 }
 
-                // حذف الصور القديمة التي لم تعد موجودة
+                // Remove old images that are no longer present
                 if (ExistingImageIds != null)
                 {
                     var imagesToRemove = productFromDb.ProductImages.Where(img => !ExistingImageIds.Contains(img.Id)).ToList();
@@ -241,7 +241,7 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
                     }
                 }
 
-                // تحديث ألوان الصور القديمة
+                // Update colors of old images
                 if (ExistingImageIds != null && ExistingImageColors != null)
                 {
                     for (int i = 0; i < ExistingImageIds.Count; i++)
@@ -256,7 +256,7 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
                     }
                 }
 
-                // إضافة الصور الجديدة مع ألوانها
+                // Add new images with their colors
                 if (productVM.Images != null && productVM.Images.Count > 0)
                 {
                     int newColorIndex = 0;
@@ -280,7 +280,7 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
                     }
                 }
 
-                // تحديث باقي البيانات
+                // Update remaining data
                 productFromDb.Name = productVM.product.Name;
                 productFromDb.Price = productVM.product.Price;
                 productFromDb.OldPrice = productVM.product.OldPrice;
@@ -332,7 +332,7 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
 
                 string RootPath = _webHostEnvironment.WebRootPath;
 
-                // حذف الصورة الرئيسية إذا كانت موجودة
+                // Remove main image if exists
                 if (!string.IsNullOrEmpty(product.Img))
                 {
                     var mainImgPath = Path.Combine(RootPath, product.Img.Replace("/", Path.DirectorySeparatorChar.ToString()));
@@ -340,7 +340,7 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
                         System.IO.File.Delete(mainImgPath);
                 }
 
-                // حذف كل الصور الإضافية المرتبطة بالمنتج
+                // Remove all additional images related to the product
                 if (product.ProductImages != null && product.ProductImages.Count > 0)
                 {
                     foreach (var img in product.ProductImages)
@@ -354,7 +354,7 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
                     }
                 }
 
-                // حذف المنتج
+                // Delete the product
                 _untiOfWork.Product.Remove(product);
                 _untiOfWork.Complete();
 

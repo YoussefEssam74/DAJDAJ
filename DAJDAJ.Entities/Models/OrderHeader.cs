@@ -41,6 +41,8 @@ namespace DAJDAJ.Entities.Models
         public string City { get; set; }
         public string Phone { get; set; }
 
+        public string InstgramUserName { get; set; }
+
     }
 
 }

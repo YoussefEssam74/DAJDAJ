@@ -1,0 +1,28 @@
+﻿FullCalendar.globalLocales.push(function () {
+  'use strict';
+
+  var enLy = {
+    code: 'en-ly',
+    week: {
+      dow: 6, // Saturday is the first day of the week.
+      doy: 12, // The week that contains Jan 1st is the first week of the year.
+    },
+    direction: 'ltr',
+    buttonText: {
+      prev: 'Previous',
+      next: 'Next',
+      today: 'Today',
+      month: 'Month',
+      week: 'Week',
+      day: 'Day',
+      list: 'Agenda',
+    },
+    weekText: 'Week',
+    allDayText: 'All day',
+    moreLinkText: 'More',
+    noEventsText: 'No events to display',
+  };
+
+  return enLy;
+
+}());

@@ -43,25 +43,25 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
             var colors = new List<string>();
             var sizes = new List<string>();
 
-            // جمع الألوان الفريدة من ProductImages
+            // Collect unique colors from ProductImages
             if (product.ProductImages != null && product.ProductImages.Any())
             {
                 colors = product.ProductImages
                     .Where(img => !string.IsNullOrWhiteSpace(img.Color))
-                    .Select(img => img.Color.Trim()) // Don't convert to lowercase here
-                    .Distinct(StringComparer.OrdinalIgnoreCase) // Use case-insensitive comparison
+                    .Select(img => img.Color.Trim())
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
                     .ToList();
             }
 
-            // استخراج الأحجام من Product.Size كما هو
+            // Extract sizes from Product.Size as is
             if (!string.IsNullOrWhiteSpace(product.Size))
             {
                 sizes = product.Size.Split(',').Select(s => s.Trim()).ToList();
             }
 
-            // جمع الصور من ProductImages و Img
+            // Collect images from ProductImages and Img
             var productImages = new List<string>();
-            var imageColorMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase); // Case-insensitive comparison
+            var imageColorMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
             if (product.ProductImages != null && product.ProductImages.Any())
             {
@@ -70,13 +70,11 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
                     var imagePath = "/" + img.ImagePath.Replace("\\", "/");
                     productImages.Add(imagePath);
 
-                    // ربط الصورة باللون - احتفظ بالحالة الأصلية للألوان
+                    // Map image to color - keep original color casing
                     if (!string.IsNullOrEmpty(img.Color))
                     {
-                        var colorKey = img.Color.Trim(); // Don't change case here
+                        var colorKey = img.Color.Trim();
                         imageColorMap[colorKey] = imagePath;
-                        
-                        // إضافة console log للتصحيح
                         System.Diagnostics.Debug.WriteLine($"Mapping color '{colorKey}' to image '{imagePath}'");
                     }
                 }
@@ -89,18 +87,18 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
             var shoppingcart = new Shoppingcart()
             {
                 product = product,
-                ProductId = id, // إضافة ProductId
+                ProductId = id, // Add ProductId
                 Sizes = sizes,
-                Colors = colors, // الألوان من ProductImages
+                Colors = colors, // Colors from ProductImages
                 Count = 1,
                 ProductImages = productImages
             };
 
-            // إضافة خريطة الألوان والصور إلى ViewBag
+            // Add color-image map to ViewBag
             ViewBag.ImageColorMap = imageColorMap;
             ViewBag.Viewers = new Random().Next(37, 54);
 
-            // تسجيل البيانات للتصحيح
+            // Log for debugging
             System.Diagnostics.Debug.WriteLine($"Product Colors from ProductImages: {string.Join(", ", colors)}");
             System.Diagnostics.Debug.WriteLine($"ImageColorMap Count: {imageColorMap.Count}");
             foreach (var kvp in imageColorMap)
@@ -155,7 +153,7 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
             }
 
 
-            // تحديث Session ليكون مجموع الكميات
+            // Update Session to be the sum of quantities
             HttpContext.Session.SetInt32(
                 SD.SessionKey,
                 _unitOfWork.ShoppingCart.GetAll(x => x.ApplicationUserId == claim.Value).Sum(x => x.Count)

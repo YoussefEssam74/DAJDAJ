@@ -33,10 +33,10 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                //_context.categories.Add(category);
+                // _context.categories.Add(category);
                 _untiOfWork.Category.Add(category);
 
-                //_context.SaveChanges();
+                // _context.SaveChanges();
                 _untiOfWork.Complete();
                 TempData["Create"] = "Data Has Created Successfully";
 
@@ -50,9 +50,8 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
             if(id==null | id==0)
             {
                 NotFound();
-
             }
-            //var categoryIndb = _context.categories.Find(id);
+            // var categoryIndb = _context.categories.Find(id);
             var categoryIndb = _untiOfWork.Category.GetFirstorDefault(x => x.Id == id);
 
             return View(categoryIndb);
@@ -64,10 +63,9 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-              //  _context.categories.Update(category);
-
+                // _context.categories.Update(category);
                 _untiOfWork.Category.Update(category);
-                //  _context.SaveChanges();
+                // _context.SaveChanges();
                 _untiOfWork.Complete();
                 TempData["Update"] = "Data Has Updated Successfully";
                 return RedirectToAction("Index");
@@ -83,7 +81,7 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            //  var categoryIndb = _context.categories.Find(id);
+            // var categoryIndb = _context.categories.Find(id);
             var categoryIndb = _untiOfWork.Category.GetFirstorDefault(x => x.Id == id);
 
             return View(categoryIndb);
@@ -93,7 +91,7 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult DeleteCategory(int? id)
         {
-            //  var categoryIndb = _context.categories.Find(id);
+            // var categoryIndb = _context.categories.Find(id);
             var categoryIndb = _untiOfWork.Category.GetFirstorDefault(x => x.Id == id);
 
             if (categoryIndb == null)
@@ -101,10 +99,10 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            //_context.categories.Remove(categoryIndb);
+            // _context.categories.Remove(categoryIndb);
             _untiOfWork.Category.Remove(categoryIndb);
-           //_context.SaveChanges();
-           _untiOfWork.Complete();
+            // _context.SaveChanges();
+            _untiOfWork.Complete();
             TempData["Delete"] = "Data Has Deleted Successfully";
             return RedirectToAction("Index");
         }

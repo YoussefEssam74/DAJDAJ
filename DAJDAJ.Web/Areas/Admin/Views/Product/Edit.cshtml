@@ -146,7 +146,6 @@
                                 </div>
                             }
                         }
-                        <!-- صف لإضافة صورة جديدة -->
                         <div class="image-color-row row mb-3 p-2 border rounded">
                             <input type="hidden" name="ExistingImagePaths" value="" />
                             <input type="hidden" name="ExistingImageIds" value="0" />
@@ -368,7 +367,6 @@
                         }
                     }
 
-                    // إذا كان هناك ID حقيقي أضفه إلى الحقل المخفي
                     if (existingId && existingId !== "0") {
                         let imagesToDelete = document.getElementById('ImagesToDelete');
                         let current = imagesToDelete.value ? imagesToDelete.value.split(',') : [];

@@ -40,6 +40,14 @@
                                 </div>
                             </div>
                             <div class="row my-1">
+                                <div class="col-3">Instegram UserName</div>
+                                <div class="col-9">
+                                    <input asp-for="OrderHeader.InstgramUserName" type="text" class="form-control" />
+                                    <span asp-validation-for="OrderHeader.InstgramUserName" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="row my-1">
                                 <div class="col-3">Address</div>
                                 <div class="col-9">
                                     <input asp-for="OrderHeader.Address" type="text" class="form-control" />
@@ -122,12 +130,12 @@
                                     <div class="list-group-item d-flex justify-content-between align-items-center flex-wrap border-0 border-bottom">
                                         <div>
                                             <div class="fw-bold text-primary">@item.Product?.Name</div>
-                                            <div class="text-muted" style="font-size:13px;">Price : @item.Price.ToString("C")
+                                            <div class="text-muted" style="font-size:13px;">Price : EGP @item.Price.ToString()
                                             </div>
                                             <div class="text-muted" style="font-size:13px;">Quantity : @item.Count</div>
                                         </div>
                                         <div class="fw-bold" style="color:#28a745;font-size:18px;">
-                                            @((item.Price * item.Count).ToString("C"))
+                                            EGP @((item.Price * item.Count).ToString())
                                         </div>
                                     </div>
                                 }
@@ -139,7 +147,7 @@
                         </div>
                         <div class="d-flex justify-content-between align-items-center bg-dark text-white p-3 rounded-bottom">
                             <span class="fw-bold">TOTAL</span>
-                            <span class="fw-bold" style="font-size:18px;">@order.TotalPrice.ToString("C")</span>
+                            <span class="fw-bold" style="font-size:18px;">EGP @order.TotalPrice.ToString()</span>
                         </div>
                         <div class="d-flex justify-content-center gap-2 mt-4">
                             <form asp-area="Admin" asp-controller="Order" method="post" class="d-flex justify-content-center gap-2">

@@ -1,5 +1,5 @@
 //! moment.js locale configuration
-//! locale : Arabic (Saudi Arabia) [ar-sa]
+//! locale : English (Saudi Arabia) [en-sa]
 //! author : Suhail Alkowaileet : https://github.com/xsoh
 
 ;(function (global, factory) {
@@ -12,40 +12,40 @@
     //! moment.js locale configuration
 
     var symbolMap = {
-            1: '١',
-            2: '٢',
-            3: '٣',
-            4: '٤',
-            5: '٥',
-            6: '٦',
-            7: '٧',
-            8: '٨',
-            9: '٩',
-            0: '٠',
+            1: '1',
+            2: '2',
+            3: '3',
+            4: '4',
+            5: '5',
+            6: '6',
+            7: '7',
+            8: '8',
+            9: '9',
+            0: '0',
         },
         numberMap = {
-            '١': '1',
-            '٢': '2',
-            '٣': '3',
-            '٤': '4',
-            '٥': '5',
-            '٦': '6',
-            '٧': '7',
-            '٨': '8',
-            '٩': '9',
-            '٠': '0',
+            '1': '1',
+            '2': '2',
+            '3': '3',
+            '4': '4',
+            '5': '5',
+            '6': '6',
+            '7': '7',
+            '8': '8',
+            '9': '9',
+            '0': '0',
         };
 
-    var arSa = moment.defineLocale('ar-sa', {
-        months: 'يناير_فبراير_مارس_أبريل_مايو_يونيو_يوليو_أغسطس_سبتمبر_أكتوبر_نوفمبر_ديسمبر'.split(
+    var enSa = moment.defineLocale('en-sa', {
+        months: 'January_February_March_April_May_June_July_August_September_October_November_December'.split(
             '_'
         ),
-        monthsShort: 'يناير_فبراير_مارس_أبريل_مايو_يونيو_يوليو_أغسطس_سبتمبر_أكتوبر_نوفمبر_ديسمبر'.split(
+        monthsShort: 'Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec'.split(
             '_'
         ),
-        weekdays: 'الأحد_الإثنين_الثلاثاء_الأربعاء_الخميس_الجمعة_السبت'.split('_'),
-        weekdaysShort: 'أحد_إثنين_ثلاثاء_أربعاء_خميس_جمعة_سبت'.split('_'),
-        weekdaysMin: 'ح_ن_ث_ر_خ_ج_س'.split('_'),
+        weekdays: 'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split('_'),
+        weekdaysShort: 'Sun_Mon_Tue_Wed_Thu_Fri_Sat'.split('_'),
+        weekdaysMin: 'Su_Mo_Tu_We_Th_Fr_Sa'.split('_'),
         weekdaysParseExact: true,
         longDateFormat: {
             LT: 'HH:mm',
@@ -55,54 +55,54 @@
             LLL: 'D MMMM YYYY HH:mm',
             LLLL: 'dddd D MMMM YYYY HH:mm',
         },
-        meridiemParse: /ص|م/,
+        meridiemParse: /AM|PM/,
         isPM: function (input) {
-            return 'م' === input;
+            return 'PM' === input;
         },
         meridiem: function (hour, minute, isLower) {
             if (hour < 12) {
-                return 'ص';
+                return 'AM';
             } else {
-                return 'م';
+                return 'PM';
             }
         },
         calendar: {
-            sameDay: '[اليوم على الساعة] LT',
-            nextDay: '[غدا على الساعة] LT',
-            nextWeek: 'dddd [على الساعة] LT',
-            lastDay: '[أمس على الساعة] LT',
-            lastWeek: 'dddd [على الساعة] LT',
+            sameDay: '[Today at] LT',
+            nextDay: '[Tomorrow at] LT',
+            nextWeek: 'dddd [at] LT',
+            lastDay: '[Yesterday at] LT',
+            lastWeek: 'dddd [at] LT',
             sameElse: 'L',
         },
         relativeTime: {
-            future: 'في %s',
-            past: 'منذ %s',
-            s: 'ثوان',
-            ss: '%d ثانية',
-            m: 'دقيقة',
-            mm: '%d دقائق',
-            h: 'ساعة',
-            hh: '%d ساعات',
-            d: 'يوم',
-            dd: '%d أيام',
-            M: 'شهر',
-            MM: '%d أشهر',
-            y: 'سنة',
-            yy: '%d سنوات',
+            future: 'in %s',
+            past: '%s ago',
+            s: 'seconds',
+            ss: '%d seconds',
+            m: 'minute',
+            mm: '%d minutes',
+            h: 'hour',
+            hh: '%d hours',
+            d: 'day',
+            dd: '%d days',
+            M: 'month',
+            MM: '%d months',
+            y: 'year',
+            yy: '%d years',
         },
         preparse: function (string) {
             return string
-                .replace(/[١٢٣٤٥٦٧٨٩٠]/g, function (match) {
+                .replace(/[1-9]/g, function (match) {
                     return numberMap[match];
                 })
-                .replace(/،/g, ',');
+                .replace(/,/g, ',');
         },
         postformat: function (string) {
             return string
                 .replace(/\d/g, function (match) {
                     return symbolMap[match];
                 })
-                .replace(/,/g, '،');
+                .replace(/,/g, ',');
         },
         week: {
             dow: 0, // Sunday is the first day of the week.
@@ -110,6 +110,6 @@
         },
     });
 
-    return arSa;
+    return enSa;
 
-})));
+}));

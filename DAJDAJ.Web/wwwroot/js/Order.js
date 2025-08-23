@@ -23,7 +23,7 @@ function loaddata() {
             {
                 "data": "totalPrice",
                 "render": function (data) {
-                    return data ? "$" + parseFloat(data).toFixed(2) : "$0.00";
+                    return data ? "EGP" + parseFloat(data).toFixed(2) : "EGP 0.00";
                 }
             },
             {

@@ -40,6 +40,7 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
                     o.Address,
                     o.City,
                     o.Phone,
+                    o.InstgramUserName,
                     o.OrderDate,
                     o.TotalPrice,
                     o.OrderStatus,
@@ -71,6 +72,7 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
             orderFromDb.Phone = OrderVM.OrderHeader.Phone;
             orderFromDb.Address = OrderVM.OrderHeader.Address;
             orderFromDb.City = OrderVM.OrderHeader.City;
+            orderFromDb.InstgramUserName = OrderVM.OrderHeader.InstgramUserName;
 
             if (OrderVM.OrderHeader.Carrier != null)
             {

@@ -18,6 +18,7 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
         }
         public IActionResult Index()
         {
+
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var cliam = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             string userid = cliam.Value;
@@ -54,4 +55,3 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
     }
 
     }
- 
