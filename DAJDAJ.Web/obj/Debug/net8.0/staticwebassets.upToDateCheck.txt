@@ -384,8 +384,12 @@ wwwroot\docs\license.md
 wwwroot\docs\upgrade-guide.md
 wwwroot\favicon.ico
 wwwroot\Images\IMG-20250724-WA0059.jpg
+wwwroot\Images\products\056abdfd-0836-4ed6-b82e-f213d9898359.jpg
+wwwroot\Images\products\41068a17-d4d4-41cc-8de4-9fbf1c6a887d.jpg
 wwwroot\Images\products\5a0b8c68-abd4-443a-a55f-ca3cd54f4107.jpg
+wwwroot\Images\products\5c98bda5-cc7b-4b23-bc13-b80a6d6b811b.jpg
 wwwroot\Images\products\cbca67c6-2b78-4cfe-9b84-16f82b1ab990.jpg
+wwwroot\Images\products\d9fa0fe2-9192-4e91-b492-b10ae0123b8a.jpg
 wwwroot\Images\tiktok-brands-solid-full.svg
 wwwroot\img\AdminLTELogo.png
 wwwroot\img\avatar.png
