@@ -18,8 +18,8 @@ function loaddata() {
             { "data": "id" },
             { "data": "name" },
             { "data": "phone" },
-            { "data": "address" },
             { "data": "city" },
+            { "data": "orderStatus" },
             {
                 "data": "totalPrice",
                 "render": function (data) {

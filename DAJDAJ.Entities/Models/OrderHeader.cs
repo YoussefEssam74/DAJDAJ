@@ -43,6 +43,12 @@ namespace DAJDAJ.Entities.Models
 
         public string InstgramUserName { get; set; }
 
+
+
+
+        [ValidateNever]
+        public ICollection<OrderDetails> OrderDetails { get; set; } = new List<OrderDetails>();
+
     }
 
 }
