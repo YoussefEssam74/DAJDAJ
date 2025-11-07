@@ -1,0 +1,115 @@
+//! moment.js locale configuration
+//! locale : English (Saudi Arabia) [en-sa]
+//! author : Suhail Alkowaileet : https://github.com/xsoh
+
+;(function (global, factory) {
+   typeof exports === 'object' && typeof module !== 'undefined'
+       && typeof require === 'function' ? factory(require('../moment')) :
+   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
+   factory(global.moment)
+}(this, (function (moment) { 'use strict';
+
+    //! moment.js locale configuration
+
+    var symbolMap = {
+            1: '1',
+            2: '2',
+            3: '3',
+            4: '4',
+            5: '5',
+            6: '6',
+            7: '7',
+            8: '8',
+            9: '9',
+            0: '0',
+        },
+        numberMap = {
+            '1': '1',
+            '2': '2',
+            '3': '3',
+            '4': '4',
+            '5': '5',
+            '6': '6',
+            '7': '7',
+            '8': '8',
+            '9': '9',
+            '0': '0',
+        };
+
+    var enSa = moment.defineLocale('en-sa', {
+        months: 'January_February_March_April_May_June_July_August_September_October_November_December'.split(
+            '_'
+        ),
+        monthsShort: 'Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec'.split(
+            '_'
+        ),
+        weekdays: 'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split('_'),
+        weekdaysShort: 'Sun_Mon_Tue_Wed_Thu_Fri_Sat'.split('_'),
+        weekdaysMin: 'Su_Mo_Tu_We_Th_Fr_Sa'.split('_'),
+        weekdaysParseExact: true,
+        longDateFormat: {
+            LT: 'HH:mm',
+            LTS: 'HH:mm:ss',
+            L: 'DD/MM/YYYY',
+            LL: 'D MMMM YYYY',
+            LLL: 'D MMMM YYYY HH:mm',
+            LLLL: 'dddd D MMMM YYYY HH:mm',
+        },
+        meridiemParse: /AM|PM/,
+        isPM: function (input) {
+            return 'PM' === input;
+        },
+        meridiem: function (hour, minute, isLower) {
+            if (hour < 12) {
+                return 'AM';
+            } else {
+                return 'PM';
+            }
+        },
+        calendar: {
+            sameDay: '[Today at] LT',
+            nextDay: '[Tomorrow at] LT',
+            nextWeek: 'dddd [at] LT',
+            lastDay: '[Yesterday at] LT',
+            lastWeek: 'dddd [at] LT',
+            sameElse: 'L',
+        },
+        relativeTime: {
+            future: 'in %s',
+            past: '%s ago',
+            s: 'seconds',
+            ss: '%d seconds',
+            m: 'minute',
+            mm: '%d minutes',
+            h: 'hour',
+            hh: '%d hours',
+            d: 'day',
+            dd: '%d days',
+            M: 'month',
+            MM: '%d months',
+            y: 'year',
+            yy: '%d years',
+        },
+        preparse: function (string) {
+            return string
+                .replace(/[1-9]/g, function (match) {
+                    return numberMap[match];
+                })
+                .replace(/,/g, ',');
+        },
+        postformat: function (string) {
+            return string
+                .replace(/\d/g, function (match) {
+                    return symbolMap[match];
+                })
+                .replace(/,/g, ',');
+        },
+        week: {
+            dow: 0, // Sunday is the first day of the week.
+            doy: 6, // The week that contains Jan 6th is the first week of the year.
+        },
+    });
+
+    return enSa;
+
+}));

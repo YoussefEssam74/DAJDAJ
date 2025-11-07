@@ -150,6 +150,32 @@
                             <i class="bi bi-cart-fill me-1"></i> Login to Add to Cart
                         </a>
                     }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.product.Description))
+                    {
+                        <section class="mt-5">
+                            <h5 class="fw-semibold mb-4" style="color: #1a1a1a; border-left: 3px solid #ff69b4; padding-left: 10px; font-family: 'Poppins', sans-serif;">
+                                Product Details
+                            </h5>
+
+                            <div style="font-family: 'Poppins', sans-serif; font-size: 0.95rem; color: #1a1a1a; line-height: 1.8;">
+                                <ul style="list-style: none; padding-left: 0; margin: 0;">
+                                    @foreach (var line in Model.product.Description.Split('\n'))
+                                    {
+                                        if (!string.IsNullOrWhiteSpace(line))
+                                        {
+                                            <li style="margin-bottom: 10px;">
+                                                <span style="color: #ff69b4;">•</span>
+                                                <span style="color: #555;">@Html.Raw(line.Trim())</span>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </section>
+                    }
+
+
                 </div>
             </div>
         </div>

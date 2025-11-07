@@ -83,7 +83,7 @@
                     {
                        @if(User.IsInRole(SD.AdminRole))
                         {
-                            <li class="nav-item"><a class="nav-link active" href="Admin/Dashboard/Index">Dashboard</a></li>
+                            <li class="nav-item"><a class="nav-link active" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
 
                         }
                         else
@@ -128,7 +128,7 @@
                 </a>
 
                 <!-- TikTok Icon -->
-                <a href="https://www.tiktok.com/@@dajdajj.eg" target="_blank">
+                <a href="https://www.tiktok.com/@@dajdaj.eg" target="_blank">
                     <img src="~/Images/tiktok-brands-solid-full.svg" alt="TikTok"
                          style="width: 28px; height: 28px; filter: brightness(0) invert(1);" />
                 </a>
@@ -151,26 +151,17 @@
             <style>
                 .policy-link {
                     position: relative;
-                    text-decoration: none;
-                    color: white;
+                    text-decoration: underline;
+                    color: #f06292;
+                    font-weight: 500;
+                    transition: color 0.2s;
                 }
 
-                    .policy-link::after {
-                        content: "";
-                        position: absolute;
-                        left: 0;
-                        bottom: -3px;
-                        width: 100%;
-                        height: 2px;
-                        background-color: white;
-                        transform: scaleX(0);
-                        transform-origin: left;
-                        transition: transform 0.3s ease-in-out;
-                    }
-
-                    .policy-link:hover::after {
-                        transform: scaleX(1);
-                    }
+                .policy-link:active,
+                .policy-link:focus {
+                        color: #f06292;
+                    outline: none;
+                }
             </style>
         </div>
     </footer>

@@ -21,6 +21,10 @@ namespace DAJDAJ.Utilities
         public const string Rejected = "Rejected";
         public const string Confirmed = "Confirmed";
 
+        public const string Return = "Return";
+        public const string Earned = "Earned";
+        public const string Booked = "Booked";
+
         public const string PaymentMethod_Cash = "Cash";
         public const string PaymentMethod_CreditCard = "CreditCard";
 

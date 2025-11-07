@@ -287,6 +287,7 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
                 productFromDb.CategoryId = productVM.product.CategoryId;
                 productFromDb.Color = productVM.product.Color;
                 productFromDb.Size = productVM.product.Size;
+                productFromDb.Description = productVM.product.Description;
 
                 int result = _untiOfWork.Complete();
                 if (result > 0)

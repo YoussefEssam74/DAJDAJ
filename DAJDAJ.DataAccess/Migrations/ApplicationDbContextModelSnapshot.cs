@@ -43,7 +43,7 @@ namespace DAJDAJ.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("categories");
+                    b.ToTable("categories", (string)null);
                 });
 
             modelBuilder.Entity("DAJDAJ.Entities.Models.OrderDetails", b =>
@@ -80,7 +80,7 @@ namespace DAJDAJ.DataAccess.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderDetails");
+                    b.ToTable("OrderDetails", (string)null);
                 });
 
             modelBuilder.Entity("DAJDAJ.Entities.Models.OrderHeader", b =>
@@ -147,7 +147,7 @@ namespace DAJDAJ.DataAccess.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("OrderHeaders");
+                    b.ToTable("OrderHeaders", (string)null);
                 });
 
             modelBuilder.Entity("DAJDAJ.Entities.Models.Product", b =>
@@ -162,10 +162,6 @@ namespace DAJDAJ.DataAccess.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Color")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -191,7 +187,7 @@ namespace DAJDAJ.DataAccess.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("products");
+                    b.ToTable("products", (string)null);
                 });
 
             modelBuilder.Entity("DAJDAJ.Entities.Models.ProductImage", b =>
@@ -217,7 +213,7 @@ namespace DAJDAJ.DataAccess.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductImages");
+                    b.ToTable("ProductImages", (string)null);
                 });
 
             modelBuilder.Entity("DAJDAJ.Entities.Models.Shoppingcart", b =>
@@ -252,7 +248,7 @@ namespace DAJDAJ.DataAccess.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Shoppingcarts");
+                    b.ToTable("Shoppingcarts", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -480,7 +476,7 @@ namespace DAJDAJ.DataAccess.Migrations
             modelBuilder.Entity("DAJDAJ.Entities.Models.OrderDetails", b =>
                 {
                     b.HasOne("DAJDAJ.Entities.Models.OrderHeader", "OrderHeader")
-                        .WithMany("OrderDetails")
+                        .WithMany()
                         .HasForeignKey("OrderHeaderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -597,11 +593,6 @@ namespace DAJDAJ.DataAccess.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("DAJDAJ.Entities.Models.OrderHeader", b =>
-                {
-                    b.Navigation("OrderDetails");
                 });
 
             modelBuilder.Entity("DAJDAJ.Entities.Models.Product", b =>

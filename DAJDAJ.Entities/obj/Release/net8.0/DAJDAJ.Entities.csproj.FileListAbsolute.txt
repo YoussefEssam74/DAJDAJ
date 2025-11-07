@@ -1,0 +1,14 @@
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Entities\bin\Release\net8.0\Models\appsettings.json
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Entities\bin\Release\net8.0\DAJDAJ.Entities.deps.json
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Entities\bin\Release\net8.0\DAJDAJ.Entities.dll
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Entities\bin\Release\net8.0\DAJDAJ.Entities.pdb
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Entities\obj\Release\net8.0\DAJDAJ.Entities.csproj.AssemblyReference.cache
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Entities\obj\Release\net8.0\DAJDAJ.Entities.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Entities\obj\Release\net8.0\DAJDAJ.Entities.AssemblyInfoInputs.cache
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Entities\obj\Release\net8.0\DAJDAJ.Entities.AssemblyInfo.cs
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Entities\obj\Release\net8.0\DAJDAJ.Entities.csproj.CoreCompileInputs.cache
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Entities\obj\Release\net8.0\DAJDAJ.Entities.sourcelink.json
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Entities\obj\Release\net8.0\DAJDAJ.Entities.dll
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Entities\obj\Release\net8.0\refint\DAJDAJ.Entities.dll
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Entities\obj\Release\net8.0\DAJDAJ.Entities.pdb
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Entities\obj\Release\net8.0\ref\DAJDAJ.Entities.dll

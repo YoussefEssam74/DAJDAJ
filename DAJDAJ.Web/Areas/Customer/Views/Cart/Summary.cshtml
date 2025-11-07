@@ -1,6 +1,6 @@
-﻿@{
-    Layout = "_Customer";
-    var totalPrice = ViewData["TotalPrice"] != null ? Convert.ToDecimal(ViewData["TotalPrice"]) : 0;
+﻿﻿@{
+Layout = "_Customer";
+var totalPrice = ViewData["TotalPrice"] != null ? Convert.ToDecimal(ViewData["TotalPrice"]) : 0;
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -118,7 +118,8 @@
             <div class="col-lg-7">
                 <div class="checkout-section mb-4">
                     <div class="checkout-title mb-4">Contact information</div>
-                    <form asp-action="Summary" method="post">
+<form asp-area="Customer" asp-controller="Cart" asp-action="Summary" method="post">
+    @Html.AntiForgeryToken()
                         <div class="form-group mb-4">
                             <label class="checkout-label">Email address <span class="required">*</span></label>
                             <input type="email" name="Email" class="form-control checkout-input" required placeholder="Email address *" />

@@ -51,8 +51,8 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
                 // Add color-related image info
                 if (item.product.ProductImages != null && item.product.ProductImages.Any())
                 {
-                    var colorImage = item.product.ProductImages.FirstOrDefault(pi => 
-                        !string.IsNullOrEmpty(pi.Color) && 
+                    var colorImage = item.product.ProductImages.FirstOrDefault(pi =>
+                        !string.IsNullOrEmpty(pi.Color) &&
                         pi.Color.Equals(item.SelectedColor, System.StringComparison.OrdinalIgnoreCase));
                     if (colorImage != null)
                     {
@@ -96,8 +96,12 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
             return View(ShoppingCartVM);
         }
 
+
+
+
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
+      //  [ValidateAntiForgeryToken]
         [ActionName("Summary")]
         public async Task<IActionResult> PostSummary(ShoppingCartVM shoppingCartVM, string PaymentMethod, decimal ShippingPrice)
         {
@@ -151,7 +155,7 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
             {
                 shoppingCartVM.OrderHeaders.Phone = "-";
             }
-             string InstegramUserName = Request.Form["InstegramUserName"];
+            string InstegramUserName = Request.Form["InstegramUserName"];
 
             if (!string.IsNullOrWhiteSpace(InstegramUserName))
             {
@@ -176,8 +180,8 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
 
             // Save OrderHeader first
             _unitOfWork.OrderHeader.Add(shoppingCartVM.OrderHeaders);
-            var saveResult = _unitOfWork.Complete();
-            if (shoppingCartVM.OrderHeaders.Id == 0 || saveResult == 0)
+            _unitOfWork.Complete();
+            if (shoppingCartVM.OrderHeaders.Id == 0 )
             {
                 ModelState.AddModelError("", "An error occurred while saving the order. Please check the data and try again.");
                 return View("Summary");
@@ -251,9 +255,9 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
-            
+
             var shoppingcart = _unitOfWork.ShoppingCart.GetFirstorDefault(x => x.Id == cartid);
-            
+
             if (shoppingcart.Count <= 1)
             {
                 _unitOfWork.ShoppingCart.Remove(shoppingcart);
@@ -262,7 +266,7 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
                 HttpContext.Session.SetInt32(SD.SessionKey, count);
 
                 var remainingCartItems = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId);
-                
+
                 if (!remainingCartItems.Any())
                 {
                     return RedirectToAction("Index", "Home");
@@ -284,7 +288,7 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
-            
+
             var shoppingcart = _unitOfWork.ShoppingCart.GetFirstorDefault(x => x.Id == cartid);
             _unitOfWork.ShoppingCart.Remove(shoppingcart);
             _unitOfWork.Complete();
@@ -292,7 +296,7 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
             var count = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId).Count();
             HttpContext.Session.SetInt32(SD.SessionKey, count);
             var remainingCartItems = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId);
-            
+
             if (!remainingCartItems.Any())
             {
                 return RedirectToAction("Index", "Home");

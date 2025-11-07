@@ -1,4 +1,4 @@
-using DAJDAJ.DataAccess;
+﻿using DAJDAJ.DataAccess;
 using DAJDAJ.DataAccess.DbIntializer;
 using DAJDAJ.DataAccess.Implementation;
 using DAJDAJ.Entities.Repositories;
@@ -61,8 +61,21 @@ namespace DAJDAJ.Web
             builder.Services.AddScoped<IUntiOfWork, UnitOfWork>();
             builder.Services.AddScoped<IDbIntializar,DbIntializar>();
             builder.Services.AddDistributedMemoryCache();
-            builder.Services.AddSession();
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30); 
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
 
+
+            builder.Services.AddAntiforgery(options =>
+            {
+                options.Cookie.Name = "Antiforgery";
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.Lax;
+            });
 
             var app = builder.Build();
 
@@ -74,14 +87,33 @@ namespace DAJDAJ.Web
                 app.UseHsts();
             }
 
+          
+            else
+            {
+                // ✅ Show detailed errors in development/testing
+                app.UseDeveloperExceptionPage();
+            }
+
             app.UseHttpsRedirection();
+            app.Use((context, next) =>
+            {
+                context.Request.Scheme = "https";
+                return next();
+            });
+
             app.UseStaticFiles();
+
+            app.UseCookiePolicy(new CookiePolicyOptions
+            {
+                MinimumSameSitePolicy = SameSiteMode.Lax,
+            });
+
 
             app.UseRouting();
             SeedDb();
+            app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseSession();
 
             app.MapRazorPages();
 

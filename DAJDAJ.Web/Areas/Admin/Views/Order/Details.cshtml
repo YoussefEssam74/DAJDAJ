@@ -6,10 +6,18 @@
     var order = Model?.OrderHeader;
     var details = Model?.OrderDetails;
     var products = Model?.Product;
-    
 }
 <link rel="stylesheet" href="/css/Summary.css" />
+
 <div class="container mt-4">
+    <!-- Print Button -->
+    <div class="mb-3 d-flex justify-content-end">
+        <button class="btn btn-secondary" onclick="printThermal()">
+            <i class="fas fa-print"></i> Print
+        </button>
+    </div>
+
+    <!-- Existing Page Content -->
     <div class="row">
         <!-- Pickup Details -->
         <div class="col-md-7">
@@ -47,7 +55,6 @@
                                     <span asp-validation-for="OrderHeader.InstgramUserName" class="text-danger"></span>
                                 </div>
                             </div>
-
                             <div class="row my-1">
                                 <div class="col-3">Address</div>
                                 <div class="col-9">
@@ -62,25 +69,6 @@
                                     <span asp-validation-for="OrderHeader.City" class="text-danger"></span>
                                 </div>
                             </div>
-                          @*   <div class="row my-1">
-                                <div class="col-3">Carrier</div>
-                                <div class="col-9">
-                                    <input asp-for="OrderHeader.Carrier" id="carrier" type="text" class="form-control" />
-                                </div>
-                            </div>
-                            <div class="row my-1">
-                                <div class="col-3">Tracking Number</div>
-                                <div class="col-9">
-                                    <input asp-for="OrderHeader.TrackingNumber" id="tracking" type="text" class="form-control" />
-                                </div>
-                            </div> *@
-                           @*  <div class="row my-1">
-                                <div class="col-3">Email Id</div>
-                                <div class="col-9">
-                                    <input asp-for="OrderHeader.ApplicationUserId" type="text" class="form-control"
-                                           readonly />
-                                </div>
-                            </div> *@
                             <div class="row my-1">
                                 <div class="col-3">Order Date</div>
                                 <div class="col-9">
@@ -93,12 +81,6 @@
                                     <input asp-for="OrderHeader.PaymentMethod" type="text" class="form-control" readonly />
                                 </div>
                             </div>
-                          @*   <div class="row my-1">
-                                <div class="col-3">Payment Status</div>
-                                <div class="col-9">
-                                    <input asp-for="OrderHeader.PaymentStatus" type="text" class="form-control" readonly />
-                                </div>
-                            </div> *@
                             <button type="submit" class="btn btn-primary w-100 mt-2">
                                 <i class="fas fa-save"></i> Update Order Details
                             </button>
@@ -107,6 +89,7 @@
                 </div>
             </div>
         </div>
+
         <!-- Order Summary -->
         <div class="col-md-5 mx-auto">
             <div class="card shadow mb-4">
@@ -130,16 +113,12 @@
                                 {
                                     <div class="list-group-item d-flex justify-content-between align-items-center flex-wrap border-0 border-bottom">
                                         <div>
-                                            <div class="fw-bold text-primary">Product Nmae : @item.Product?.Name</div>
+                                            <div class="fw-bold text-primary">Product Name : @item.Product?.Name</div>
                                             <div class="fw-bold text-primary">Size : @item.SelectedSize</div>
                                             <div class="fw-bold text-primary">Color : @item.SelectedColor</div>
-                                            <div class="text-muted" style="font-size:13px;">Price : EGP @item.Price.ToString()
-                                            </div>
+                                            <div class="text-muted" style="font-size:13px;">Price : EGP @item.Price.ToString()</div>
                                             <div class="text-muted" style="font-size:13px;">Quantity : @item.Count</div>
                                         </div>
-                                      @*   <div class="fw-bold" style="color:#28a745;font-size:18px;">
-                                            EGP @((item.Price * item.Count).ToString())
-                                        </div> *@
                                     </div>
                                 }
                             }
@@ -157,11 +136,16 @@
                                 <input type="hidden" asp-for="OrderHeader.Id" />
                                 @if (Model.OrderHeader.OrderStatus == SD.Proccessing)
                                 {
-                                    <input type="submit" asp-action="StartShip" onclick="return CheckData()" class="btn btn-success px-4" value="Ship Order" />
+                                    <input type="submit" asp-action="BookOrder" class="btn btn-success px-4" value="Book Order" />
                                 }
                                 @if (Model.OrderHeader.OrderStatus != SD.Cancelled && Model.OrderHeader.OrderStatus != SD.Refund)
                                 {
                                     <input type="submit" asp-action="CancelOrder" class="btn btn-danger px-4" value="Cancel Order" />
+                                }
+                                @if (Model.OrderHeader.OrderStatus == SD.Booked || Model.OrderHeader.OrderStatus == SD.Shipped)
+                                {
+                                    <input type="submit" asp-action="ReturnOrder" class="btn btn-warning px-4" value="Return Order" />
+                                    <input type="submit" asp-action="EarnOrder" class="btn btn-info px-4" value="Earn Order" />
                                 }
                             </form>
                         </div>
@@ -170,34 +154,119 @@
             </div>
         </div>
     </div>
+
+    <!-- ✅ Thermal Invoice (Print Only Section) -->
+    <div id="thermalInvoice" style="display:none;">
+        <h2 class="center">DAJDAJ ♡</h2>
+        <hr />
+        <div>
+            <div style="font-size:15px; margin:8px 0; color:#000;">
+            <strong>Name:</strong> @order?.Name <br />
+            <strong>Phone:</strong> @order?.Phone <br />
+            <strong>Address:</strong> @order?.Address, @order?.City <br />
+            <strong>Date:</strong> @order?.OrderDate.ToString("yyyy-MM-dd HH:mm") <br />
+            <strong>Payment:</strong> @order?.PaymentMethod
+        </div>
+        <hr />
+        <div>
+        </div>
+        <hr />
+        <table class="items">
+            <thead>
+                <tr>
+                    <th style="width:20%;">Product</th>
+                    <th style="width:20%; text-align:center;">Qty</th>
+                    <th style="width:20%; text-align:right;">Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (details?.Any() == true)
+                {
+                    foreach (var item in details)
+                    {
+                        <tr>
+                            <td>
+                                <strong>@item.Product?.Name</strong><br />
+                                <small>Size: @item.SelectedSize|Color: @item.SelectedColor</small>
+                            </td>
+                            <td style="text-align:center;">@item.Count</td>
+                            <td style="text-align:right;">@item.Price.ToString("0.00")</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3" class="center">No products found</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div>
+        </div>
+
+        <hr />
+        <div class="center">
+            <strong>Total:</strong> EGP @order?.TotalPrice.ToString("0.00")
+        </div>
+
+        <hr />
+        <div class="center" style="font-size:10px;">
+            Thank you for your purchase!    
 </div>
+
 @section Scripts {
+    <style>
+        @@media print {
+            @@page {
+                size: 360mm auto;   
+                margin: 5mm;
+            }
+
+            * { margin:0 !important; padding:0 !important; box-sizing:border-box; }
+            body { 
+                margin:0 !important; 
+                padding:0 !important; 
+                font-family:'Courier New',monospace !important; 
+                font-size:16px !important;
+                -webkit-print-color-adjust: exact;
+            }
+
+         
+            body > * { visibility:hidden !important; }
+            #thermalInvoice, #thermalInvoice * { visibility:visible !important; }
+
+            #thermalInvoice {
+                display:block !important;
+                position:absolute !important;
+                left:0 !important; top:0 !important;
+                width: 72mm !important;        
+                padding: 0.2mm !important;
+                background:#fff !important;
+                transform: scale(3.4) !important;   
+                transform-origin: top left !important;
+            }
+
+            #thermalInvoice * {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+
+            hr { 
+                border:0 !important; 
+                border-top:1px dashed #000 !important; 
+                margin:8px 0 !important; 
+            }
+
+            table { width:100% !important; font-size:16px !important; }
+            th, td { padding:4px 0 !important; }
+            small { font-size:14px !important; }
+        }
+    </style>
+
     <script>
-        function CheckData() {
-            var carrier = document.getElementById("carrier").value.trim();
-            var tracking = document.getElementById("tracking").value.trim();
-
-            if (carrier === '') {
-                Swal.fire({
-                    title: 'There is an error',
-                    text: "Please enter the carrier name.",
-                    icon: 'error',
-                    confirmButtonColor: '#3085d6',
-                });
-                return false;
-            }
-
-            if (tracking === '') {
-                Swal.fire({
-                    title: 'There is an error',
-                    text: "Please enter the tracking number.",
-                    icon: 'error',
-                    confirmButtonColor: '#3085d6',
-                });
-                return false;
-            }
-
-            return true;
+        function printThermal() {
+            window.print();
         }
     </script>
 }

@@ -17,7 +17,7 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
     {
         private readonly IUntiOfWork _untiOfWork;
         [BindProperty]
-        public  OrderVM OrderVM { get; set; }
+        public OrderVM OrderVM { get; set; }
         public OrderController(IUntiOfWork untiOfWork)
         {
             _untiOfWork = untiOfWork;
@@ -109,17 +109,17 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
         {
             var orderFromDb = _untiOfWork.OrderHeader.GetFirstorDefault(u => u.Id == OrderVM.OrderHeader.Id);
 
-         
-                orderFromDb.TrackingNumber = OrderVM.OrderHeader.TrackingNumber;
-                orderFromDb.Carrier = OrderVM.OrderHeader.Carrier;
-                orderFromDb.OrderStatus = SD.Shipped;
-                orderFromDb.ShippingDate = DateTime.Now;
 
-                _untiOfWork.OrderHeader.Update(orderFromDb);
-                _untiOfWork.Complete();
+            orderFromDb.TrackingNumber = OrderVM.OrderHeader.TrackingNumber;
+            orderFromDb.Carrier = OrderVM.OrderHeader.Carrier;
+            orderFromDb.OrderStatus = SD.Shipped;
+            orderFromDb.ShippingDate = DateTime.Now;
 
-                TempData["Update"] = "Order has been shipped successfully.";
-            
+            _untiOfWork.OrderHeader.Update(orderFromDb);
+            _untiOfWork.Complete();
+
+            TempData["Update"] = "Order has been shipped successfully.";
+
             return RedirectToAction("Details", "Order", new { orderid = OrderVM.OrderHeader.Id });
         }
 

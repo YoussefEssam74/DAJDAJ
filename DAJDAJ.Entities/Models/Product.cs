@@ -37,7 +37,7 @@ namespace DAJDAJ.Entities.Models
         [ValidateNever]
         public ICollection<ProductImage> ProductImages { get; set; }
 
-        public string Description { get; set; } 
+        public string? Description { get; set; } 
 
     }
 }
