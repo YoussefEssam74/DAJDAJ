@@ -530,7 +530,7 @@
                     })
                     .then(response => {
                         if (response.ok) {
-                            window.location.href = '/Customer/Cart/Summary';
+                            window.location.href = '/Customer/Cart/Index';
                         } else {
                             response.text().then(text => alert('Add to cart failed: ' + text));
                         }

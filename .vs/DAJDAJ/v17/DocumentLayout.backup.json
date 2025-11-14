@@ -3,12 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\areas\\admin\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\areas\\admin\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\areas\\admin\\views\\order\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\areas\\admin\\views\\order\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\areas\\customer\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\areas\\customer\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\areas\\admin\\views\\dashboard\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\areas\\admin\\views\\dashboard\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\areas\\admin\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\areas\\admin\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\areas\\customer\\views\\home\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -25,10 +33,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\views\\shared\\_customer.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\views\\shared\\_customer.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\areas\\admin\\views\\order\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\areas\\admin\\views\\order\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\areas\\customer\\views\\cart\\summary.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -59,10 +63,6 @@
       "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\areas\\customer\\controllers\\cartcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\areas\\customer\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\areas\\customer\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|c:\\users\\youss\\source\\repos\\dajdaj\\dajdaj.web\\areas\\admin\\controllers\\ordercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7E389687-354D-4071-AFC5-30B2288D3C79}|DAJDAJ.Web\\DAJDAJ.Web.csproj|solutionrelative:dajdaj.web\\areas\\admin\\controllers\\ordercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -86,7 +86,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 338,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Bookmark",
@@ -102,33 +102,19 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "DashboardController.cs",
-              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Controllers\\DashboardController.cs",
-              "RelativeDocumentMoniker": "DAJDAJ.Web\\Areas\\Admin\\Controllers\\DashboardController.cs",
-              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Controllers\\DashboardController.cs",
-              "RelativeToolTip": "DAJDAJ.Web\\Areas\\Admin\\Controllers\\DashboardController.cs",
-              "ViewState": "AgIAAAcAAAAAAAAAAAAwwCEAAAA4AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-14T14:32:42.303Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Views\\Dashboard\\Index.cshtml",
               "RelativeDocumentMoniker": "DAJDAJ.Web\\Areas\\Admin\\Views\\Dashboard\\Index.cshtml",
               "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Views\\Dashboard\\Index.cshtml",
               "RelativeToolTip": "DAJDAJ.Web\\Areas\\Admin\\Views\\Dashboard\\Index.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACAAAAASAAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAADEAAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-14T14:15:05.085Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-14T14:15:05.085Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "_Layout.cshtml",
               "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Views\\Shared\\_Layout.cshtml",
               "RelativeDocumentMoniker": "DAJDAJ.Web\\Views\\Shared\\_Layout.cshtml",
@@ -136,12 +122,11 @@
               "RelativeToolTip": "DAJDAJ.Web\\Views\\Shared\\_Layout.cshtml",
               "ViewState": "AgIAACoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-13T18:12:51.23Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-13T18:12:51.23Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "_Customer.cshtml",
               "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Views\\Shared\\_Customer.cshtml",
               "RelativeDocumentMoniker": "DAJDAJ.Web\\Views\\Shared\\_Customer.cshtml",
@@ -149,12 +134,11 @@
               "RelativeToolTip": "DAJDAJ.Web\\Views\\Shared\\_Customer.cshtml",
               "ViewState": "AgIAAK4AAAAAAAAAAAAAADoAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-13T18:12:22.087Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-13T18:12:22.087Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Customer\\Views\\Cart\\Index.cshtml",
               "RelativeDocumentMoniker": "DAJDAJ.Web\\Areas\\Customer\\Views\\Cart\\Index.cshtml",
@@ -162,12 +146,11 @@
               "RelativeToolTip": "DAJDAJ.Web\\Areas\\Customer\\Views\\Cart\\Index.cshtml",
               "ViewState": "AgIAAMoAAAAAAAAAAAAAAAkAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-07T19:43:49.777Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-07T19:43:49.777Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "Details.cshtml",
               "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Customer\\Views\\Home\\Details.cshtml",
               "RelativeDocumentMoniker": "DAJDAJ.Web\\Areas\\Customer\\Views\\Home\\Details.cshtml",
@@ -175,25 +158,49 @@
               "RelativeToolTip": "DAJDAJ.Web\\Areas\\Customer\\Views\\Home\\Details.cshtml",
               "ViewState": "AgIAAPEBAAAAAAAAAAAAAA0CAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-07T23:36:13.819Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-07T23:36:13.819Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 0,
               "Title": "Details.cshtml",
               "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Views\\Order\\Details.cshtml",
               "RelativeDocumentMoniker": "DAJDAJ.Web\\Areas\\Admin\\Views\\Order\\Details.cshtml",
               "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Views\\Order\\Details.cshtml",
               "RelativeToolTip": "DAJDAJ.Web\\Areas\\Admin\\Views\\Order\\Details.cshtml",
-              "ViewState": "AgIAAIEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAJYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-11-07T19:44:31.577Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 1,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Customer\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\Areas\\Customer\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Customer\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "DAJDAJ.Web\\Areas\\Customer\\Controllers\\HomeController.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAuwBoAAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-08T00:18:38.615Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "DashboardController.cs",
+              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Controllers\\DashboardController.cs",
+              "RelativeDocumentMoniker": "DAJDAJ.Web\\Areas\\Admin\\Controllers\\DashboardController.cs",
+              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Admin\\Controllers\\DashboardController.cs",
+              "RelativeToolTip": "DAJDAJ.Web\\Areas\\Admin\\Controllers\\DashboardController.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAIwCEAAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-14T14:32:42.303Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
               "Title": "_ValidationScriptsPartial.cshtml",
               "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
               "RelativeDocumentMoniker": "DAJDAJ.Web\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
@@ -205,7 +212,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "Summary.cshtml",
               "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Customer\\Views\\Cart\\Summary.cshtml",
               "RelativeDocumentMoniker": "DAJDAJ.Web\\Areas\\Customer\\Views\\Cart\\Summary.cshtml",
@@ -213,12 +220,11 @@
               "RelativeToolTip": "DAJDAJ.Web\\Areas\\Customer\\Views\\Cart\\Summary.cshtml",
               "ViewState": "AgIAAAYBAAAAAAAAAAAQwBUBAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-07T20:07:30.667Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-07T20:07:30.667Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "_Toaster.cshtml",
               "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Views\\Shared\\_Toaster.cshtml",
               "RelativeDocumentMoniker": "DAJDAJ.Web\\Views\\Shared\\_Toaster.cshtml",
@@ -230,7 +236,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "_LoginPartial.cshtml",
               "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Views\\Shared\\_LoginPartial.cshtml",
               "RelativeDocumentMoniker": "DAJDAJ.Web\\Views\\Shared\\_LoginPartial.cshtml",
@@ -242,7 +248,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Views\\Home\\Index.cshtml",
               "RelativeDocumentMoniker": "DAJDAJ.Web\\Views\\Home\\Index.cshtml",
@@ -254,7 +260,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "_Dashboard.cshtml",
               "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Views\\Shared\\_Dashboard.cshtml",
               "RelativeDocumentMoniker": "DAJDAJ.Web\\Views\\Shared\\_Dashboard.cshtml",
@@ -303,18 +309,6 @@
             {
               "$type": "Document",
               "DocumentIndex": 14,
-              "Title": "HomeController.cs",
-              "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Customer\\Controllers\\HomeController.cs",
-              "RelativeDocumentMoniker": "DAJDAJ.Web\\Areas\\Customer\\Controllers\\HomeController.cs",
-              "ToolTip": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Customer\\Controllers\\HomeController.cs",
-              "RelativeToolTip": "DAJDAJ.Web\\Areas\\Customer\\Controllers\\HomeController.cs",
-              "ViewState": "AgIAAJ0AAAAAAAAAAAAkwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-08T00:18:38.615Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
               "Title": "CartController.cs",
               "DocumentMoniker": "C:\\Users\\youss\\source\\repos\\DAJDAJ\\DAJDAJ.Web\\Areas\\Customer\\Controllers\\CartController.cs",
               "RelativeDocumentMoniker": "DAJDAJ.Web\\Areas\\Customer\\Controllers\\CartController.cs",
