@@ -123,6 +123,74 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
             return RedirectToAction("Details", "Order", new { orderid = OrderVM.OrderHeader.Id });
         }
 
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult BookOrder(OrderVM OrderVM)
+        {
+            var orderFromDb = _untiOfWork.OrderHeader.GetFirstorDefault(u => u.Id == OrderVM.OrderHeader.Id);
+
+            if (orderFromDb == null)
+            {
+                TempData["Error"] = "Order not found.";
+                return RedirectToAction("Details", "Order", new { orderid = OrderVM.OrderHeader.Id });
+            }
+
+            orderFromDb.OrderStatus = SD.Booked;
+
+            _untiOfWork.OrderHeader.Update(orderFromDb);
+            _untiOfWork.Complete();
+
+            TempData["Update"] = "Order has been booked successfully.";
+            return RedirectToAction("Details", "Order", new { orderid = orderFromDb.Id });
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EarnOrder(OrderVM OrderVM)
+        {
+            var orderFromDb = _untiOfWork.OrderHeader.GetFirstorDefault(u => u.Id == OrderVM.OrderHeader.Id);
+
+            if (orderFromDb == null)
+            {
+                TempData["Error"] = "Order not found.";
+                return RedirectToAction("Details", "Order", new { orderid = OrderVM.OrderHeader.Id });
+            }
+
+            orderFromDb.OrderStatus = SD.Earned;
+
+            _untiOfWork.OrderHeader.Update(orderFromDb);
+            _untiOfWork.Complete();
+
+            TempData["Update"] = "Order has been marked as earned successfully.";
+            return RedirectToAction("Details", "Order", new { orderid = orderFromDb.Id });
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ReturnOrder(OrderVM OrderVM)
+        {
+            var orderFromDb = _untiOfWork.OrderHeader.GetFirstorDefault(u => u.Id == OrderVM.OrderHeader.Id);
+
+            if (orderFromDb == null)
+            {
+                TempData["Error"] = "Order not found.";
+                return RedirectToAction("Details", "Order", new { orderid = OrderVM.OrderHeader.Id });
+            }
+
+            orderFromDb.OrderStatus = SD.Return;
+
+            _untiOfWork.OrderHeader.Update(orderFromDb);
+            _untiOfWork.Complete();
+
+            TempData["Update"] = "Order has been returned successfully.";
+            return RedirectToAction("Details", "Order", new { orderid = orderFromDb.Id });
+        }
+
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult CancelOrder(OrderVM OrderVM)

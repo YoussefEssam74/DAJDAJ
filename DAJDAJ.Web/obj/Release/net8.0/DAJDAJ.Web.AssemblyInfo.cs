@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DAJDAJ.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c66b62cc0f5bc8b2ad5c6657593f494ca0a6b46c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bd5c0b64057b67baa52110a66ef5c7da6624dc23")]
 [assembly: System.Reflection.AssemblyProductAttribute("DAJDAJ.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DAJDAJ.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

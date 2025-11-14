@@ -25,6 +25,7 @@
             color: #666;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin-top: 5px;
+            text-wrap:nowrap;
         }
 
         .card:hover {
@@ -179,7 +180,7 @@
     <div class="container px-4 px-lg-5 mt-0">
         @if (Model != null && Model.Any())
         {
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-3 row-cols-xl-4 justify-content-center">
                 @foreach (var item in Model)
                 {
                     <div class="col mb-5">
@@ -198,7 +199,7 @@
                                 </div>
                             </a>
                             <!-- Product details -->
-                            <div class="card-body p-4">
+                            <div class="card-body">
                                 <div class="text-center">
                                     <h5 class="fw-bolder">@item.Name</h5>
                                     <div class="d-flex align-items-center gap-1 justify-content-center">

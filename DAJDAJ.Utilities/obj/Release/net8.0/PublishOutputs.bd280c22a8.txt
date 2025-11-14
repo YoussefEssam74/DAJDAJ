@@ -1,0 +1,14 @@
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Utilities\bin\Release\net8.0\publish\DAJDAJ.Utilities.dll
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Utilities\bin\Release\net8.0\publish\DAJDAJ.Utilities.deps.json
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Utilities\bin\Release\net8.0\publish\DAJDAJ.Utilities.pdb
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Utilities\bin\Release\net8.0\publish\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Utilities\bin\Release\net8.0\publish\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Utilities\bin\Release\net8.0\publish\Microsoft.AspNetCore.Identity.UI.dll
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Utilities\bin\Release\net8.0\publish\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Utilities\bin\Release\net8.0\publish\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Utilities\bin\Release\net8.0\publish\Microsoft.Extensions.FileProviders.Embedded.dll
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Utilities\bin\Release\net8.0\publish\Microsoft.Extensions.Identity.Core.dll
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Utilities\bin\Release\net8.0\publish\Microsoft.Extensions.Identity.Stores.dll
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Utilities\bin\Release\net8.0\publish\Microsoft.Extensions.Logging.dll
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Utilities\bin\Release\net8.0\publish\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Utilities\bin\Release\net8.0\publish\Microsoft.Extensions.Options.dll

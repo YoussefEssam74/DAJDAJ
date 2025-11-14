@@ -1,4 +1,4 @@
-﻿@model Shoppingcart
+﻿    @model Shoppingcart
 @{
     ViewData["Title"] = "Product Details";
     var productImages = Model.ProductImages ?? new List<string>();
@@ -129,12 +129,15 @@
                 }
 
                 <div class="mb-3">
-                    <label class="fw-bold">Quantity:</label>
-                    <div class="input-group w-25">
-                        <button type="button" class="btn btn-outline-secondary" onclick="updateCount(-1)">-</button>
-                        <input type="text" id="countInput" class="form-control text-center" value="@Model.Count" readonly />
-                        <button type="button" class="btn btn-outline-secondary" onclick="updateCount(1)">+</button>
+                    <label class="fw-bold d-block mb-2">Quantity:</label>
+                    <div class="flex">
+                        <div class="input-group quantity-group">
+                            <button type="button" class="btn btn-outline-secondary" onclick="updateCount(-1)">-</button>
+                            <input type="text" id="countInput" class="input-quantity" value="@Model.Count" readonly />
+                            <button type="button" class="btn btn-outline-secondary" onclick="updateCount(1)">+</button>
+                        </div>
                     </div>
+                    
                 </div>
 
                 <div class="d-flex flex-column gap-2">
@@ -463,6 +466,36 @@
                 modalInstance.hide();
             }
         });
+        
+        // Swipe gesture support for carouselImage
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const swipeThreshold = 50; // Minimum px for swipe
+        const carouselImage = document.getElementById("carouselImage");
+        if (carouselImage) {
+            carouselImage.addEventListener('touchstart', function(e) {
+                if (e.touches.length === 1) {   
+                    touchStartX = e.touches[0].clientX;
+                }
+            });
+            carouselImage.addEventListener('touchmove', function(e) {
+                if (e.touches.length === 1) {
+                    touchEndX = e.touches[0].clientX;
+                }
+            });
+            carouselImage.addEventListener('touchend', function(e) {
+                const deltaX = touchEndX - touchStartX;
+                if (Math.abs(deltaX) > swipeThreshold) {
+                    if (deltaX < 0) {
+                        nextImage(); // Swipe left
+                    } else {
+                        prevImage(); // Swipe right
+                    }
+                }
+                touchStartX = 0;
+                touchEndX = 0;
+            });
+        }
     </script>
 }
 
@@ -581,4 +614,15 @@
             width: auto !important;
             margin: 0 auto;
         }
-    </style>
+
+    .input-quantity{
+        width:50px;
+        text-align: center;
+        border: 1px solid #ced4da;
+    }
+
+    .quantity-group{
+        flex-wrap:nowrap
+    }
+ 
+</style>

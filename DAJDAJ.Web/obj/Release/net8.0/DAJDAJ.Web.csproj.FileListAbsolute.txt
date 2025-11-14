@@ -577,10 +577,10 @@ C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Web\obj\Release\net8.0\staticwebassets
 C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Web\obj\Release\net8.0\staticwebassets.build.json.cache
 C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Web\obj\Release\net8.0\staticwebassets.development.json
 C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Web\obj\Release\net8.0\staticwebassets.build.endpoints.json
-C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Web\obj\Release\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Web\obj\Release\net8.0\DAJDAJ.Web.csproj.Up2Date
 C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Web\obj\Release\net8.0\DAJDAJ.Web.dll
 C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Web\obj\Release\net8.0\refint\DAJDAJ.Web.dll
 C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Web\obj\Release\net8.0\DAJDAJ.Web.pdb
 C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Web\obj\Release\net8.0\DAJDAJ.Web.genruntimeconfig.cache
 C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Web\obj\Release\net8.0\ref\DAJDAJ.Web.dll
+C:\Users\youss\source\repos\DAJDAJ\DAJDAJ.Web\obj\Release\net8.0\staticwebassets.upToDateCheck.txt
