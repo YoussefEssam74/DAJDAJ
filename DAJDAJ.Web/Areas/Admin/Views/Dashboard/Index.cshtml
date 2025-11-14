@@ -6,6 +6,21 @@
 <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
 <div class="row">
+    <!-- Products -->
+    <div class="col-lg-3 col-md-6 col-12 mb-4">
+        <div class="small-box bg-danger shadow">
+            <div class="inner">
+                <h3>@ViewBag.Products</h3>
+                <p>Products</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-pie-graph"></i>
+            </div>
+            <a href="/Admin/Product/" class="small-box-footer">
+                More info <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
     <!-- All Orders -->
     <div class="col-lg-3 col-md-6 col-12 mb-4">
         <div class="small-box bg-info shadow">
@@ -22,15 +37,50 @@
         </div>
     </div>
 
-    <!-- Shipped Orders -->
+    <!-- On Booked Orders -->
+    <div class="col-lg-3 col-md-6 col-12 mb-4">
+        <div class="small-box bg-primary shadow">
+            <div class="inner">
+                <h3>@ViewBag.BookedOrders</h3>
+                <p>Booked Orders</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-bookmark"></i>
+            </div>
+            <a href="/Admin/Order/Index" class="small-box-footer">
+                More info <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Earned Orders -->
     <div class="col-lg-3 col-md-6 col-12 mb-4">
         <div class="small-box bg-success shadow">
             <div class="inner">
-                <h3>@ViewBag.ShippedOrders</h3>
-                <p>Shipped Orders</p>
+                <h3>@ViewBag.EarnedOrders</h3>
+                <p>Earned Orders</p>
             </div>
             <div class="icon">
-                <i class="ion ion-stats-bars"></i>
+                <i class="ion ion-cash"></i>
+            </div>
+            <a href="/Admin/Order/Index" class="small-box-footer">
+                More info <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+
+
+
+
+    <!-- On Return Orders -->
+    <div class="col-lg-3 col-md-6 col-12 mb-4">
+        <div class="small-box bg-warning shadow">
+            <div class="inner">
+                <h3>@ViewBag.ReturnedOrders</h3>
+                <p> Returned Orders</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-refresh"></i>
             </div>
             <a href="/Admin/Order/Index" class="small-box-footer">
                 More info <i class="fas fa-arrow-circle-right"></i>
@@ -86,19 +136,4 @@
         </div>
     </div>
 
-    <!-- Products -->
-    <div class="col-lg-3 col-md-6 col-12 mb-4">
-        <div class="small-box bg-danger shadow">
-            <div class="inner">
-                <h3>@ViewBag.Products</h3>
-                <p>Products</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-pie-graph"></i>
-            </div>
-            <a href="/Admin/Product/" class="small-box-footer">
-                More info <i class="fas fa-arrow-circle-right"></i>
-            </a>
-        </div>
-    </div>
 </div>

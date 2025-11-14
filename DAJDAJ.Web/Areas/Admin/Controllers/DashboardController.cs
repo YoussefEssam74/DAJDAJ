@@ -24,7 +24,9 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
         public IActionResult Index()
         {
             ViewBag.Orders = _untiOfWork.OrderHeader.GetAll().Count();
-            ViewBag.ShippedOrders = _untiOfWork.OrderHeader.GetAll(x => x.OrderStatus == SD.Shipped).Count();
+            ViewBag.EarnedOrders = _untiOfWork.OrderHeader.GetAll(x => x.OrderStatus == SD.Earned).Count();
+            ViewBag.BookedOrders = _untiOfWork.OrderHeader.GetAll(x => x.OrderStatus == SD.Booked).Count();
+            ViewBag.ReturnedOrders = _untiOfWork.OrderHeader.GetAll(x => x.OrderStatus == SD.Return).Count();
             ViewBag.CancelledOrders = _untiOfWork.OrderHeader.GetAll(x => x.OrderStatus == SD.Cancelled).Count();
             ViewBag.Users = _untiOfWork.ApplicationUser.GetAll().Count();
             ViewBag.Products = _untiOfWork.Product.GetAll().Count();

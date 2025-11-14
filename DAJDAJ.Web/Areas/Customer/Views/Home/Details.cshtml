@@ -1,4 +1,4 @@
-﻿    @model Shoppingcart
+﻿@model Shoppingcart
 @{
     ViewData["Title"] = "Product Details";
     var productImages = Model.ProductImages ?? new List<string>();
@@ -415,7 +415,7 @@
                 let lastClickedBtn = null;
                 // Track which submit button was clicked
                 form.querySelectorAll('button[type="submit"]').forEach(function(btn) {
-                    btn.addEventListener('click', function(e) {
+                    btn.addEventListener('click', function() {
                         lastClickedBtn = this;
                     });
                 });
@@ -496,6 +496,51 @@
                 touchEndX = 0;
             });
         }
+
+        // AJAX Add to Cart and redirect to /Customer/Cart/Summary
+        document.addEventListener('DOMContentLoaded', function() {
+            const addToCartBtn = document.getElementById('addToCartBtn');
+            if (addToCartBtn) {
+                const form = addToCartBtn.closest('form');
+                addToCartBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    // Validate color/size as before
+                    let showError = false;
+                    if (!selectedColor && (document.querySelectorAll('.color-image-option').length > 0 || document.querySelectorAll('.color-circle-option').length > 0)) {
+                        document.getElementById('colorValidationMsg').style.display = 'block';
+                        showError = true;
+                    } else {
+                        document.getElementById('colorValidationMsg').style.display = 'none';
+                    }
+                    if (!selectedSize && document.querySelectorAll('.size-btn').length > 0) {
+                        document.getElementById('sizeValidationMsg').style.display = 'block';
+                        showError = true;
+                    } else {
+                        document.getElementById('sizeValidationMsg').style.display = 'none';
+                    }
+                    if (showError) return;
+                    // AJAX submit
+                    const formData = new FormData(form);
+                    fetch(form.action || window.location.pathname, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.href = '/Customer/Cart/Summary';
+                        } else {
+                            response.text().then(text => alert('Add to cart failed: ' + text));
+                        }
+                    })
+                    .catch(err => {
+                        alert('Add to cart failed: ' + err);
+                    });
+                });
+            }
+        });
     </script>
 }
 
