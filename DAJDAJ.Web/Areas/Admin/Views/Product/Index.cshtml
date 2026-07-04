@@ -6,22 +6,30 @@
 
 @Html.AntiForgeryToken()
 
-<a class="btn btn-primary mb-3" href="/Admin/Product/Create">Create</a>
+<div class="mb-3 d-grid d-md-block">
+    <a class="btn btn-primary" href="/Admin/Product/Create">
+        <i class="fas fa-plus"></i> Create New Product
+    </a>
+</div>
 
-<div class="table-responsive">
-    <table id="mytable" class="table table-hover" width="100%">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Size</th>
-                <th>Price</th>
-                <th>Color</th>
-                <th>Category</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-    </table>
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table id="mytable" class="table table-hover table-striped mb-0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Size</th>
+                        <th>Price</th>
+                        <th>Color</th>
+                        <th>Category</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
     </div>
+</div>
 
 
 

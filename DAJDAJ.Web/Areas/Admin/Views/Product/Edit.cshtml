@@ -1,4 +1,5 @@
 ﻿@model DAJDAJ.Entities.ViewModels.ProductVM
+@using Microsoft.AspNetCore.Mvc.Rendering
 
 @{
     ViewBag.PageTitle = "Product Management";
@@ -188,7 +189,7 @@
 
             <div class="form-group">
                 <label asp-for="product.CategoryId" class="control-label">Category</label>
-                <select asp-for="product.CategoryId" asp-items="Model.categorylist" class="form-control">
+                <select asp-for="product.CategoryId" asp-items="@(Model.categorylist ?? new List<SelectListItem>())" class="form-control">
                     <option disabled>-- Select Category --</option>
                 </select>
                 <span asp-validation-for="product.CategoryId" class="text-danger"></span>
@@ -208,7 +209,7 @@
 
             <div class="form-group">
                 <label asp-for="product.Description" class="control-label"></label>
-                <textarea asp-for="product.Description" class="form-control"></textarea>
+                <textarea asp-for="product.Description" class="form-control" id="productDescriptionEdit"></textarea>
                 <span asp-validation-for="product.Description" class="text-danger"></span>
             </div>
 
@@ -428,6 +429,37 @@
 
             // Initialize remove buttons
             updateRemoveButtons();
+        });
+    </script>
+
+    <!-- CKEditor CDN -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
+
+    <script>
+        // Initialize CKEditor for Description
+        document.addEventListener('DOMContentLoaded', function() {
+            ClassicEditor
+                .create(document.querySelector('#productDescriptionEdit'), {
+                    toolbar: ['heading', '|', 'bold', 'italic', 'underline', '|', 'link', 'bulletedList', 'numberedList', '|', 'undo', 'redo'],
+                    heading: {
+                        options: [
+                            { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                            { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                            { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' }
+                        ]
+                    }
+                })
+                .then(editor => {
+                    window.productDescEditor = editor;
+                    // Sync with textarea on form submit
+                    const form = document.querySelector('form');
+                    form.addEventListener('submit', function() {
+                        document.querySelector('#productDescriptionEdit').value = editor.getData();
+                    });
+                })
+                .catch(error => {
+                    console.error(error);
+                });
         });
     </script>
 }

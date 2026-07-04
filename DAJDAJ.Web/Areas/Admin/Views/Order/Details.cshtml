@@ -8,6 +8,23 @@
     var products = Model?.Product;
 }
 <link rel="stylesheet" href="/css/Summary.css" />
+<style>
+    .order-action-form .btn {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    
+    .order-action-form .btn:last-child {
+        margin-bottom: 0;
+    }
+    
+    @@media (min-width: 768px) {
+        .order-action-form .btn {
+            width: auto;
+            margin-bottom: 0;
+        }
+    }
+</style>
 
 <div class="container mt-4">
     <!-- Print Button -->
@@ -58,7 +75,7 @@
                             <div class="row my-1">
                                 <div class="col-3">Address</div>
                                 <div class="col-9">
-                                    <input asp-for="OrderHeader.Address" type="text" class="form-control" />
+                                    <textarea asp-for="OrderHeader.Address" class="form-control" id="orderAddress" rows="3"></textarea>
                                     <span asp-validation-for="OrderHeader.Address" class="text-danger"></span>
                                 </div>
                             </div>
@@ -131,18 +148,18 @@
                             <span class="fw-bold">TOTAL</span>
                             <span class="fw-bold" style="font-size:18px;">EGP @order.TotalPrice.ToString()</span>
                         </div>
-                        <div class="d-flex justify-content-center gap-2 mt-4">
-                            <form asp-area="Admin" asp-controller="Order" method="post" class="d-flex justify-content-center gap-2">
+                        <div class="mt-4">
+                            <form asp-area="Admin" asp-controller="Order" method="post" class="order-action-form d-flex flex-column flex-md-row justify-content-center" style="gap: 1.5rem;">
                                 <input type="hidden" asp-for="OrderHeader.Id" />
-                                @if (Model.OrderHeader.OrderStatus == SD.Proccessing)
+                                @if (Model?.OrderHeader?.OrderStatus == SD.Proccessing)
                                 {
                                     <input type="submit" asp-action="BookOrder" class="btn btn-success px-4" value="Book Order" />
                                 }
-                                @if (Model.OrderHeader.OrderStatus != SD.Cancelled && Model.OrderHeader.OrderStatus != SD.Refund)
+                                @if (Model?.OrderHeader?.OrderStatus != SD.Cancelled && Model?.OrderHeader?.OrderStatus != SD.Refund)
                                 {
                                     <input type="submit" asp-action="CancelOrder" class="btn btn-danger px-4" value="Cancel Order" />
                                 }
-                                @if (Model.OrderHeader.OrderStatus == SD.Booked || Model.OrderHeader.OrderStatus == SD.Shipped)
+                                @if (Model?.OrderHeader?.OrderStatus == SD.Booked || Model?.OrderHeader?.OrderStatus == SD.Shipped)
                                 {
                                     <input type="submit" asp-action="ReturnOrder" class="btn btn-warning px-4" value="Return Order" />
                                     <input type="submit" asp-action="EarnOrder" class="btn btn-info px-4" value="Earn Order" />
@@ -157,15 +174,15 @@
 
     <!-- ✅ Thermal Invoice (Print Only Section) -->
     <div id="thermalInvoice" style="display:none;">
-        <h2 class="center">DAJDAJ ♡</h2>
+        <h2 class="center"><strong>DAJDAJ ♡</strong></h2>
         <hr />
         <div>
             <div style="font-size:15px; margin:8px 0; color:#000;">
-            <strong>Name:</strong> @order?.Name <br />
-            <strong>Phone:</strong> @order?.Phone <br />
-            <strong>Address:</strong> @order?.Address, @order?.City <br />
-            <strong>Date:</strong> @order?.OrderDate.ToString("yyyy-MM-dd HH:mm") <br />
-            <strong>Payment:</strong> @order?.PaymentMethod
+            <strong>Name: @order?.Name</strong> <br />
+            <strong>Phone: @order?.Phone</strong> <br />
+            <strong>Address: @order?.Address, @order?.City</strong> <br />
+            <strong>Date: @order?.OrderDate.ToString("yyyy-MM-dd HH:mm")</strong> <br />
+            <strong>Payment: @order?.PaymentMethod</strong>
         </div>
         <hr />
         <div>
@@ -174,9 +191,9 @@
         <table class="items">
             <thead>
                 <tr>
-                    <th style="width:20%;">Product</th>
-                    <th style="width:20%; text-align:center;">Qty</th>
-                    <th style="width:20%; text-align:right;">Price</th>
+                    <th style="width:20%;"><strong>Product</strong></th>
+                    <th style="width:20%; text-align:center;"><strong>Qty</strong></th>
+                    <th style="width:20%; text-align:right;"><strong>Price</strong></th>
                 </tr>
             </thead>
             <tbody>
@@ -187,17 +204,17 @@
                         <tr>
                             <td>
                                 <strong>@item.Product?.Name</strong><br />
-                                <small>Size: @item.SelectedSize|Color: @item.SelectedColor</small>
+                                <strong><small>Size: @item.SelectedSize | Color: @item.SelectedColor</small></strong>
                             </td>
-                            <td style="text-align:center;">@item.Count</td>
-                            <td style="text-align:right;">@item.Price.ToString("0.00")</td>
+                            <td style="text-align:center;"><strong>@item.Count</strong></td>
+                            <td style="text-align:right;"><strong>@item.Price.ToString("0.00")</strong></td>
                         </tr>
                     }
                 }
                 else
                 {
                     <tr>
-                        <td colspan="3" class="center">No products found</td>
+                        <td colspan="3" class="center"><strong>No products found</strong></td>
                     </tr>
                 }
             </tbody>
@@ -207,13 +224,14 @@
 
         <hr />
         <div class="center">
-            <strong>Total:</strong> EGP @order?.TotalPrice.ToString("0.00")
+            <strong>Total: EGP @order?.TotalPrice.ToString("0.00")</strong>
         </div>
 
         <hr />
         <div class="center" style="font-size:10px;">
-            Thank you for your purchase!    
-</div>
+            <strong>Thank you for your purchase!</strong>
+        </div>
+    </div>
 
 @section Scripts {
     <style>
@@ -261,6 +279,11 @@
             table { width:100% !important; font-size:16px !important; }
             th, td { padding:4px 0 !important; }
             small { font-size:14px !important; }
+            
+            .center { 
+                text-align: center !important; 
+                display: block !important;
+            }
         }
     </style>
 

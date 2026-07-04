@@ -35,7 +35,9 @@ namespace DAJDAJ.Entities.ViewModels
 
         [ValidateNever]
         public IEnumerable<SelectListItem> AvailableColors { get; set; } = new List<SelectListItem>();
-
+        
+        [ValidateNever]
+        public IEnumerable<ProductStockInfo> StockInfo { get; set; } = new List<ProductStockInfo>();
       
     }
 }

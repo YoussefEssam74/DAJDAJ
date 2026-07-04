@@ -273,14 +273,13 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
                                 Color = color,
                                 ProductId = productFromDb.Id
                             };
-                            _context.ProductImages.Add(newImage);
                             productFromDb.ProductImages.Add(newImage);
                             newColorIndex++;
                         }
                     }
                 }
 
-                // Update remaining data
+                // Update product data first
                 productFromDb.Name = productVM.product.Name;
                 productFromDb.Price = productVM.product.Price;
                 productFromDb.OldPrice = productVM.product.OldPrice;
@@ -289,8 +288,52 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
                 productFromDb.Size = productVM.product.Size;
                 productFromDb.Description = productVM.product.Description;
 
+                // Save product and image changes first
+                _untiOfWork.Complete();
+
+                // Now handle stock management based on the updated colors
+                var currentColors = productFromDb.ProductImages.Select(img => img.Color).Distinct().ToList();
+                
+                // Get all stock entries for this product (fresh query after save)
+                var allStockEntries = _untiOfWork.ProductColorSizeStock.GetAll(s => s.ProductId == productFromDb.Id).ToList();
+                
+                // Remove stock entries for colors that no longer exist in product images
+                var stockToRemove = allStockEntries.Where(s => !currentColors.Contains(s.Color)).ToList();
+                foreach (var stock in stockToRemove)
+                {
+                    _untiOfWork.ProductColorSizeStock.Remove(stock);
+                }
+
+                // Add stock entries for new colors that don't have stock yet
+                var existingStockColors = allStockEntries.Select(s => s.Color).Distinct().ToList();
+                var newColors = currentColors.Where(c => !existingStockColors.Contains(c)).ToList();
+                
+                if (newColors.Any())
+                {
+                    // Get available sizes from product
+                    var availableSizes = productVM.product.Size?.Split(',')
+                        .Select(s => s.Trim())
+                        .ToList() ?? new List<string> { "Free Size" };
+
+                    foreach (var color in newColors)
+                    {
+                        foreach (var size in availableSizes)
+                        {
+                            var newStock = new ProductColorSizeStock
+                            {
+                                ProductId = productFromDb.Id,
+                                Color = color,
+                                Size = size,
+                                Quantity = 0
+                            };
+                            _untiOfWork.ProductColorSizeStock.Add(newStock);
+                        }
+                    }
+                }
+
+                // Save stock changes
                 int result = _untiOfWork.Complete();
-                if (result > 0)
+                if (result >= 0)
                 {
                     TempData["Update"] = "Product updated successfully";
                     return RedirectToAction("Index");

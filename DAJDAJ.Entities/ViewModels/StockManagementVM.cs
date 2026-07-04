@@ -1,0 +1,65 @@
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+namespace DAJDAJ.Entities.ViewModels
+{
+    public class StockManagementVM
+    {
+        public int ProductId { get; set; }
+        public string ProductName { get; set; } = string.Empty;
+        public List<ColorSizeStockItem> ColorSizeStocks { get; set; } = new List<ColorSizeStockItem>();
+    }
+
+    public class ColorSizeStockItem
+    {
+        public int Id { get; set; }
+        public string Color { get; set; } = string.Empty;
+        public string Size { get; set; } = string.Empty;
+        
+        [Required]
+        [Range(0, int.MaxValue, ErrorMessage = "Quantity must be 0 or greater")]
+        public int Quantity { get; set; }
+        
+        public bool IsSoldOut => Quantity == 0;
+        public bool IsLowStock => Quantity > 0 && Quantity <= 5;
+    }
+
+    public class AddStockVM
+    {
+        public int ProductId { get; set; }
+        public string ProductName { get; set; } = string.Empty;
+        
+        [Required(ErrorMessage = "Please select a color")]
+        public string Color { get; set; } = string.Empty;
+        
+        [Required(ErrorMessage = "Please select a size")]
+        public string Size { get; set; } = string.Empty;
+        
+        [Required]
+        [Range(0, int.MaxValue, ErrorMessage = "Quantity must be 0 or greater")]
+        public int Quantity { get; set; }
+        
+        public List<string> AvailableColors { get; set; } = new List<string>();
+        public List<string> AvailableSizes { get; set; } = new List<string>();
+    }
+
+    public class LowStockAlertVM
+    {
+        public int ProductId { get; set; }
+        public string ProductName { get; set; } = string.Empty;
+        public string Color { get; set; } = string.Empty;
+        public string Size { get; set; } = string.Empty;
+        public int Quantity { get; set; }
+    }
+
+    public class ProductStockDataVM
+    {
+        public int ProductId { get; set; }
+        public string ProductName { get; set; } = string.Empty;
+        public string CategoryName { get; set; } = string.Empty;
+        public int TotalStock { get; set; }
+        public string StockStatus { get; set; } = string.Empty;
+        public bool IsSoldOut { get; set; }
+        public bool IsLowStock { get; set; }
+    }
+}

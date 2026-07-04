@@ -15,29 +15,25 @@ namespace DAJDAJ.Entities.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
+        public string? ApplicationUserId { get; set; }
+
         public int ProductId { get; set; }
 
         [ForeignKey("ProductId")]
         [ValidateNever]
         public Product product { get; set; } = null!;
 
+        public string? SelectedColor { get; set; }
+        public string? SelectedSize { get; set; }
+
         [Range(1, 100, ErrorMessage = "Count must be between 1 and 100.")]
         public int Count { get; set; }
-
-        public string SelectedColor { get; set; } = string.Empty;
-        public string SelectedSize { get; set; } = string.Empty;
-
-        public string ApplicationUserId { get; set; } = string.Empty;
-
-        [ForeignKey("ApplicationUserId")]
-        [ValidateNever]
-        public ApplicationUser ApplicationUser { get; set; } = null!;
-
-        [NotMapped]
-        public List<string> Sizes { get; set; } = new List<string>();
-
+        
         [NotMapped]
         public List<string> Colors { get; set; } = new List<string>();
+        
+        [NotMapped]
+        public List<string> Sizes { get; set; } = new List<string>();
 
         [NotMapped]
         public List<string> ProductImages { get; set; } = new List<string>();

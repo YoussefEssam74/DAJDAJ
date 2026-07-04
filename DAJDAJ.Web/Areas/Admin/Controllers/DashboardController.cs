@@ -28,16 +28,20 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
             ViewBag.BookedOrders = _untiOfWork.OrderHeader.GetAll(x => x.OrderStatus == SD.Booked).Count();
             ViewBag.ReturnedOrders = _untiOfWork.OrderHeader.GetAll(x => x.OrderStatus == SD.Return).Count();
             ViewBag.CancelledOrders = _untiOfWork.OrderHeader.GetAll(x => x.OrderStatus == SD.Cancelled).Count();
-            ViewBag.Users = _untiOfWork.ApplicationUser.GetAll().Count();
-            ViewBag.Products = _untiOfWork.Product.GetAll().Count();
-
-            var googleUsersCount = _dbContext.UserLogins
-                .Where(l => l.LoginProvider == "Google")
-                .Select(l => l.UserId)
+            
+            // Count distinct/unique emails from EmailOtp table
+            ViewBag.Users = _untiOfWork.EmailOtp.GetAll()
+                .Select(x => x.Email)
                 .Distinct()
                 .Count();
+            
+            ViewBag.Products = _untiOfWork.Product.GetAll().Count();
+            
+            // Get total stock from database directly
+            var totalStock = _dbContext.ProductColorSizeStocks.Sum(x => (int?)x.Quantity) ?? 0;
+            ViewBag.TotalStock = totalStock;
 
-            ViewBag.GoogleUsers = googleUsersCount;
+           
 
             return View();
         }

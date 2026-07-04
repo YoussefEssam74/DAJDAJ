@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP System Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 { color: #667eea; }
+        h2 { color: #333; margin-top: 0; }
+        .test-case {
+            border-left: 4px solid #667eea;
+            padding: 10px;
+            margin: 10px 0;
+            background: #f9f9f9;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #5568d3; }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        input {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .status { font-weight: bold; margin: 10px 0; }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔐 OTP Login System - Test Suite</h1>
+    
+    <div class="test-section">
+        <h2>System Status</h2>
+        <div class="status" id="systemStatus">Checking...</div>
+        <button onclick="checkSystemStatus()">Recheck System</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 1: Send OTP</h2>
+        <div class="test-case">
+            <p>Test sending OTP to an email address</p>
+            <input type="email" id="testEmail" placeholder="your@email.com" value="test@example.com">
+            <button onclick="testSendOtp()">Send OTP</button>
+            <div class="result" id="sendOtpResult"></div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: Verify OTP</h2>
+        <div class="test-case">
+            <p>Test OTP verification (use OTP from your email)</p>
+            <input type="email" id="verifyEmail" placeholder="your@email.com" value="test@example.com">
+            <input type="text" id="verifyOtp" placeholder="123456" maxlength="6">
+            <button onclick="testVerifyOtp()">Verify OTP</button>
+            <div class="result" id="verifyOtpResult"></div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: Rate Limiting (Email)</h2>
+        <div class="test-case">
+            <p>Test rate limiting by sending 4 OTP requests quickly to same email</p>
+            <input type="email" id="rateLimitEmail" placeholder="your@email.com" value="ratelimit@test.com">
+            <button onclick="testRateLimiting()">Run Rate Limit Test</button>
+            <div class="result" id="rateLimitResult"></div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 4: Invalid OTP</h2>
+        <div class="test-case">
+            <p>Test verification with wrong OTP</p>
+            <button onclick="testInvalidOtp()">Test Invalid OTP</button>
+            <div class="result" id="invalidOtpResult"></div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 5: API Response Times</h2>
+        <div class="test-case">
+            <p>Test API endpoint response times</p>
+            <button onclick="testPerformance()">Run Performance Test</button>
+            <div class="result" id="performanceResult"></div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Quick Access</h2>
+        <div class="test-case">
+            <a href="/AuthPage/Login" target="_blank">
+                <button>Open Login Page</button>
+            </a>
+            <button onclick="window.location.href='/api/auth/send-otp'">Test API Endpoint</button>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = window.location.origin;
+
+        async function checkSystemStatus() {
+            const statusEl = document.getElementById('systemStatus');
+            statusEl.textContent = 'Checking system...';
+            
+            try {
+                const response = await fetch(`${API_BASE}/AuthPage/Login`);
+                if (response.ok) {
+                    statusEl.innerHTML = '✅ <span style="color: green;">System Online - Login page accessible</span>';
+                } else {
+                    statusEl.innerHTML = '❌ <span style="color: red;">System Error - Status: ' + response.status + '</span>';
+                }
+            } catch (error) {
+                statusEl.innerHTML = '❌ <span style="color: red;">System Offline - ' + error.message + '</span>';
+            }
+        }
+
+        async function testSendOtp() {
+            const email = document.getElementById('testEmail').value;
+            const resultEl = document.getElementById('sendOtpResult');
+            
+            if (!email) {
+                showResult(resultEl, 'error', 'Please enter an email address');
+                return;
+            }
+
+            resultEl.style.display = 'block';
+            resultEl.className = 'result';
+            resultEl.textContent = 'Sending OTP...';
+
+            try {
+                const startTime = Date.now();
+                const response = await fetch(`${API_BASE}/api/auth/send-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+
+                const data = await response.json();
+                const duration = Date.now() - startTime;
+
+                if (data.success) {
+                    showResult(resultEl, 'success', 
+                        `✅ SUCCESS!\n` +
+                        `Message: ${data.message}\n` +
+                        `Masked Email: ${data.data.email}\n` +
+                        `Response Time: ${duration}ms\n\n` +
+                        `Check your email for the OTP code.`
+                    );
+                } else {
+                    showResult(resultEl, 'error', 
+                        `❌ FAILED!\n` +
+                        `Message: ${data.message}`
+                    );
+                }
+            } catch (error) {
+                showResult(resultEl, 'error', `Network Error: ${error.message}`);
+            }
+        }
+
+        async function testVerifyOtp() {
+            const email = document.getElementById('verifyEmail').value;
+            const otp = document.getElementById('verifyOtp').value;
+            const resultEl = document.getElementById('verifyOtpResult');
+            
+            if (!email || !otp) {
+                showResult(resultEl, 'error', 'Please enter both email and OTP');
+                return;
+            }
+
+            if (otp.length !== 6) {
+                showResult(resultEl, 'error', 'OTP must be 6 digits');
+                return;
+            }
+
+            resultEl.style.display = 'block';
+            resultEl.className = 'result';
+            resultEl.textContent = 'Verifying OTP...';
+
+            try {
+                const startTime = Date.now();
+                const response = await fetch(`${API_BASE}/api/auth/verify-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, otp })
+                });
+
+                const data = await response.json();
+                const duration = Date.now() - startTime;
+
+                if (data.success) {
+                    showResult(resultEl, 'success', 
+                        `✅ VERIFICATION SUCCESS!\n` +
+                        `Message: ${data.message}\n` +
+                        `User Email: ${data.data.email}\n` +
+                        `Redirect URL: ${data.data.redirectUrl}\n` +
+                        `Response Time: ${duration}ms\n\n` +
+                        `User is now logged in!`
+                    );
+                } else {
+                    showResult(resultEl, 'error', 
+                        `❌ VERIFICATION FAILED!\n` +
+                        `Message: ${data.message}`
+                    );
+                }
+            } catch (error) {
+                showResult(resultEl, 'error', `Network Error: ${error.message}`);
+            }
+        }
+
+        async function testRateLimiting() {
+            const email = document.getElementById('rateLimitEmail').value;
+            const resultEl = document.getElementById('rateLimitResult');
+            
+            if (!email) {
+                showResult(resultEl, 'error', 'Please enter an email address');
+                return;
+            }
+
+            resultEl.style.display = 'block';
+            resultEl.className = 'result';
+            resultEl.textContent = 'Testing rate limiting (sending 4 requests)...';
+
+            let results = [];
+            
+            for (let i = 1; i <= 4; i++) {
+                try {
+                    const response = await fetch(`${API_BASE}/api/auth/send-otp`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email })
+                    });
+
+                    const data = await response.json();
+                    results.push(`Request ${i}: ${data.success ? '✅ Success' : '❌ ' + data.message}`);
+                    
+                    // Small delay between requests
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                } catch (error) {
+                    results.push(`Request ${i}: ❌ Error - ${error.message}`);
+                }
+            }
+
+            const hasRateLimit = results.some(r => r.includes('Too many'));
+            showResult(resultEl, hasRateLimit ? 'success' : 'error', 
+                `Rate Limiting Test Results:\n\n` +
+                results.join('\n') + '\n\n' +
+                (hasRateLimit 
+                    ? '✅ Rate limiting is working correctly!' 
+                    : '⚠️ No rate limit detected - check configuration')
+            );
+        }
+
+        async function testInvalidOtp() {
+            const resultEl = document.getElementById('invalidOtpResult');
+            const testEmail = 'invalid-test@example.com';
+            const invalidOtp = '000000';
+
+            resultEl.style.display = 'block';
+            resultEl.className = 'result';
+            resultEl.textContent = 'Testing invalid OTP...';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/verify-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: testEmail, otp: invalidOtp })
+                });
+
+                const data = await response.json();
+
+                if (!data.success && data.message.includes('Invalid')) {
+                    showResult(resultEl, 'success', 
+                        `✅ TEST PASSED!\n` +
+                        `System correctly rejected invalid OTP.\n` +
+                        `Message: ${data.message}`
+                    );
+                } else {
+                    showResult(resultEl, 'error', 
+                        `❌ TEST FAILED!\n` +
+                        `System should reject invalid OTP.\n` +
+                        `Response: ${JSON.stringify(data)}`
+                    );
+                }
+            } catch (error) {
+                showResult(resultEl, 'error', `Network Error: ${error.message}`);
+            }
+        }
+
+        async function testPerformance() {
+            const resultEl = document.getElementById('performanceResult');
+            resultEl.style.display = 'block';
+            resultEl.className = 'result';
+            resultEl.textContent = 'Running performance tests...';
+
+            const testEmail = `perf-test-${Date.now()}@example.com`;
+            let times = [];
+
+            for (let i = 0; i < 3; i++) {
+                try {
+                    const startTime = Date.now();
+                    await fetch(`${API_BASE}/api/auth/send-otp`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: testEmail })
+                    });
+                    times.push(Date.now() - startTime);
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                } catch (error) {
+                    times.push(-1);
+                }
+            }
+
+            const validTimes = times.filter(t => t > 0);
+            const avgTime = validTimes.reduce((a, b) => a + b, 0) / validTimes.length;
+            const minTime = Math.min(...validTimes);
+            const maxTime = Math.max(...validTimes);
+
+            showResult(resultEl, 'success', 
+                `Performance Test Results:\n\n` +
+                `Average Response Time: ${avgTime.toFixed(0)}ms\n` +
+                `Fastest: ${minTime}ms\n` +
+                `Slowest: ${maxTime}ms\n\n` +
+                `Individual times: ${times.map(t => t + 'ms').join(', ')}\n\n` +
+                (avgTime < 1000 ? '✅ Performance is good!' : '⚠️ Consider optimization')
+            );
+        }
+
+        function showResult(element, type, message) {
+            element.style.display = 'block';
+            element.className = `result ${type}`;
+            element.innerHTML = `<pre>${message}</pre>`;
+        }
+
+        // Auto-check system status on load
+        window.onload = checkSystemStatus;
+    </script>
+</body>
+</html>

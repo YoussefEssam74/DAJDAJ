@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DAJDAJ.Utilities")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bd5c0b64057b67baa52110a66ef5c7da6624dc23")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7e605753705300eca3e93e9b7cd5eb53ed65108e")]
 [assembly: System.Reflection.AssemblyProductAttribute("DAJDAJ.Utilities")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DAJDAJ.Utilities")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

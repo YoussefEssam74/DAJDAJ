@@ -16,6 +16,9 @@ namespace DAJDAJ.Entities.Repositories
         
         IProductImageRepository ProductImage { get; }
         IApplicationUserRepository ApplicationUser { get; }
+        IProductColorStockRepository ProductColorStock { get; }
+        IProductColorSizeStockRepository ProductColorSizeStock { get; }
+        IEmailOtpRepository EmailOtp { get; }
         int Complete();
     }
 }

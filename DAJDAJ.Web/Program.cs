@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Configuration;
 using System.Security.Principal;
+using OfficeOpenXml; // <-- Add this for EPPlus
+
 namespace DAJDAJ.Web
 {
     public class Program
@@ -19,6 +21,9 @@ namespace DAJDAJ.Web
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Set EPPlus license context for non-commercial use (EPPlus 7.x syntax)
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
@@ -26,16 +31,26 @@ namespace DAJDAJ.Web
                 options.UseSqlServer(
                     builder.Configuration.GetConnectionString("DefaultConnection"))
                     .EnableSensitiveDataLogging()
-                    
                 );
 
 
             builder.Services.AddIdentity<IdentityUser, IdentityRole>
-                (options=>options.Lockout.DefaultLockoutTimeSpan=TimeSpan.FromMinutes(30))
-                .AddDefaultTokenProviders().AddDefaultUI()
+                (options=>
+                {
+                    options.Lockout.DefaultLockoutTimeSpan=TimeSpan.FromMinutes(30);
+                    // Disable default UI pages in favor of OTP login
+                    options.SignIn.RequireConfirmedAccount = false;
+                })
+                .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-
+            // Configure application cookie to redirect to OTP login
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/AuthPage/Login";
+                options.AccessDeniedPath = "/AuthPage/Login";
+                options.LogoutPath = "/Identity/Account/Logout";
+            });
 
 
             builder.Services.AddAuthentication(options =>
@@ -55,12 +70,18 @@ namespace DAJDAJ.Web
 
 
 
-
-
             builder.Services.AddSingleton<IEmailSender, EmailSender>();
             builder.Services.AddScoped<IUntiOfWork, UnitOfWork>();
             builder.Services.AddScoped<IDbIntializar,DbIntializar>();
+            builder.Services.AddMemoryCache(); // For OTP storage in memory
             builder.Services.AddDistributedMemoryCache();
+            
+            // Add response compression for faster page loads
+            builder.Services.AddResponseCompression(options =>
+            {
+                options.EnableForHttps = true;
+            });
+
             builder.Services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30); 
@@ -86,13 +107,14 @@ namespace DAJDAJ.Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
-          
             else
             {
                 // ✅ Show detailed errors in development/testing
                 app.UseDeveloperExceptionPage();
             }
+
+            // Enable response compression for faster page loads
+            app.UseResponseCompression();
 
             app.UseHttpsRedirection();
             app.Use((context, next) =>

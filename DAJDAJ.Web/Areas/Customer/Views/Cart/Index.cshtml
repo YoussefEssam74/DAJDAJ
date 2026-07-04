@@ -332,4 +332,60 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+@section Scripts {
+<script>
+        function updateCartCount(cartId, change, btn) {
+            // Update UI immediately
+            var countSpan = document.getElementById('cart-count-' + cartId);
+            var current = parseInt(countSpan.textContent);
+            var updated = current + change;
+            if (updated >= 1 && updated <= 100) {
+                countSpan.textContent = updated;
+            }
+            // Send AJAX to backend
+            let url = change === 1 ? '/Customer/Cart/PlusAjax' : '/Customer/Cart/MinusAjax';
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: `cartid=${cartId}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    countSpan.textContent = data.newCount;
+                    updateOrderSummaryTotal();
+                    updateCartBadge();
+                }
+            });
+        }
+
+        function updateCartBadge() {
+            let cartTotalCount = 0;
+            document.querySelectorAll('[id^="cart-count-"]').forEach(function(span) {
+                cartTotalCount += parseInt(span.textContent);
+            });
+            var badge = document.getElementById('cart-count-badge');
+            if (badge) badge.textContent = cartTotalCount;
+        }
+
+        function updateOrderSummaryTotal() {
+            let total = 0;
+            document.querySelectorAll('[id^="cart-count-"]').forEach(function(span) {
+                const count = parseInt(span.textContent);
+                const priceElem = span.closest('.product-actions').querySelector('.price');
+                if (priceElem) {
+                    const price = parseFloat(priceElem.textContent.replace(/[^\d.]/g, ''));
+                    total += count * price;
+                }
+            });
+            const summaryElem = document.querySelector('.summary-item strong');
+            if (summaryElem) {
+                summaryElem.textContent = total.toFixed(2) + ' EGP';
+            }
+        }
+    </script>
+}
 </html>

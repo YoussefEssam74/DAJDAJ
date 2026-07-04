@@ -1,4 +1,5 @@
 ﻿@model DAJDAJ.Entities.ViewModels.ProductVM
+@using Microsoft.AspNetCore.Mvc.Rendering
 
 @{
     ViewBag.PageTitle = "Product Management";
@@ -57,17 +58,17 @@
 
             <!-- Images with Colors Section -->
             <div class="form-group">
-                <label class="control-label"><i class="fas fa-images"></i> Images with Colors</label>
+                <label class="control-label"><i class="fas fa-images"></i> Images with Colors & Stock</label>
                 <div id="imageColorContainer">
                     <div class="image-color-row row mb-3">
-                        <div class="col-md-6">
+                        <div class="col-md-5">
                             <label>Image</label>
                             <input name="Images" type="file" class="form-control image-input" accept="image/*" />
                             <div class="image-preview mt-2">
                                 <img src="/images/placeholder.jpg" class="img-thumbnail" style="max-width: 100px; max-height: 100px;" alt="Preview" />
                             </div>
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-3">
                             <label>Color</label>
                             <select name="ImageColors" class="form-control color-select">
                                 <option value="">Select Color</option>
@@ -80,17 +81,25 @@
                                 }
                             </select>
                         </div>
+                        <div class="col-md-3">
+                            <label>Quantity in Stock</label>
+                            <input name="ImageQuantities" type="number" min="0" class="form-control" placeholder="0" />
+                            <small class="text-muted">Stock for this color</small>
+                        </div>
                         <div class="col-md-1 d-flex align-items-end">
                             <button type="button" class="btn btn-danger remove-image-row" style="display:none;">Delete</button>
                         </div>
                     </div>
                 </div>
-                <button type="button" id="addImageRow" class="btn btn-success btn-sm">Add Another Image</button>
+                <button type="button" id="addImageRow" class="btn btn-success btn-sm">Add Another Color/Image</button>
+                <small class="text-muted d-block mt-2">
+                    <i class="fas fa-info-circle"></i> Each color variant can have its own stock quantity. Set to 0 to mark a specific color as "Out of Stock".
+                </small>
             </div>
 
             <div class="form-group">
                 <label asp-for="product.CategoryId" class="control-label">Category</label>
-                <select asp-for="product.CategoryId" asp-items="Model.categorylist" class="form-control">
+                <select asp-for="product.CategoryId" asp-items="@(Model.categorylist ?? new List<SelectListItem>())" class="form-control">
                     <option disabled selected>-- Select Category --</option>
                 </select>
                 <span asp-validation-for="product.CategoryId" class="text-danger"></span>
@@ -111,7 +120,7 @@
             <div class="form-group">
                 <label asp-for="product.Description" class="control-label"> Product Description (optional)</label>
 
-                <textarea asp-for="product.Description" class="form-control"></textarea>
+                <textarea asp-for="product.Description" class="form-control" id="productDescription"></textarea>
                 <span asp-validation-for="product.Description" class="text-danger"></span>
             </div>
 
@@ -201,7 +210,7 @@
                 document.querySelectorAll('.image-input').forEach(function(input) {
                     input.addEventListener('change', function(e) {
                         const file = e.target.files[0];
-                        const previewImg = e.target.closest('.col-md-6').querySelector('.image-preview img');
+                        const previewImg = e.target.closest('.col-md-5').querySelector('.image-preview img');
                         if (file && previewImg) {
                             const reader = new FileReader();
                             reader.onload = function(e) {
@@ -227,9 +236,11 @@
                         // Clear values
                         const imageInput = newRow.querySelector('.image-input');
                         const colorSelect = newRow.querySelector('.color-select');
+                        const quantityInput = newRow.querySelector('input[name="ImageQuantities"]');
                         const previewImg = newRow.querySelector('.image-preview img');
                         if (imageInput) imageInput.value = '';
                         if (colorSelect) colorSelect.value = '';
+                        if (quantityInput) quantityInput.value = '';
                         if (previewImg) previewImg.src = '/images/placeholder.jpg';
 
                         // Show delete button
@@ -300,6 +311,36 @@
             }
 
             console.log('Create Product page initialization complete');
+        });
+    </script>
+
+    <!-- CKEditor CDN -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
+
+    <script>
+        // Initialize CKEditor for Description
+        document.addEventListener('DOMContentLoaded', function() {
+            ClassicEditor
+                .create(document.querySelector('#productDescription'), {
+                    toolbar: ['heading', '|', 'bold', 'italic', 'underline', '|', 'link', 'bulletedList', 'numberedList', '|', 'undo', 'redo'],
+                    heading: {
+                        options: [
+                            { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                            { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                            { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' }
+                        ]
+                    }
+                })
+                .then(editor => {
+                    window.productDescEditor = editor;
+                    // Sync with textarea on form submit
+                    document.querySelector('#productForm').addEventListener('submit', function() {
+                        document.querySelector('#productDescription').value = editor.getData();
+                    });
+                })
+                .catch(error => {
+                    console.error(error);
+                });
         });
     </script>
 }

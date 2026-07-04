@@ -10,18 +10,16 @@
             <a id="manage" class="nav-link text-dark text-truncate" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)</a>
     </li>
     <li class="nav-item">
-        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>
+        <form id="logoutForm" asp-controller="AuthPage" asp-action="Logout" method="post" style="margin: 0; padding: 0;">
+            @Html.AntiForgeryToken()
+            <button id="logout" type="submit" class="nav-link text-dark border-0" style="background: none; padding: 0.5rem 1rem; cursor: pointer; font-size: inherit; width: 100%; text-align: left;">Logout</button>
         </form>
     </li>
 }
 else
 {
     <li class="nav-item">
-        <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        <a class="nav-link text-dark" id="login" href="/AuthPage/Login">Login</a>
     </li>
 }
 </ul>

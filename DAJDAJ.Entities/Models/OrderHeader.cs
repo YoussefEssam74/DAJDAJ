@@ -44,9 +44,12 @@ namespace DAJDAJ.Entities.Models
         public string City { get; set; }
         public string Phone { get; set; }
 
-        public string InstgramUserName { get; set; }
+        public string? InstgramUserName { get; set; }
 
+        public bool IsPrinted { get; set; } = false;
 
+        // Idempotency key to prevent duplicate orders
+        public string? IdempotencyKey { get; set; }
 
 
         [ValidateNever]

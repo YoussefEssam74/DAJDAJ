@@ -1,0 +1,104 @@
+@{
+    ViewData["Title"] = "Stock Management";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Stock Management</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/Admin/Dashboard">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Stock Management</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-boxes"></i> Product Stock Levels
+                </h3>
+                <div class="card-tools">
+                    <a asp-action="LowStockAlerts" class="btn btn-warning btn-sm">
+                        <i class="fas fa-exclamation-triangle"></i> View Low Stock Alerts
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <table id="stockTable" class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Product ID</th>
+                            <th>Product Name</th>
+                            <th>Category</th>
+                            <th>Total Stock</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data loaded via AJAX -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#stockTable').DataTable({
+                "ajax": {
+                    "url": "/Admin/Stock/GetProductsStockData",
+                    "type": "GET",
+                    "dataSrc": "data"
+                },
+                "columns": [
+                    { "data": "productId" },
+                    { "data": "productName" },
+                    { "data": "categoryName" },
+                    { "data": "totalStock" },
+                    {
+                        "data": null,
+                        "render": function (data, type, row) {
+                            if (row.isSoldOut) {
+                                return '<span class="badge badge-danger"><i class="fas fa-times-circle"></i> Sold Out</span>';
+                            } else if (row.isLowStock) {
+                                return '<span class="badge badge-warning"><i class="fas fa-exclamation-triangle"></i> Low Stock</span>';
+                            } else {
+                                return '<span class="badge badge-success"><i class="fas fa-check-circle"></i> In Stock</span>';
+                            }
+                        }
+                    },
+                    {
+                        "data": null,
+                        "orderable": false,
+                        "render": function (data, type, row) {
+                            return `
+                                <a href="/Admin/Stock/ManageStock?productId=${row.productId}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-edit"></i> Manage
+                                </a>
+                                <a href="/Admin/Stock/AddStock?productId=${row.productId}" class="btn btn-success btn-sm">
+                                    <i class="fas fa-plus"></i> Add
+                                </a>
+                            `;
+                        }
+                    }
+                ],
+                "responsive": true,
+                "lengthChange": true,
+                "autoWidth": false,
+                "pageLength": 10,
+                "order": [[0, "asc"]]
+            });
+        });
+    </script>
+}

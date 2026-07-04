@@ -20,7 +20,26 @@
                 More info <i class="fas fa-arrow-circle-right"></i>
             </a>
         </div>
+        
     </div>
+
+    <!-- Product Stock -->
+    <div class="col-lg-3 col-md-6 col-12 mb-4">
+        <div class="small-box bg-warning shadow">
+            <div class="inner">
+                <h3>@ViewBag.TotalStock</h3>
+                <p>Product Stock</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-cube"></i>
+            </div>
+            <a href="/Admin/Stock/" class="small-box-footer">
+                More info <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+
+
     <!-- All Orders -->
     <div class="col-lg-3 col-md-6 col-12 mb-4">
         <div class="small-box bg-info shadow">
@@ -47,7 +66,7 @@
             <div class="icon">
                 <i class="ion ion-bookmark"></i>
             </div>
-            <a href="/Admin/Order/Index" class="small-box-footer">
+            <a href="/Admin/Order/Index?status=Booked" class="small-box-footer">
                 More info <i class="fas fa-arrow-circle-right"></i>
             </a>
         </div>
@@ -63,7 +82,7 @@
             <div class="icon">
                 <i class="ion ion-cash"></i>
             </div>
-            <a href="/Admin/Order/Index" class="small-box-footer">
+            <a href="/Admin/Order/Index?status=Earned" class="small-box-footer">
                 More info <i class="fas fa-arrow-circle-right"></i>
             </a>
         </div>
@@ -82,7 +101,7 @@
             <div class="icon">
                 <i class="ion ion-refresh"></i>
             </div>
-            <a href="/Admin/Order/Index" class="small-box-footer">
+            <a href="/Admin/Order/Index?status=Return" class="small-box-footer">
                 More info <i class="fas fa-arrow-circle-right"></i>
             </a>
         </div>
@@ -98,7 +117,7 @@
             <div class="icon">
                 <i class="ion ion-close"></i>
             </div>
-            <a href="/Admin/Order/Index" class="small-box-footer">
+            <a href="/Admin/Order/Index?status=Cancelled" class="small-box-footer">
                 More info <i class="fas fa-arrow-circle-right"></i>
             </a>
         </div>
@@ -120,20 +139,6 @@
         </div>
     </div>
 
-    <!-- Google Users -->
-    <div class="col-lg-3 col-md-6 col-12 mb-4">
-        <div class="small-box bg-primary shadow">
-            <div class="inner">
-                <h3>@ViewBag.GoogleUsers</h3>
-                <p>Users via Google</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-social-google"></i>
-            </div>
-            <a href="" class="small-box-footer">
-                More info <i class="fas fa-arrow-circle-right"></i>
-            </a>
-        </div>
-    </div>
+    
 
 </div>

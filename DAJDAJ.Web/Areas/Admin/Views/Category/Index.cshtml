@@ -6,46 +6,53 @@
     Layout = "~/Views/Shared/_Dashboard.cshtml";
 }
 
-<div>
-    <a asp-area="Admin" asp-controller="Category" asp-action="Create" class="btn btn-primary">Create</a>
+<div class="mb-3 d-grid d-md-block">
+    <a asp-area="Admin" asp-controller="Category" asp-action="Create" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Create New Category
+    </a>
 </div>
 
-<br />
-
-<table class="table table-hover table-bordered" width="100%">
-    <thead class="thead-dark">
-        <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Date Created</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Name</td>
-                <td>@item.Description</td>
-                <td>@item.CreatedTime.ToString("yyyy-MM-dd HH:mm")</td>
-                <td>
-                    <a class="btn btn-success btn-sm"
-                       asp-area="Admin"
-                       asp-controller="Category"
-                       asp-action="Edit"
-                       asp-route-id="@item.Id">
-                        Edit
-                    </a>
-                    <a class="btn btn-danger btn-sm"
-                       asp-area="Admin"
-                       asp-controller="Category"
-                       asp-action="Delete"
-                       asp-route-id="@item.Id">
-                        Delete
-                    </a>
-
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped mb-0" width="100%">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th class="d-none d-md-table-cell">Description</th>
+                        <th class="d-none d-lg-table-cell">Date Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Name</td>
+                            <td class="d-none d-md-table-cell">@item.Description</td>
+                            <td class="d-none d-lg-table-cell">@item.CreatedTime.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a class="btn btn-success btn-sm"
+                                       asp-area="Admin"
+                                       asp-controller="Category"
+                                       asp-action="Edit"
+                                       asp-route-id="@item.Id">
+                                        <i class="fas fa-edit"></i><span class="d-none d-lg-inline"> Edit</span>
+                                    </a>
+                                    <a class="btn btn-danger btn-sm"
+                                       asp-area="Admin"
+                                       asp-controller="Category"
+                                       asp-action="Delete"
+                                       asp-route-id="@item.Id">
+                                        <i class="fas fa-trash"></i><span class="d-none d-lg-inline"> Delete</span>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

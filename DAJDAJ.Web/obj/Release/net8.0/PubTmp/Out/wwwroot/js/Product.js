@@ -2,22 +2,33 @@
 
 $(document).ready(function () {
     $('#mytable').DataTable({
+        "responsive": true,
         "ajax": {
             "url": "/Admin/Product/GetData",
             "type": "GET",
             "datatype": "json"
         },
         "columns": [
-            { "data": "name" },
+            { 
+                "data": "name",
+                "responsivePriority": 1
+            },
             { "data": "size" },
             { "data": "price" },
             { "data": "color" },
             { "data": "category.name" },
             {
                 "data": "id",
+                "responsivePriority": 2,
                 "render": function (data, type, row) {
-                    return `<a href="/Admin/Product/Edit/${data}" class="btn btn-sm btn-warning">Edit</a> ` +
-                        `<a onclick="DeleteItem('/Admin/Product/Delete/${data}')" class="btn btn-sm btn-danger">Delete</a>`
+                    return `<div class="btn-group" role="group">
+                                <a href="/Admin/Product/Edit/${data}" class="btn btn-sm btn-warning">
+                                    <i class="fas fa-edit"></i><span class="d-none d-lg-inline"> Edit</span>
+                                </a>
+                                <a onclick="DeleteItem('/Admin/Product/Delete/${data}')" class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash"></i><span class="d-none d-lg-inline"> Delete</span>
+                                </a>
+                            </div>`;
                 },
                 "orderable": false,
                 "searchable": false

@@ -27,8 +27,37 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
         public IActionResult Index(int ? page)
         {
             var PageNumber = page ?? 1;
-            var PageSize = 4;
-            var products = _unitOfWork.Product.GetAll().ToPagedList(PageNumber, PageSize);   
+            var PageSize = 6;
+            var products = _unitOfWork.Product.GetAll().ToPagedList(PageNumber, PageSize);
+
+            // Add stock information for each product
+            var productStockData = new Dictionary<int, bool>();
+            foreach (var product in products)
+            {
+                var isFullySoldOut = _unitOfWork.ProductColorSizeStock.IsProductFullySoldOut(product.Id);
+                productStockData[product.Id] = isFullySoldOut;
+            }
+            ViewBag.ProductStockData = productStockData;
+
+            // Set cart count for layout
+            if (User.Identity.IsAuthenticated)
+            {
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var claim = claimsIdentity?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+                if (claim != null)
+                {
+                    ViewBag.CartCount = _unitOfWork.ShoppingCart.GetAll(x => x.ApplicationUserId == claim.Value).Sum(x => x.Count);
+                }
+                else
+                {
+                    ViewBag.CartCount = 0;
+                }
+            }
+            else
+            {
+                ViewBag.CartCount = 0;
+            }
+
             return View(products);
         }
 
@@ -84,18 +113,51 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
                 productImages.Add("/" + product.Img.Replace("\\", "/"));
             }
 
+            // Get stock information for each color+size combination
+            var stockInfo = new List<ProductStockInfo>();
+            var isProductFullySoldOut = false;
+
+            if (colors.Any() && sizes.Any())
+            {
+                foreach (var color in colors)
+                {
+                    foreach (var size in sizes)
+                    {
+                        // Check if stock record exists, if not create one with quantity 0
+                        var existingStock = _unitOfWork.ProductColorSizeStock.GetStockByProductColorSize(id, color, size);
+                        if (existingStock == null)
+                        {
+                            _unitOfWork.ProductColorSizeStock.UpdateStock(id, color, size, 0);
+                            _unitOfWork.Complete();
+                        }
+
+                        var quantity = _unitOfWork.ProductColorSizeStock.GetAvailableQuantity(id, color, size);
+                        stockInfo.Add(new ProductStockInfo
+                        {
+                            Color = color,
+                            Size = size,
+                            Quantity = quantity
+                        });
+                    }
+                }
+
+                isProductFullySoldOut = _unitOfWork.ProductColorSizeStock.IsProductFullySoldOut(id);
+            }
+
             var shoppingcart = new Shoppingcart()
             {
                 product = product,
-                ProductId = id, // Add ProductId
+                ProductId = id,
                 Sizes = sizes,
-                Colors = colors, // Colors from ProductImages
+                Colors = colors,
                 Count = 1,
                 ProductImages = productImages
             };
 
-            // Add color-image map to ViewBag
+            // Add color-image map and stock info to ViewBag
             ViewBag.ImageColorMap = imageColorMap;
+            ViewBag.StockInfo = stockInfo;
+            ViewBag.IsProductFullySoldOut = isProductFullySoldOut;
             ViewBag.Viewers = new Random().Next(37, 54);
 
             // Log for debugging
@@ -122,14 +184,46 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var existingCart = _unitOfWork.ShoppingCart.GetFirstorDefault(
+            // Validate stock availability by Color AND Size
+            if (!string.IsNullOrEmpty(model.SelectedColor) && !string.IsNullOrEmpty(model.SelectedSize))
+            {
+                var availableStock = _unitOfWork.ProductColorSizeStock.GetAvailableQuantity(model.ProductId, model.SelectedColor, model.SelectedSize);
+                
+                if (availableStock == 0)
+                {
+                    TempData["error"] = $"Sorry, {model.SelectedColor} color in size {model.SelectedSize} is currently out of stock.";
+                    return RedirectToAction("Details", new { id = model.ProductId });
+                }
+
+                // Check if requested quantity exceeds available stock
+                var existingCart = _unitOfWork.ShoppingCart.GetFirstorDefault(
+                    u => u.ApplicationUserId == claim.Value &&
+                         u.ProductId == model.ProductId &&
+                         u.SelectedColor == model.SelectedColor &&
+                         u.SelectedSize == model.SelectedSize
+                );
+
+                int totalRequestedQuantity = model.Count;
+                if (existingCart != null)
+                {
+                    totalRequestedQuantity += existingCart.Count;
+                }
+
+                if (totalRequestedQuantity > availableStock)
+                {
+                    TempData["error"] = $"Only {availableStock} items available in stock for {model.SelectedColor} / {model.SelectedSize}.";
+                    return RedirectToAction("Details", new { id = model.ProductId });
+                }
+            }
+
+            var existingCartItem = _unitOfWork.ShoppingCart.GetFirstorDefault(
                 u => u.ApplicationUserId == claim.Value &&
                      u.ProductId == model.ProductId &&
                      u.SelectedColor == model.SelectedColor &&
                      u.SelectedSize == model.SelectedSize
             );
 
-            if (existingCart == null)
+            if (existingCartItem == null)
             {
                 var newCartItem = new Shoppingcart
                 {
@@ -147,9 +241,9 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
             }
             else
             {
-                int newCount = existingCart.Count + model.Count;
+                int newCount = existingCartItem.Count + model.Count;
                 if (newCount > 100) newCount = 100;
-                _unitOfWork.ShoppingCart.IncreaseCount(existingCart, model.Count);
+                _unitOfWork.ShoppingCart.IncreaseCount(existingCartItem, model.Count);
             }
 
 
@@ -160,8 +254,10 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
             );
 
             _unitOfWork.Complete();
-            return RedirectToAction("Index");
+            TempData["success"] = "Product added to cart successfully!";
+            return RedirectToAction("Index", "Cart", new { area = "Customer" });
         }
+        
         public IActionResult Returns()
         {
             return View();

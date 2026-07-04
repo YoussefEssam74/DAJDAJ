@@ -25,6 +25,22 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
             _unitOfWork = unitOfWork;
             _emailSender = emailSender;
         }
+
+        // Helper method to strip HTML tags and entities from text
+        private string StripHtml(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return input;
+            
+            // Remove HTML tags
+            var withoutTags = System.Text.RegularExpressions.Regex.Replace(input, "<.*?>", string.Empty);
+            
+            // Decode HTML entities like &nbsp;
+            var decoded = System.Net.WebUtility.HtmlDecode(withoutTags);
+            
+            // Trim and return
+            return decoded.Trim();
+        }
         public IActionResult Index()
         {
             if (!User.Identity.IsAuthenticated)
@@ -74,6 +90,7 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
             return View(ShoppingCartVM);
         }
 
+        [Authorize]
         public IActionResult Summary()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -90,26 +107,53 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
                 ShoppingCartVM.OrderHeaders.TotalPrice += (item.Count * item.product.Price);
             }
 
+            // Generate idempotency key to prevent duplicate orders
+            ShoppingCartVM.OrderHeaders.IdempotencyKey = Guid.NewGuid().ToString();
+
             // Pass total price to the view using ViewData (for Razor view usage)
             ViewData["TotalPrice"] = ShoppingCartVM.OrderHeaders.TotalPrice;
 
             return View(ShoppingCartVM);
         }
 
-
-
-
-
+        [Authorize]
         [HttpPost]
-      //  [ValidateAntiForgeryToken]
         [ActionName("Summary")]
         public async Task<IActionResult> PostSummary(ShoppingCartVM shoppingCartVM, string PaymentMethod, decimal ShippingPrice)
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var cliam = claimsIdentity.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+            
+            // Get idempotency key from form
+            string idempotencyKey = Request.Form["OrderHeaders.IdempotencyKey"];
+            
+            // Check for existing order with same idempotency key FIRST to prevent any duplicate processing
+            if (!string.IsNullOrEmpty(idempotencyKey))
+            {
+                var existingOrder = _unitOfWork.OrderHeader.GetFirstorDefault(
+                    u => u.IdempotencyKey == idempotencyKey
+                );
+                
+                if (existingOrder != null)
+                {
+                    // Order already exists, redirect to confirmation without any further processing
+                    TempData["info"] = "This order has already been submitted.";
+                    return RedirectToAction("OrderConfirmation", new { id = existingOrder.Id });
+                }
+            }
+            else
+            {
+                // If no idempotency key provided, generate one
+                idempotencyKey = Guid.NewGuid().ToString();
+            }
+
+            // Create a fresh ShoppingCartVM and OrderHeader to avoid model binding issues
+            shoppingCartVM = new ShoppingCartVM();
             shoppingCartVM.CartsList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == cliam.Value, "product");
+            shoppingCartVM.OrderHeaders = new OrderHeader();
 
             // Prepare OrderHeader data
+            shoppingCartVM.OrderHeaders.IdempotencyKey = idempotencyKey;
             shoppingCartVM.OrderHeaders.ApplicationUserId = cliam.Value;
             shoppingCartVM.OrderHeaders.OrderDate = DateTime.Now;
             shoppingCartVM.OrderHeaders.PaymentMethod = PaymentMethod;
@@ -140,7 +184,7 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
             string address = Request.Form["Address"];
             if (!string.IsNullOrWhiteSpace(address))
             {
-                shoppingCartVM.OrderHeaders.Address = address;
+                shoppingCartVM.OrderHeaders.Address = StripHtml(address);
             }
             else
             {
@@ -200,6 +244,23 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
                     SelectedSize = item.SelectedSize    // Store selected size
                 };
                 _unitOfWork.OrderDetails.Add(orderDetails);
+
+                // Decrease stock for ordered items by Color AND Size
+                if (!string.IsNullOrEmpty(item.SelectedColor) && !string.IsNullOrEmpty(item.SelectedSize))
+                {
+                    var stockDecreased = _unitOfWork.ProductColorSizeStock.DecreaseStock(
+                        item.ProductId, 
+                        item.SelectedColor,
+                        item.SelectedSize,
+                        item.Count
+                    );
+                    
+                    if (!stockDecreased)
+                    {
+                        // Stock insufficient - this shouldn't happen if cart validation is working
+                        TempData["error"] = $"Insufficient stock for {item.product.Name} in {item.SelectedColor} / {item.SelectedSize}";
+                    }
+                }
             }
             _unitOfWork.Complete();
 
@@ -208,8 +269,10 @@ namespace DAJDAJ.Web.Areas.Customer.Controllers
             _unitOfWork.Complete();
 
             // Send email notification for new order
-            var adminEmails = new List<string> { "youssefessam1293@gmail.com", "nouraessam301@gmail.com", "mayaressam814@gmail.com" };
+            var adminEmails = new List<string> { "mayaressam814@gmail.com","nouraessam301@gmail.com"};
+              //  var adminEmails = new List<string> { "youssefessam1293@gmail.com" };
             var subject = "New Order Placed";
+
 
             // Build product details table
             var productDetails = "<table border='1' cellpadding='5' cellspacing='0'><tr><th>Product Name</th><th>Size</th><th>Color</th><th>Price</th><th>Quantity</th></tr>";

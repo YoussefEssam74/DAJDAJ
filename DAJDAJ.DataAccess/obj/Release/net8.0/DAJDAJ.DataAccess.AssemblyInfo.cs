@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DAJDAJ.DataAccess")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bd5c0b64057b67baa52110a66ef5c7da6624dc23")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bd83446633a445d50402ea84a758cee63fb88f61")]
 [assembly: System.Reflection.AssemblyProductAttribute("DAJDAJ.DataAccess")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DAJDAJ.DataAccess")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

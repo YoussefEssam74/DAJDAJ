@@ -1,0 +1,299 @@
+@model List<DAJDAJ.Entities.ViewModels.OrderVM>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Print Orders</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .no-print {
+            text-align: center;
+            margin: 20px 0;
+            position: sticky;
+            top: 0;
+            background: #fff;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .orders-container {
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .thermal-invoice {
+            display: block;
+            width: 72mm;
+            margin: 20px auto;
+            padding: 15px;
+            background: #fff;
+            border: 2px dashed #ccc;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        .thermal-invoice hr {
+            border: 0;
+            border-top: 1px dashed #000;
+            margin: 10px 0;
+        }
+
+        .thermal-invoice .center {
+            text-align: center;
+            display: block;
+        }
+
+        .thermal-invoice table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .thermal-invoice th,
+        .thermal-invoice td {
+            padding: 5px 2px;
+            text-align: left;
+        }
+
+        .thermal-invoice small {
+            font-size: 12px;
+        }
+
+        .no-orders-message {
+            text-align: center;
+            padding: 50px 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin: 20px auto;
+            max-width: 500px;
+        }
+
+        .no-orders-message h3 {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        @@media print {
+            @@page {
+                size: 360mm auto;
+                margin: 5mm;
+            }
+
+            * {
+                margin: 0 !important;
+                padding: 0 !important;
+                box-sizing: border-box;
+            }
+
+            body {
+                margin: 0 !important;
+                padding: 0 !important;
+                font-family: 'Courier New', monospace !important;
+                font-size: 16px !important;
+                -webkit-print-color-adjust: exact;
+                background: #fff !important;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
+            .orders-container {
+                margin: 0 !important;
+                max-width: none !important;
+            }
+
+            body > *:not(.orders-container) {
+                visibility: hidden !important;
+            }
+
+            .orders-container,
+            .thermal-invoice,
+            .thermal-invoice * {
+                visibility: visible !important;
+            }
+
+            .thermal-invoice {
+                display: block !important;
+                position: relative !important;
+                width: 72mm !important;
+                padding: 0.2mm !important;
+                background: #fff !important;
+                transform: scale(3.4) !important;
+                transform-origin: top left !important;
+                page-break-after: always !important;
+                border: none !important;
+                box-shadow: none !important;
+                margin: 0 !important;
+            }
+
+            .thermal-invoice * {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+
+            hr {
+                border: 0 !important;
+                border-top: 1px dashed #000 !important;
+                margin: 8px 0 !important;
+            }
+
+            table {
+                width: 100% !important;
+                font-size: 16px !important;
+            }
+
+            th, td {
+                padding: 4px 0 !important;
+            }
+
+            small {
+                font-size: 14px !important;
+            }
+
+            .center {
+                text-align: center !important;
+                display: block !important;
+            }
+        }
+    </style>    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        var orderIds = @Html.Raw(Json.Serialize(ViewBag.OrderIds ?? new List<int>()));
+        var onlyUnprinted = @Html.Raw(Json.Serialize(ViewBag.OnlyUnprinted ?? false));
+        var hasMarkedAsPrinted = false;
+
+        function printOrders() {
+            window.print();
+        }
+
+        function markOrdersAsPrinted() {
+            if (onlyUnprinted && orderIds.length > 0 && !hasMarkedAsPrinted) {
+                hasMarkedAsPrinted = true;
+                $.ajax({
+                    url: '/Admin/Order/MarkOrdersAsPrinted',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(orderIds),
+                    success: function(response) {
+                        alert('Orders marked as printed successfully!');
+                        window.close();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Failed to mark orders as printed:', error);
+                        alert('Failed to mark orders as printed');
+                    }
+                });
+            } else {
+                window.close();
+            }
+        }
+    </script></head>
+<body>
+    <div class="no-print">
+        <button onclick="printOrders()" style="padding: 10px 20px; font-size: 16px; cursor: pointer; background-color: #007bff; color: white; border: none; border-radius: 4px;">
+            🖨️ Print Orders
+        </button>
+        <button onclick="markOrdersAsPrinted()" style="padding: 10px 20px; font-size: 16px; cursor: pointer; margin-left: 10px; background-color: #28a745; color: white; border: none; border-radius: 4px;">
+            ✅ Mark as Printed & Close
+        </button>
+        <button onclick="window.close()" style="padding: 10px 20px; font-size: 16px; cursor: pointer; margin-left: 10px; background-color: #6c757d; color: white; border: none; border-radius: 4px;">
+            ❌ Close Without Marking
+        </button>
+    </div>
+
+    <div class="orders-container">
+        @if (Model == null || !Model.Any())
+        {
+            <div class="no-orders-message">
+                <h3>No orders match the current filter criteria.</h3>
+            </div>
+        }
+        else
+        {
+            @foreach (var orderVM in Model)
+            {
+                var order = orderVM.OrderHeader;
+                var details = orderVM.OrderDetails;
+
+                <div class="thermal-invoice">
+                <h2 class="center"><strong>DAJDAJ ♡</strong></h2>
+                <hr />
+                <div>
+                    <div style="font-size:15px; margin:8px 0; color:#000;">
+                        <strong>Name: @order?.Name</strong> <br />
+                        <strong>Phone: @order?.Phone</strong> <br />
+                        <strong>Address: @order?.Address, @order?.City</strong> <br />
+                        <strong>Date: @order?.OrderDate.ToString("yyyy-MM-dd HH:mm")</strong> <br />
+                        <strong>Payment: @order?.PaymentMethod</strong>
+                    </div>
+                    <hr />
+                    <div>
+                    </div>
+                    <hr />
+                    <table class="items">
+                        <thead>
+                            <tr>
+                                <th style="width:20%;"><strong>Product</strong></th>
+                                <th style="width:20%; text-align:center;"><strong>Qty</strong></th>
+                                <th style="width:20%; text-align:right;"><strong>Price</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (details?.Any() == true)
+                            {
+                                foreach (var item in details)
+                                {
+                                    <tr>
+                                        <td>
+                                            <strong>@item.Product?.Name</strong><br />
+                                            <strong><small>Size: @item.SelectedSize | Color: @item.SelectedColor</small></strong>
+                                        </td>
+                                        <td style="text-align:center;"><strong>@item.Count</strong></td>
+                                        <td style="text-align:right;"><strong>@item.Price.ToString("0.00")</strong></td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="3" class="center"><strong>No products found</strong></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div>
+                    </div>
+
+                    <hr />
+                    <div class="center">
+                        <strong>Total: EGP @order?.TotalPrice.ToString("0.00")</strong>
+                    </div>
+
+                    <hr />
+                    <div class="center" style="font-size:10px;">
+                        <strong>Thank you for your purchase!</strong>
+                    </div>
+                </div>
+            </div>
+            }
+        }
+    </div>
+
+    <script>
+        // Auto print when page loads (optional)
+        // window.onload = function() { window.print(); }
+    </script>
+</body>
+</html>

@@ -28,6 +28,13 @@ namespace DAJDAJ.DataAccess.Implementation
             {
                 orderFromDb.OrderStatus = OrderStatus;
                 orderFromDb.PaymentDate = DateTime.Now;
+                
+                // Reset IsPrinted when changing to Booked status
+                if (OrderStatus == "Booked")
+                {
+                    orderFromDb.IsPrinted = false;
+                }
+                
                 if (PaymentStatus != null)
                 {
                     orderFromDb.PaymentStatus = PaymentStatus;

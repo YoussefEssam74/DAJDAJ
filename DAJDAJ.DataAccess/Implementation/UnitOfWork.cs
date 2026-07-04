@@ -19,6 +19,9 @@ namespace DAJDAJ.DataAccess.Implementation
         public IOrderDetailsRepository OrderDetails { get; private set; }
         public IProductImageRepository ProductImage { get; private set; }
         public IApplicationUserRepository ApplicationUser { get; private set; }
+        public IProductColorStockRepository ProductColorStock { get; private set; }
+        public IProductColorSizeStockRepository ProductColorSizeStock { get; private set; }
+        public IEmailOtpRepository EmailOtp { get; private set; }
 
 
         public UnitOfWork(ApplicationDbContext context) 
@@ -31,6 +34,9 @@ namespace DAJDAJ.DataAccess.Implementation
             OrderDetails = new OrderDetailsRepository(_context);
             ApplicationUser = new ApplicationUserRepository(_context);
             ProductImage = new ProductImageRepository(_context);
+            ProductColorStock = new ProductColorStockRepository(_context);
+            ProductColorSizeStock = new ProductColorSizeStockRepository(_context);
+            EmailOtp = new EmailOtpRepository(_context);
 
 
         }

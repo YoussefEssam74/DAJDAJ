@@ -19,7 +19,8 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
         public IActionResult Index()
         {
 
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
+
+              /*        var claimsIdentity = (ClaimsIdentity)User.Identity;
             var cliam = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             string userid = cliam.Value;
             return View(_context.ApplicationUsers.Where(x => x.Id != userid).ToList());
@@ -50,8 +51,18 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
             }
 
             _context.SaveChanges();
+           
             return RedirectToAction("Index", "Users", new { area = "Admin" });
+            */
+
+            // Get all unique emails from EmailOtp table
+            var emails = _context.EmailOtps
+                .Select(e => e.Email)
+                .Distinct()
+                .ToList();
+            
+            return View(emails);
         }
-    }
 
     }
+}

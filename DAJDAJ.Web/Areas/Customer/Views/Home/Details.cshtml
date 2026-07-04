@@ -1,11 +1,22 @@
-﻿@model Shoppingcart
+@model Shoppingcart
+@using DAJDAJ.Entities.ViewModels
 @{
     ViewData["Title"] = "Product Details";
     var productImages = Model.ProductImages ?? new List<string>();
     var imageColorMap = ViewBag.ImageColorMap as Dictionary<string, string> ?? new Dictionary<string, string>();
-
+    var stockInfo = ViewBag.StockInfo as List<ProductStockInfo> ?? new List<ProductStockInfo>();
+    var isProductFullySoldOut = ViewBag.IsProductFullySoldOut as bool? ?? false;
    
     var isAuthenticated = User.Identity.IsAuthenticated;
+    
+    // Create JavaScript-friendly stock data
+    var stockData = System.Text.Json.JsonSerializer.Serialize(stockInfo.Select(s => new { 
+        color = s.Color, 
+        size = s.Size, 
+        quantity = s.Quantity,
+        isSoldOut = s.IsSoldOut,
+        isLowStock = s.IsLowStock
+    }));
 }
 
 <form method="post">
@@ -22,18 +33,18 @@
                 <div class="position-relative text-center d-inline-block" style="width: 100%; max-width: 500px; height: auto; overflow: hidden; border-radius: 12px;">
                     <img id="carouselImage" src="@productImages.FirstOrDefault()" alt="Product Image"
                          class="img-fluid rounded border zoomable"
-                         style="width: 100%; height: auto; object-fit: cover;  transition: transform 0.3s ease; cursor: zoom-in;" 1
-                         data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImageInModal(this.src)" />
+                         style="width: 100%; height: auto; object-fit: cover;  transition: transform 0.3s ease; cursor: zoom-in;"
+                         data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImageInModal(this.src); event.stopPropagation();" />
 
                     @if (productImages.Count > 1)
                     {
-                        <button onclick="prevImage()" type="button" class="btn btn-dark position-absolute"
-                                style="top: 50%; left: 10px; transform: translateY(-50%); z-index: 10; opacity: 0.7;">
-                            ⟨
+                        <button onclick="prevImage()" type="button" class="btn position-absolute"
+                                style="top: 50%; left: 10px; transform: translateY(-50%); z-index: 10; background: rgba(0, 0, 0, 0.6); border: 1px solid #333; color: #fff; width: 35px; height: 35px; padding: 0; display: flex; align-items: center; justify-content: center; font-size: 18px;">
+                            〈
                         </button>
-                        <button onclick="nextImage()" type="button" class="btn btn-dark position-absolute"
-                                style="top: 50%; right: 10px; transform: translateY(-50%); z-index: 10; opacity: 0.7;">
-                            ⟩
+                        <button onclick="nextImage()" type="button" class="btn position-absolute"
+                                style="top: 50%; right: 10px; transform: translateY(-50%); z-index: 10; background: rgba(0, 0, 0, 0.6); border: 1px solid #333; color: #fff; width: 35px; height: 35px; padding: 0; display: flex; align-items: center; justify-content: center; font-size: 18px;">
+                            〉
                         </button>
                         
                         <!-- Auto-play toggle button -->
@@ -47,15 +58,27 @@
 
             <div class="col-md-6" style="position: sticky; top: 14px; align-self: start;">
                 <h2>@Model.product.Name</h2>
+                
+                @* Sold Out Badge *@
+                @if (isProductFullySoldOut)
+                {
+                    <div class="mb-3" role="alert">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fas fa-times-circle" style="color: #dc3545; font-size: 16px;"></i>
+                            <span style="color: #212529; font-size: 14px;">Sorry, this product is currently sold out.</span>
+                        </div>
+                    </div>
+                }
+                
                 <div class="d-flex align-items-center gap-1 ">
                     @if (Model.product.OldPrice.HasValue && Model.product.OldPrice > Model.product.Price)
                     {
                         <span class="text-muted text-decoration-line-through">@Model.product.OldPrice.Value.ToString("0.00")</span>
-                        <span class="text fw-bold">@Model.product.Price.ToString("0.00") EGP</span>
+                        <span style="color: #000; font-weight: 700;">@Model.product.Price.ToString("0.00") EGP</span>
                     }
                     else
                     {
-                        <span class="text-danger fw-bold">@Model.product.Price.ToString("0.00") EGP</span>
+                        <span style="color: #000; font-weight: 700;">@Model.product.Price.ToString("0.00") EGP</span>
                     }
                 </div>
 
@@ -68,16 +91,21 @@
                         <div class="d-flex gap-2 mt-1" id="size-options">
                             @foreach (var size in Model.Sizes)
                             {
-                                var isSoldOut = size.ToLower().Contains("soldout");
                                 var displaySize = size.Replace("soldout", "", StringComparison.OrdinalIgnoreCase).Trim();
 
-                                <button type="button" class="btn rounded-pill px-3 py-1 size-btn @(isSoldOut ? "btn-secondary disabled" : "btn-outline-dark")"
-                                        data-size="@displaySize" @(isSoldOut ? "disabled" : "")>
+                                <button type="button" class="btn rounded-pill px-3 py-1 size-btn btn-outline-dark"
+                                        data-size="@displaySize">
                                     @displaySize
                                 </button>
                             }
                         </div>
                         <div id="sizeValidationMsg" class="text-danger mt-2" style="display:none;">Please select a size</div>
+                        <div id="sizeStockMsg" class="mt-2" style="display:none;">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="fas fa-info-circle" style="color: #ffc107; font-size: 16px;"></i>
+                                <span id="sizeStockText" style="color: #212529; font-size: 14px;"></span>
+                            </div>
+                        </div>
                     </div>
                 }
 
@@ -87,17 +115,21 @@
                         <label class="fw-bold">Color:</label>
                         <div class="available-colors mt-2">
                             <div class="d-flex flex-wrap gap-2">
-                                @* Create a map of color to image URL for quick access SSS *@
                                 @foreach (var color in Model.Colors)
                                 {
-                                    var isSoldOut = color.ToLower().Contains("soldout");
                                     var displayColor = color.Replace("soldout", "", StringComparison.OrdinalIgnoreCase).Trim();
                                     var hasImage = imageColorMap.ContainsKey(displayColor);
+                                    
                                     @if (hasImage)
                                     {
-                                        <div class="color-image-option" data-color="@displayColor" data-image="@imageColorMap[displayColor]">
+                                        <div class="color-image-option" 
+                                             data-color="@displayColor" 
+                                             data-image="@imageColorMap[displayColor]">
                                             <div class="color-image-container" style="position: relative; cursor: pointer; border-radius: 6px; overflow: hidden; border: 2px solid transparent; transition: all 0.3s ease; width: 70px; height: 70px;">
                                                 <img src="@imageColorMap[displayColor]" alt="@displayColor" style="width: 100%; height: 100%; object-fit: contain;" />
+                                                <div class="sold-out-overlay" style="display:none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.7); align-items: center; justify-content: center; overflow: hidden;">
+                                                    <span style="position: absolute; top: 15px; left: -5px; transform: rotate(-45deg); background: rgba(220, 53, 69, 0.85); color: white; padding: 1px 10px; font-weight: 600; font-size: 6px; text-align: center; box-shadow: 0 1px 2px rgba(0,0,0,0.2);">SOLD OUT</span>
+                                                </div>
                                                 <div class="color-overlay" style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; padding: 3px; text-align: center;">
                                                     <small class="fw-bold" style="font-size: 9px;">@displayColor</small>
                                                 </div>
@@ -106,10 +138,14 @@
                                     }
                                     else
                                     {
-                                        <div class="color-circle-option" data-color="@displayColor">
+                                        <div class="color-circle-option" 
+                                             data-color="@displayColor">
                                             <div class="color-circle-container text-center">
                                                 <div class="color-circle" style=" width: 70px; height: 70px; border-radius: 6px; border: 2px solid #ddd; cursor: pointer; transition: all 0.3s ease; position: relative; display: flex; align-items: center; justify-content: center;">
-                                                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                                                    <div class="sold-out-badge" style="display:none;">
+                                                        <span class="badge bg-danger">Out</span>
+                                                    </div>
+                                                    <div class="check-icon" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                                                         <i class="fas fa-check text-white" style="font-size: 14px; opacity: 0; transition: opacity 0.3s ease;"></i>
                                                     </div>
                                                 </div>
@@ -121,9 +157,15 @@
                             </div>
                         </div>
                         <div id="colorValidationMsg" class="text-danger mt-2" style="display:none;">Please select a color</div>
-                        <div id="selectedColorDisplay" class="mt-3 text-muted ">
+                        <div id="colorStockMsg" class="mt-2" style="display:none;">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="fas fa-info-circle" style="color: #ffc107; font-size: 16px;"></i>
+                                <span id="colorStockText" style="color: #212529; font-size: 14px;"></span>
+                            </div>
+                        </div>
+                        <div id="selectedDisplay" class="mt-3 text-muted ">
                             <i class="fas fa-info-circle mr-1"></i>
-                            Please select a color to continue
+                            Please select size and color
                         </div>
                     </div>
                 }
@@ -143,17 +185,28 @@
                 <div class="d-flex flex-column gap-2">
                     @if (isAuthenticated)
                     {
-                        <button id="addToCartBtn" class="btn text-white" style="background-color: #f06292;" type="submit">
-                            <i class="bi bi-cart-fill me-1"></i> Add to Cart
-                        </button>
+                        @if (isProductFullySoldOut)
+                        {
+                            <button class="btn btn-secondary" type="button" disabled>
+                                <i class="bi bi-x-circle me-1"></i> Out of Stock
+                            </button>
+                        }
+                        else
+                        {
+                            <button id="addToCartBtn" class="btn text-white" style="background-color: #f06292;" type="submit">
+                                <i class="bi bi-cart-fill me-1"></i> Add to Cart
+                            </button>
+                        }
                     }
                     else
                     {
-                        <a href="/Identity/Account/Login?returnUrl=@Context.Request.Path" class="btn text-white" style="background-color: #f06292;">
+                        <a href="/AuthPage/Login?returnUrl=@Uri.EscapeDataString(Context.Request.Path)" class="btn text-white" style="background-color: #f06292;">
                             <i class="bi bi-cart-fill me-1"></i> Login to Add to Cart
                         </a>
                     }
+                </div>
 
+                <div class="d-flex flex-column gap-2">
                     @if (!string.IsNullOrWhiteSpace(Model.product.Description))
                     {
                         <section class="mt-5">
@@ -168,7 +221,6 @@
                                         if (!string.IsNullOrWhiteSpace(line))
                                         {
                                             <li style="margin-bottom: 10px;">
-                                                <span style="color: #ff69b4;">•</span>
                                                 <span style="color: #555;">@Html.Raw(line.Trim())</span>
                                             </li>
                                         }
@@ -204,15 +256,147 @@
     <script>
         const images = @Html.Raw(Json.Serialize(productImages));
         const imageColorMap = @Html.Raw(Json.Serialize(imageColorMap));
+        const stockData = @Html.Raw(stockData);
         let currentIndex = 0;
         let selectedColor = '';
         let selectedSize = '';
         let autoplayInterval = null;
         let isAutoPlaying = false;
 
-        // Display data in console for debugging
-        console.log('Product Images:', images);
-        console.log('Image Color Map:', imageColorMap);
+        console.log('Stock Data:', stockData);
+
+        // Helper function to get stock for specific color+size
+        function getStock(color, size) {
+            return stockData.find(s => 
+                s.color.toLowerCase() === color.toLowerCase() && 
+                s.size.toLowerCase() === size.toLowerCase()
+            );
+        }
+
+        // Helper function to check if color has any stock for selected size
+        function hasStockForColorAndSize(color, size) {
+            const stock = getStock(color, size);
+            return stock && stock.quantity > 0;
+        }
+
+        // Helper function to check if size has any stock for selected color
+        function hasStockForSizeAndColor(size, color) {
+            const stock = getStock(color, size);
+            return stock && stock.quantity > 0;
+        }
+
+        // Update size buttons based on selected color
+        function updateSizeAvailability() {
+            if (!selectedColor) {
+                // No color selected, enable all sizes
+                document.querySelectorAll('.size-btn').forEach(btn => {
+                    btn.classList.remove('btn-secondary', 'disabled');
+                    btn.classList.add('btn-outline-dark');
+                    btn.disabled = false;
+                });
+                return;
+            }
+
+            document.querySelectorAll('.size-btn').forEach(btn => {
+                const size = btn.getAttribute('data-size');
+                const hasStock = hasStockForColorAndSize(selectedColor, size);
+                
+                if (!hasStock) {
+                    btn.classList.remove('btn-outline-dark', 'btn-dark');
+                    btn.classList.add('btn-secondary', 'disabled');
+                    btn.disabled = true;
+                } else {
+                    btn.classList.remove('btn-secondary', 'disabled');
+                    btn.disabled = false;
+                    if (!btn.classList.contains('selected')) {
+                        btn.classList.add('btn-outline-dark');
+                    }
+                }
+            });
+        }
+
+        // Update color buttons based on selected size
+        function updateColorAvailability() {
+            if (!selectedSize) {
+                // No size selected, show all colors as available
+                document.querySelectorAll('.color-image-option').forEach(option => {
+                    option.style.opacity = '1';
+                    option.style.cursor = 'pointer';
+                    option.style.pointerEvents = 'auto';
+                    const overlay = option.querySelector('.sold-out-overlay');
+                    if (overlay) overlay.style.display = 'none';
+                });
+                
+                document.querySelectorAll('.color-circle-option').forEach(option => {
+                    option.style.opacity = '1';
+                    option.style.cursor = 'pointer';
+                    option.style.pointerEvents = 'auto';
+                    const badge = option.querySelector('.sold-out-badge');
+                    if (badge) badge.style.display = 'none';
+                });
+                return;
+            }
+
+            // Size is selected, disable colors with no stock
+            document.querySelectorAll('.color-image-option').forEach(option => {
+                const color = option.getAttribute('data-color');
+                const hasStock = hasStockForSizeAndColor(selectedSize, color);
+                const overlay = option.querySelector('.sold-out-overlay');
+                
+                if (!hasStock) {
+                    option.style.opacity = '0.5';
+                    option.style.cursor = 'not-allowed';
+                    option.style.pointerEvents = 'none';
+                    if (overlay) overlay.style.display = 'flex';
+                } else {
+                    option.style.opacity = '1';
+                    option.style.cursor = 'pointer';
+                    option.style.pointerEvents = 'auto';
+                    if (overlay) overlay.style.display = 'none';
+                }
+            });
+            
+            document.querySelectorAll('.color-circle-option').forEach(option => {
+                const color = option.getAttribute('data-color');
+                const hasStock = hasStockForSizeAndColor(selectedSize, color);
+                const badge = option.querySelector('.sold-out-badge');
+                
+                if (!hasStock) {
+                    option.style.opacity = '0.5';
+                    option.style.cursor = 'not-allowed';
+                    option.style.pointerEvents = 'none';
+                    if (badge) badge.style.display = 'block';
+                } else {
+                    option.style.opacity = '1';
+                    option.style.cursor = 'pointer';
+                    option.style.pointerEvents = 'auto';
+                    if (badge) badge.style.display = 'none';
+                }
+            });
+        }
+
+        // Update display message
+        function updateSelectionDisplay() {
+            const display = document.getElementById('selectedDisplay');
+            if (!display) return;
+
+            if (selectedColor && selectedSize) {
+                const stock = getStock(selectedColor, selectedSize);
+                if (stock) {
+                    let message = `<i class="fas fa-check-circle text-success mr-1"></i>Selected: <strong>${selectedColor} / ${selectedSize}</strong>`;
+                    if (stock.quantity > 0 && stock.quantity <= 5) {
+                        message += ` <span class="badge bg-warning text-dark ms-2">Only ${stock.quantity} left!</span>`;
+                    }
+                    display.innerHTML = message;
+                }
+            } else if (selectedColor) {
+                display.innerHTML = `<i class="fas fa-info-circle text-info mr-1"></i>Selected Color: <strong>${selectedColor}</strong> - Please select a size`;
+            } else if (selectedSize) {
+                display.innerHTML = `<i class="fas fa-info-circle text-info mr-1"></i>Selected Size: <strong>${selectedSize}</strong> - Please select a color`;
+            } else {
+                display.innerHTML = '<i class="fas fa-info-circle mr-1"></i>Please select size and color';
+            }
+        }
 
         function showImage(index) {
             const img = document.getElementById("carouselImage");
@@ -237,7 +421,7 @@
                 isAutoPlaying = true;
                 autoplayInterval = setInterval(() => {
                     nextImage();
-                }, 3000); // Change image every 3 seconds
+                }, 3000);
                 
                 const icon = document.getElementById('autoplayIcon');
                 if (icon) {
@@ -267,16 +451,14 @@
             }
         }
 
-        // Auto-start slideshow when page loads
         window.addEventListener('load', function() {
             if (images.length > 1) {
-                setTimeout(startAutoplay, 1000); // Start after 1 second
+                setTimeout(startAutoplay, 1000);
             }
         });
 
-        // Zoom effect on hover
         document.getElementById("carouselImage").addEventListener('mouseover', function () {
-            if (!isAutoPlaying) { // Only zoom if not auto-playing
+            if (!isAutoPlaying) {
                 this.style.transform = "scale(1.1)";
             }
         });
@@ -284,10 +466,22 @@
             this.style.transform = "scale(1)";
         });
 
-        // Show image in modal
         function showImageInModal(src) {
             document.getElementById('modalImage').src = src;
         }
+
+        // Close modal when clicking on the backdrop or image
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageModal = document.getElementById('imageModal');
+            if (imageModal) {
+                imageModal.addEventListener('click', function(e) {
+                    // Close modal if clicking on the backdrop (modal itself) or the image
+                    if (e.target === imageModal || e.target.classList.contains('modal-dialog') || e.target.id === 'modalImage') {
+                        bootstrap.Modal.getInstance(imageModal).hide();
+                    }
+                });
+            }
+        });
 
         function updateCount(change) {
             const countInput = document.getElementById("countInput");
@@ -300,24 +494,22 @@
             }
         }
 
-        // Color selection handling - Wait for page load first
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 DOM Content Loaded - Setting up color selection...');
+            console.log('Setting up color and size selection...');
             
-            // Handle color image options (images with colors)
+            // Handle color image options
             document.querySelectorAll('.color-image-option').forEach(function(option) {
-                console.log('🎨 Setting up image option for color:', option.getAttribute('data-color'));
-                
                 option.addEventListener('click', function() {
-                    console.log('🎨 Color image clicked:', this.getAttribute('data-color'));
+                    if (this.style.pointerEvents === 'none') return;
                     
-                    // Remove previous selections from all color options
+                    // Remove previous selections
                     document.querySelectorAll('.color-image-container').forEach(function(container) {
-                        container.style.border = '3px solid transparent';
+                        container.style.border = '2px solid transparent';
                     });
                     document.querySelectorAll('.color-circle').forEach(function(circle) {
-                        circle.style.border = '3px solid #ddd';
-                        circle.querySelector('.fas').style.opacity = '0';
+                        circle.style.border = '2px solid #ddd';
+                        const checkIcon = circle.querySelector('.fas.fa-check');
+                        if (checkIcon) checkIcon.style.opacity = '0';
                     });
                     
                     // Select current option
@@ -326,70 +518,57 @@
                     
                     selectedColor = this.getAttribute('data-color');
                     document.getElementById('SelectedColor').value = selectedColor;
-                    document.getElementById('selectedColorDisplay').innerHTML = 
-                        '<i class="fas fa-check-circle text-success mr-1"></i>Selected Color: <strong>' + selectedColor + '</strong>';
                     
                     // Change main image
                     const imageUrl = this.getAttribute('data-image');
                     if (imageUrl) {
-                        console.log('✅ Changing image to:', imageUrl);
-                        showImageForColor(imageUrl);
+                        stopAutoplay();
+                        const carouselImage = document.getElementById("carouselImage");
+                        carouselImage.style.opacity = '0.5';
+                        setTimeout(() => {
+                            carouselImage.src = imageUrl;
+                            carouselImage.style.opacity = '1';
+                        }, 100);
                     }
+                    
+                    updateSizeAvailability();
+                    updateSelectionDisplay();
                 });
             });
 
-            // Handle color circle options (colors without images)
+            // Handle color circle options
             document.querySelectorAll('.color-circle-option').forEach(function(option) {
-                console.log('🎨 Setting up circle option for color:', option.getAttribute('data-color'));
-                
                 option.addEventListener('click', function() {
-                    console.log('🎨 Color circle clicked:', this.getAttribute('data-color'));
+                    if (this.style.pointerEvents === 'none') return;
                     
-                    // Remove previous selections from all color options
+                    // Remove previous selections
                     document.querySelectorAll('.color-image-container').forEach(function(container) {
-                        container.style.border = '3px solid transparent';
+                        container.style.border = '2px solid transparent';
                     });
                     document.querySelectorAll('.color-circle').forEach(function(circle) {
-                        circle.style.border = '3px solid #ddd';
-                        circle.querySelector('.fas').style.opacity = '0';
+                        circle.style.border = '2px solid #ddd';
+                        const checkIcon = circle.querySelector('.fas.fa-check');
+                        if (checkIcon) checkIcon.style.opacity = '0';
                     });
                     
                     // Select current option
                     const circle = this.querySelector('.color-circle');
                     circle.style.border = '3px solid #007bff';
-                    circle.querySelector('.fas').style.opacity = '1';
+                    const checkIcon = circle.querySelector('.fas.fa-check');
+                    if (checkIcon) checkIcon.style.opacity = '1';
                     
                     selectedColor = this.getAttribute('data-color');
                     document.getElementById('SelectedColor').value = selectedColor;
-                    document.getElementById('selectedColorDisplay').innerHTML = 
-                        '<i class="fas fa-check-circle text-success mr-1"></i>Selected Color: <strong>' + selectedColor + '</strong>';
+                    
+                    updateSizeAvailability();
+                    updateSelectionDisplay();
                 });
             });
-
-            // Function to change main image for specific color
-            function showImageForColor(imageUrl) {
-                console.log('📸 Changing main image to:', imageUrl);
-                stopAutoplay(); // Stop autoplay when user selects specific color
-                
-                const carouselImage = document.getElementById("carouselImage");
-                if (carouselImage) {
-                    // Add transition effect
-                    carouselImage.style.opacity = '0.5';
-                    setTimeout(() => {
-                        carouselImage.src = imageUrl;
-                        carouselImage.style.opacity = '1';
-                    }, 100);
-                    
-                    console.log('✅ Image successfully changed!');
-                } else {
-                    console.log('❌ Carousel image element not found');
-                }
-            }
             
             // Size selection handling
             document.querySelectorAll('.size-btn').forEach(btn => {
                 btn.addEventListener('click', function () {
-                    if (this.classList.contains('disabled')) return;
+                    if (this.disabled) return;
                     
                     document.querySelectorAll('.size-btn').forEach(b => {
                         b.classList.remove('btn-dark', 'selected');
@@ -400,20 +579,15 @@
                     
                     selectedSize = this.getAttribute('data-size');
                     document.getElementById('SelectedSize').value = selectedSize;
+                    
+                    updateColorAvailability();
+                    updateSelectionDisplay();
                 });
             });
-
-            // Auto-select One Size if available
-            const oneSizeBtn = document.querySelector('.size-btn[data-size="One Size"]');
-            if (oneSizeBtn) {
-                selectedSize = 'One Size';
-                document.getElementById('SelectedSize').value = selectedSize;
-            }
 
             // Validate required data on form submission
             document.querySelectorAll('form').forEach(function(form) {
                 let lastClickedBtn = null;
-                // Track which submit button was clicked
                 form.querySelectorAll('button[type="submit"]').forEach(function(btn) {
                     btn.addEventListener('click', function() {
                         lastClickedBtn = this;
@@ -421,9 +595,8 @@
                 });
                 form.addEventListener('submit', function(e) {
                     var showError = false;
-                    // Only validate if Add to Cart button was clicked
                     if (lastClickedBtn && lastClickedBtn.id === 'addToCartBtn') {
-                        if (!selectedColor && (document.querySelectorAll('.color-image-option').length > 0 || document.querySelectorAll('.color-circle-option').length > 0)) {
+                        if (!selectedColor && document.querySelectorAll('.color-image-option, .color-circle-option').length > 0) {
                             document.getElementById('colorValidationMsg').style.display = 'block';
                             showError = true;
                         } else {
@@ -439,108 +612,51 @@
                             e.preventDefault();
                         }
                     }
-                    // If Buy it Now or other button, allow submit without validation
                 });
             });
-            document.querySelectorAll('.color-image-option, .color-circle-option').forEach(function(option) {
-                option.addEventListener('click', function() {
-                    document.getElementById('colorValidationMsg').style.display = 'none';
-                });
-            });
-            document.querySelectorAll('.size-btn').forEach(function(btn) {
-                btn.addEventListener('click', function() {
-                    document.getElementById('sizeValidationMsg').style.display = 'none';
-                });
-            });
-            // Stop autoplay when user interacts with navigation
-            const prevBtn = document.querySelector('button[onclick="prevImage()"]');
-            const nextBtn = document.querySelector('button[onclick="nextImage()"]');
             
-            if (prevBtn) prevBtn.addEventListener('click', () => stopAutoplay());
-            if (nextBtn) nextBtn.addEventListener('click', () => stopAutoplay());
+            // Initialize availability on page load
+            updateSizeAvailability();
+            updateColorAvailability();
+            updateSelectionDisplay();
         });
 
-        document.getElementById('imageModal').addEventListener('click', function (e) {
-            const modalInstance = bootstrap.Modal.getInstance(this);
-            if (modalInstance) {
-                modalInstance.hide();
-            }
-        });
-        
-        // Swipe gesture support for carouselImage
+        // Swipe gesture support
         let touchStartX = 0;
         let touchEndX = 0;
-        const swipeThreshold = 50; // Minimum px for swipe
+        let hasMoved = false;
+        const swipeThreshold = 50;
         const carouselImage = document.getElementById("carouselImage");
         if (carouselImage) {
             carouselImage.addEventListener('touchstart', function(e) {
                 if (e.touches.length === 1) {   
                     touchStartX = e.touches[0].clientX;
+                    touchEndX = touchStartX;
+                    hasMoved = false;
                 }
             });
             carouselImage.addEventListener('touchmove', function(e) {
                 if (e.touches.length === 1) {
                     touchEndX = e.touches[0].clientX;
+                    hasMoved = true;
                 }
             });
             carouselImage.addEventListener('touchend', function(e) {
-                const deltaX = touchEndX - touchStartX;
-                if (Math.abs(deltaX) > swipeThreshold) {
-                    if (deltaX < 0) {
-                        nextImage(); // Swipe left
-                    } else {
-                        prevImage(); // Swipe right
+                if (hasMoved) {
+                    const deltaX = touchEndX - touchStartX;
+                    if (Math.abs(deltaX) > swipeThreshold) {
+                        if (deltaX < 0) {
+                            nextImage();
+                        } else {
+                            prevImage();
+                        }
                     }
                 }
                 touchStartX = 0;
                 touchEndX = 0;
+                hasMoved = false;
             });
         }
-
-        // AJAX Add to Cart and redirect to /Customer/Cart/Summary
-        document.addEventListener('DOMContentLoaded', function() {
-            const addToCartBtn = document.getElementById('addToCartBtn');
-            if (addToCartBtn) {
-                const form = addToCartBtn.closest('form');
-                addToCartBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    // Validate color/size as before
-                    let showError = false;
-                    if (!selectedColor && (document.querySelectorAll('.color-image-option').length > 0 || document.querySelectorAll('.color-circle-option').length > 0)) {
-                        document.getElementById('colorValidationMsg').style.display = 'block';
-                        showError = true;
-                    } else {
-                        document.getElementById('colorValidationMsg').style.display = 'none';
-                    }
-                    if (!selectedSize && document.querySelectorAll('.size-btn').length > 0) {
-                        document.getElementById('sizeValidationMsg').style.display = 'block';
-                        showError = true;
-                    } else {
-                        document.getElementById('sizeValidationMsg').style.display = 'none';
-                    }
-                    if (showError) return;
-                    // AJAX submit
-                    const formData = new FormData(form);
-                    fetch(form.action || window.location.pathname, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest'
-                        }
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            window.location.href = '/Customer/Cart/Index';
-                        } else {
-                            response.text().then(text => alert('Add to cart failed: ' + text));
-                        }
-                    })
-                    .catch(err => {
-                        alert('Add to cart failed: ' + err);
-                    });
-                });
-            }
-        });
     </script>
 }
 
@@ -556,7 +672,7 @@
         }
         
         .color-image-container:hover {
-                border: 2px solid #f06292 !important;
+            border: 2px solid #f06292 !important;
             transform: scale(1.05);
             box-shadow: 0 4px 12px rgba(0,0,0,0.25);
         }
@@ -600,14 +716,9 @@
             margin-bottom: 8px;
         }
         
-        .color-image-container.selected {
-            border: 2px solid #f06292 !important;
-            transform: scale(1.05);
-        }
-        
-        .color-circle.selected {
-            border: 2px solid #f06292 !important;
-            transform: scale(1.05);
+        .size-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed !important;
         }
         
         #carouselImage {

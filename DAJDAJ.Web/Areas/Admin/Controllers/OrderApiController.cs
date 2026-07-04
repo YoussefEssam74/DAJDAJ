@@ -158,7 +158,6 @@ namespace DAJDAJ.Web.Areas.Admin.Controllers
 
     public class UpdateMultipleOrdersRequest
     {
-        public string ApiKey { get; set; }
         public List<int> OrderIds { get; set; }
         public string Status { get; set; }
     }
