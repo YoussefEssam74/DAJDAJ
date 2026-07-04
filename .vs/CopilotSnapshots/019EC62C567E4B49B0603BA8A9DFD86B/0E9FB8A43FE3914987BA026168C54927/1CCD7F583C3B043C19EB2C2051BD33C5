@@ -1,0 +1,22 @@
+﻿{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=db37765.public.databaseasp.net; Database=db37765; User Id=db37765; Password=8Ld%e!P4N3-a; Encrypt=True; TrustServerCertificate=True; MultipleActiveResultSets=True;",
+    "ApplicationDbContextConnection": "Server=(localdb)\\mssqllocaldb;Database=DAJDAJ.Web;Trusted_Connection=True;MultipleActiveResultSets=true"
+  },
+  "Authentication": {
+    "Google": {
+      "ClientId": "258120182077-0c4enurnbikpjuon7efgpp4ubfht7cqa.apps.googleusercontent.com",
+      "ClientSecret": "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"
+    },
+    "ApiSettings": {
+      "SecretKey": "dajdaj9060"
+    }
+  }
+}

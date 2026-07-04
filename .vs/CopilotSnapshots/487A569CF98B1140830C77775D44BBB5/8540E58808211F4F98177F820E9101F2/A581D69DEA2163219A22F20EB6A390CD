@@ -1,0 +1,58 @@
+﻿var dtble;
+
+$(document).ready(function () {
+    // Get status filter from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const statusFilter = urlParams.get('status');
+    
+    loaddata(statusFilter);
+});
+
+function loaddata(status) {
+    var url = "/Admin/Order/GetData";
+    
+    // Add status parameter if provided
+    if (status) {
+        url += "?status=" + encodeURIComponent(status);
+    }
+    
+    dtble = $("#mytable").DataTable({
+        "ajax": {
+            "url": url,
+            "dataSrc": "data",
+            "error": function (xhr, error, thrown) {
+                console.error("Error fetching data:", error);
+                alert("Failed to load orders data. Please check console for details.");
+            }
+        },
+        "columns": [
+            { "data": "id" },
+            { "data": "name" },
+            { "data": "phone" },
+            { "data": "city" },
+            { "data": "orderStatus" },
+            {
+                "data": "totalPrice",
+                "render": function (data) {
+                    return data ? "EGP " + parseFloat(data).toFixed(2) : "EGP 0.00";
+                }
+            },
+            {
+                "data": "id",
+                "render": function (data) {
+                    return `
+                        <a href="/Admin/Order/Details?orderid=${data}" 
+                           class="btn btn-primary btn-sm">
+                            Details
+                        </a>
+                    `;
+                },
+                "orderable": false
+            }
+        ],
+        "language": {
+            "emptyTable": "No orders found",
+            "zeroRecords": "No matching orders found"
+        }
+    });
+}

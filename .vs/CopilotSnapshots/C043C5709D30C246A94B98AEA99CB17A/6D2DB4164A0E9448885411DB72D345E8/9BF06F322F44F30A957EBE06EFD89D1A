@@ -1,0 +1,49 @@
+﻿using DAJDAJ.Entities.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DAJDAJ.Entities.ViewModels
+{
+    public class ProductStockInfo
+    {
+        public string Color { get; set; } = string.Empty;
+        public int Quantity { get; set; }
+        public bool IsSoldOut => Quantity == 0;
+        public bool IsLowStock => Quantity > 0 && Quantity <= 5;
+        public string StockStatus
+        {
+            get
+            {
+                if (IsSoldOut) return "Out of Stock";
+                if (IsLowStock) return $"Only {Quantity} left!";
+                return "In Stock";
+            }
+        }
+    }
+
+    public class ProductDetailVM
+    {
+        public Product Product { get; set; } = new Product();
+        public IEnumerable<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
+        public IEnumerable<ProductStockInfo> StockInfo { get; set; } = new List<ProductStockInfo>();
+        public bool IsProductFullySoldOut { get; set; }
+        
+        // Helper method to get stock for a specific color
+        public ProductStockInfo? GetStockForColor(string color)
+        {
+            return StockInfo?.FirstOrDefault(s => s.Color == color);
+        }
+        
+        // Gets all available colors (in stock)
+        public IEnumerable<string> AvailableColors
+        {
+            get
+            {
+                return StockInfo?.Where(s => !s.IsSoldOut).Select(s => s.Color) ?? Enumerable.Empty<string>();
+            }
+        }
+    }
+}

@@ -1,0 +1,226 @@
+﻿@model IEnumerable<DAJDAJ.Entities.Models.OrderHeader>
+
+@{
+    ViewData["Title"] = "My Orders";
+    Layout = "~/Views/Shared/_Customer.cshtml";
+}
+
+<style>
+    .order-card {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        margin-bottom: 1.5rem;
+        overflow: hidden;
+    }
+
+    .order-card:hover {
+        box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+        transform: translateY(-2px);
+    }
+
+    .order-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .order-number {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .order-date {
+        font-size: 0.9rem;
+        opacity: 0.9;
+    }
+
+    .order-body {
+        padding: 1.5rem;
+    }
+
+    .order-detail-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .order-detail-row:last-child {
+        border-bottom: none;
+    }
+
+    .order-label {
+        color: #6c757d;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    .order-value {
+        font-weight: 600;
+        color: #212529;
+    }
+
+    .order-total {
+        font-size: 1.5rem;
+        color: #28a745;
+        font-weight: bold;
+    }
+
+    .status-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .btn-view-details {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        color: white;
+        padding: 0.75rem 2rem;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    .btn-view-details:hover {
+        transform: scale(1.02);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+    }
+
+    .empty-state-icon {
+        font-size: 5rem;
+        color: #e0e0e0;
+        margin-bottom: 1.5rem;
+    }
+
+    .empty-state h3 {
+        color: #495057;
+        margin-bottom: 1rem;
+    }
+
+    .empty-state p {
+        color: #6c757d;
+        margin-bottom: 2rem;
+    }
+
+    .btn-start-shopping {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        color: white;
+        padding: 1rem 3rem;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-start-shopping:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+
+    .page-header {
+        margin-bottom: 2.5rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 3px solid #f0f0f0;
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #212529;
+        margin: 0;
+    }
+
+    .page-subtitle {
+        color: #6c757d;
+        font-size: 1.1rem;
+        margin-top: 0.5rem;
+    }
+
+    @@media (max-width: 768px) {
+        .order-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .order-date {
+            margin-top: 0.5rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+        }
+    }
+</style>
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="page-header">
+                <h1 class="page-title">
+                    <i class="bi bi-bag-check-fill me-3" style="color: #667eea;"></i>
+                    My Orders
+                </h1>
+                <p class="page-subtitle">Track and manage all your orders in one place</p>
+            </div>
+
+            @if (Model.Any())
+            {
+                <div class="row">
+                    @foreach (var order in Model)
+                    {
+                        <div class="col-lg-6 col-12">
+                            <div class="card order-card">
+                                <div class="order-header">
+                                    <div>
+                                        <p class="order-number">Order #@(1000 + order.Id)</p>
+                                        <p class="order-date mb-0">
+                                            <i class="bi bi-calendar3 me-2"></i>
+                                            @order.OrderDate.ToString("MMMM dd, yyyy")
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="order-body">
+                                    <div class="order-detail-row">
+                                        <span class="order-label">
+                                            <i class="bi bi-cash-stack me-2"></i>Total Amount
+                                        </span>
+                                        <span class="order-total">@order.TotalPrice EGP</span>
+                                    </div>
+
+                                    <div class="order-detail-row">
+                                        <span class="order-label">
+                                            <i class="bi bi-truck me-2"></i>Order Status
+                                        </span>
+                                        <span>
+                                            @if (order.OrderStatus == "Pending")
+                                            {
+                                                <span class="status-badge bg-warning text-dark">
+                                                    <i class="bi bi-clock-history me-1"></i>@order.OrderStatus
+                                                </span>
+                                            }
+                                            else if (order.OrderStatus == "Approved")
+                                            {
+                                                <span class="status-badge bg-info text-white">
+                                                    

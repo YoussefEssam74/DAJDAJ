@@ -1,0 +1,313 @@
+﻿@model IPagedList<Product>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+
+@section Styles {
+    <style>
+        .card {
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: white;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .image-container {
+            overflow: hidden;
+            padding: 12px;
+            background: white;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+            border-radius: 8px;
+        }
+
+        .image-container:hover .product-image {
+            transform: scale(1.05);
+        }
+
+        .card-body {
+            padding: 1rem 0.75rem 0.5rem;
+            background: white;
+        }
+
+        .card-footer {
+            background: white;
+            border-top: none;
+            padding: 0 0.75rem 1rem;
+        }
+
+        .egp-price {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #000;
+            margin: 0;
+        }
+
+        .text-decoration-line-through {
+            font-size: 0.9rem;
+            color: #999;
+        }
+
+        .fw-bolder {
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .btn-outline-dark {
+            border: 2px solid #000;
+            color: #000;
+            font-weight: 500;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-outline-dark:hover {
+            background-color: #000;
+            border-color: #000;
+            color: white;
+        }
+
+        @@media (max-width: 575px) {
+            .product-image {
+                height: 400px;
+            }
+            
+            .card-body {
+                padding: 0.75rem 0.6rem 0.4rem;
+            }
+            
+            .fw-bolder {
+                font-size: 0.9rem;
+            }
+            
+            .egp-price {
+                font-size: 0.9rem;
+            }
+            
+            .btn-outline-dark {
+                padding: 0.4rem 1rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        @@media (min-width: 576px) and (max-width: 991px) {
+            .product-image {
+                height: 300px;
+            }
+        }
+
+        @@media (min-width: 992px) {
+            .product-image {
+                height: 350px;
+            }
+        }
+
+        .pagination .page-link {
+            border-radius: 0.5rem !important;
+            padding: 4px 10px;
+            margin: 0 2px;
+            font-size: 0.8rem;
+            color: #e83e8c;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .pagination .page-item.active .page-link {
+            background: #e83e8c;
+            color: #fff;
+            border-color: #e83e8c;
+        }
+
+        .pagination .page-link:hover {
+            background: #fce4ec;
+            color: #ad1457;
+        }
+
+        .no-products {
+            text-align: center;
+            padding: 100px 20px;
+            color: #666;
+        }
+
+        .no-products i {
+            font-size: 80px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        .no-products h3 {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .no-products p {
+            font-size: 1rem;
+            color: #999;
+        }
+
+        .no-products a.btn {
+            margin-top: 15px;
+            border-radius: 25px;
+            padding: 10px 25px;
+        }
+
+        #home .hero {
+            position: relative;
+            background-image: url('/Images/jj.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 24px;
+            height: 50vh;
+            z-index: 0;
+        }
+
+        @@media (min-width: 992px) {
+            #home .hero {
+                height: 100vh;
+            }
+        }
+
+        .fc-white {
+            color: #FFFFFF;
+        }
+
+        .btn-custom {
+            border-radius: 999999px;
+            background-color: black;
+            color: white;
+            border: none;
+            transition: .2s;
+        }
+
+        .btn-custom:hover {
+            background-color: #222;
+        }
+    </style>
+}
+
+<section id="home" class="pt-4 pb-5">
+    <div class="container">
+        <div class="hero p-4">
+            <div class="row fc-white align-content-end h-100 z-3">
+                <div class="row justify-content-between align-items-center">
+                    <div class="col-12">
+                        <h1 class="fw-bolder" style="color: white;">DAJDAJ NEW COLLECTION</h1>
+                    </div>
+                </div>
+                <div class="row justify-content-between align-items-center">
+                    <div class="col-12 col-lg-7">
+                        <p>Where beauty meets elegance - just for YOU ♡</p>
+                    </div>
+                    <div class="col-12 col-lg-5 text-lg-end text-start">
+                        @{
+                            var firstProductId = Model.FirstOrDefault()?.Id ?? 0;
+                        }
+                        <a href="@Url.Action("Details", "Home", new { id = firstProductId })"
+                           class="btn-custom px-5 py-2 fw-bolder"
+                           style="background-color: #f06292; color: white; border: none; border-radius: 8px;">
+                            Shop Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="pb-5 pt-2">
+    <div class="container px-4 px-lg-5 mt-0">
+        @if (Model != null && Model.Any())
+        {
+            <div class="row gx-3 gx-lg-4 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                @foreach (var item in Model)
+                {
+                    <div class="col mb-4">
+                        <div class="card h-100">
+                            <a href="/Customer/Home/Details/@item.Id">
+                                <div class="image-container">
+                                    @if (!string.IsNullOrEmpty(item.Img))
+                                    {
+                                        <img class="product-image" src="~/@item.Img" alt="@item.Name" />
+                                    }
+                                    else
+                                    {
+                                        <img class="product-image" src="https://placehold.co/400x500/png" alt="No Image" />
+                                    }
+                                </div>
+                            </a>
+                            <div class="card-body">
+                                <div class="text-center">
+                                    <h5 class="fw-bolder">@item.Name</h5>
+                                    <div class="d-flex align-items-center gap-2 justify-content-center">
+                                        @if (item.OldPrice > 0)
+                                        {
+                                            <span class="egp-price text-decoration-line-through text-body-tertiary">@item.OldPrice</span>
+                                        }
+                                        <span class="egp-price"> @item.Price.ToString("0.00") EGP</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="text-center">
+                                    <a class="btn btn-outline-dark" href="/Customer/Home/Details/@item.Id">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="d-flex justify-content-center mt-4">
+                @Html.PagedListPager(
+                    Model,
+                    page => Url.Action("Index", new { page }),
+                    new PagedListRenderOptions
+                    {
+                        LiElementClasses = new[] { "page-item" },
+                        PageClasses = new[] { "page-link", "rounded-pill", "shadow-sm", "text-dark" },
+                        UlElementClasses = new[] { "pagination", "pagination-lg", "gap-2", "border-0" },
+                        DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+                        DisplayLinkToLastPage = PagedListDisplayMode.Always,
+                        DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+                        DisplayLinkToNextPage = PagedListDisplayMode.Always,
+                        LinkToFirstPageFormat = "<i class='bi bi-chevron-double-left'></i>",
+                        LinkToPreviousPageFormat = "<i class='bi bi-chevron-left'></i>",
+                        LinkToNextPageFormat = "<i class='bi bi-chevron-right'></i>",
+                        LinkToLastPageFormat = "<i class='bi bi-chevron-double-right'></i>"
+                    }
+                )
+            </div>
+        }
+        else
+        {
+            <div class="no-products">
+                <i class="fas fa-box-open"></i>
+                <h3>No Products Available</h3>
+                <p>@ViewBag.Message</p>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a href="/Admin/Product/Create" class="btn btn-primary">Add New Product</a>
+                }
+            </div>
+        }
+    </div>
+</section>

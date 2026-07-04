@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DAJDAJ.Entities")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7e605753705300eca3e93e9b7cd5eb53ed65108e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c1f908f14dded23d5ec56869d72b04179686430f")]
 [assembly: System.Reflection.AssemblyProductAttribute("DAJDAJ.Entities")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DAJDAJ.Entities")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

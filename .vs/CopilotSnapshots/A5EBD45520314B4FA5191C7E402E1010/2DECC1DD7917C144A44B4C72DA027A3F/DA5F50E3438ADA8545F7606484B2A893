@@ -1,0 +1,72 @@
+﻿using DAJDAJ.Entities;
+using DAJDAJ.Utilities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DAJDAJ.DataAccess.DbIntializer
+{
+    public class DbIntializar : IDbIntializar
+    {
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ApplicationDbContext _context;
+
+        public DbIntializar(
+            UserManager<IdentityUser> userManager,
+            RoleManager<IdentityRole> roleManager,
+            ApplicationDbContext context)
+        {
+            _userManager = userManager;        
+            _roleManager = roleManager;
+            _context = context;
+
+        }
+
+        public void Initialize()
+        {
+            // Migrations
+            try
+            {
+                if(_context.Database.GetPendingMigrations().Count()>0)
+                {
+                    _context.Database.Migrate();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            // Rolles
+            if (!_roleManager.RoleExistsAsync(SD.AdminRole).GetAwaiter().GetResult())
+            {
+                _roleManager.CreateAsync(new IdentityRole(SD.AdminRole)).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole(SD.EditorRole)).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole(SD.CustomerRole)).GetAwaiter().GetResult();
+
+                // Users
+
+                _userManager.CreateAsync(new ApplicationUser
+                {
+                    FirstName = "Youssef",
+                    LastName = "Adminstrator",
+                    UserName = "Admin@dajdaj.com",
+                    Email = "Admin@dajdaj.com",
+                    EmailConfirmed = true,
+
+                }, "Youssef?224466").GetAwaiter().GetResult();
+
+                ApplicationUser user = _context.ApplicationUsers.FirstOrDefault(u => u.Email == "Admin@dajdaj.com");
+                _userManager.AddToRoleAsync(user, SD.AdminRole).GetAwaiter().GetResult();
+            }
+            return;
+        }
+    }
+}

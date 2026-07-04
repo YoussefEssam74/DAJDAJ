@@ -1,0 +1,123 @@
+﻿@model DAJDAJ.Entities.Models.OrderHeader
+
+@{
+    ViewData["Title"] = "Order Details";
+    Layout = "~/Views/Shared/_Customer.cshtml";
+}
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>
+                    <i class="bi bi-receipt me-2"></i>
+                    Order #@(1000 + Model.Id)
+                </h2>
+                <a asp-action="MyOrders" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to Orders
+                </a>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Order Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Order Date:</strong> @Model.OrderDate.ToString("MMMM dd, yyyy")</p>
+                            <p><strong>Order Status:</strong>
+                                @if (Model.OrderStatus == "Pending")
+                                {
+                                    <span class="badge bg-warning text-dark">@Model.OrderStatus</span>
+                                }
+                                else if (Model.OrderStatus == "Approved" || Model.OrderStatus == "Shipped")
+                                {
+                                    <span class="badge bg-info">@Model.OrderStatus</span>
+                                }
+                                else if (Model.OrderStatus == "Delivered")
+                                {
+                                    <span class="badge bg-success">@Model.OrderStatus</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">@Model.OrderStatus</span>
+                                }
+                            </p>
+                            <p><strong>Payment Status:</strong>
+                                @if (Model.PaymentStatus == "Approved")
+                                {
+                                    <span class="badge bg-success">Paid</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning text-dark">@Model.PaymentStatus</span>
+                                }
+                            </p>
+                            <p><strong>Payment Method:</strong> @Model.PaymentMethod</p>
+                            @if (!string.IsNullOrEmpty(Model.TrackingNumber))
+                            {
+                                <p><strong>Tracking Number:</strong> @Model.TrackingNumber</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Shipping Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Name:</strong> @Model.Name</p>
+                            <p><strong>Address:</strong> @Model.Address</p>
+                            <p><strong>City:</strong> @Model.City</p>
+                            <p><strong>Phone:</strong> @Model.Phone</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Order Items</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Size</th>
+                                    <th>Color</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.OrderDetails)
+                                {
+                                    <tr>
+                                        <td>@item.Product.Name</td>
+                                        <td>@item.SelectedSize</td>
+                                        <td>@item.SelectedColor</td>
+                                        <td>@item.Count</td>
+                                        <td>@item.Price EGP</td>
+                                        <td><strong>@((item.Count * item.Price)) EGP</strong></td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="5" class="text-end"><strong>Total:</strong></td>
+                                    <td><strong class="text-success">@Model.TotalPrice EGP</strong></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

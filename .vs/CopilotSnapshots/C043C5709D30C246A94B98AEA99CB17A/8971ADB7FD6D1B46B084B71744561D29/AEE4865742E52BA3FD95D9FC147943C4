@@ -1,0 +1,60 @@
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DAJDAJ.Entities.Models
+{
+    /// <summary>
+    /// Junction table that manages stock for each Product Color + Size combination
+    /// This is the core inventory table
+    /// </summary>
+    public class ProductColorSizeStock
+    {
+        public int Id { get; set; }
+
+        // Foreign Keys
+        [Required]
+        public int ProductColorId { get; set; }
+
+        [ValidateNever]
+        public ProductColor ProductColor { get; set; }
+
+        [Required]
+        public int ProductSizeId { get; set; }
+
+        [ValidateNever]
+        public ProductSize ProductSize { get; set; }
+
+        // Stock Management
+        [Required]
+        [Range(0, int.MaxValue, ErrorMessage = "Quantity cannot be negative")]
+        public int Quantity { get; set; }
+
+        [Range(0, int.MaxValue, ErrorMessage = "Reserved quantity cannot be negative")]
+        public int ReservedQuantity { get; set; } = 0; // For pending orders
+
+        // Available stock = Quantity - ReservedQuantity
+        [NotMapped]
+        public int AvailableStock => Quantity - ReservedQuantity;
+
+        // Audit Fields
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
+        public string? LastUpdatedBy { get; set; } // Admin user who last updated
+
+        // Helper Properties
+        [NotMapped]
+        public bool IsSoldOut => AvailableStock == 0;
+
+        [NotMapped]
+        public bool IsLowStock => AvailableStock > 0 && AvailableStock <= 5;
+
+        // Unique constraint: One record per ProductColor + ProductSize combination
+        // Will be configured in Fluent API
+    }
+}

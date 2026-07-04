@@ -1,0 +1,145 @@
+﻿@model DAJDAJ.Entities.Models.OrderHeader
+
+@{
+    ViewData["Title"] = "Order Details";
+    Layout = "~/Views/Shared/_Customer.cshtml";
+}
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>
+                    <i class="bi bi-receipt me-2"></i>
+                    Order #@(1000 + Model.Id)
+                </h2>
+                <a asp-action="MyOrders" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to Orders
+                </a>
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Order Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <!-- Order Information Section -->
+                                <tr class="table-secondary">
+                                    <td colspan="2" class="fw-bold">
+                                        <i class="bi bi-info-circle me-2"></i>Order Information
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%;" class="fw-bold">Order Date:</td>
+                                    <td>@Model.OrderDate.ToString("MMMM dd, yyyy")</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Order Status:</td>
+                                    <td>
+                                        @if (Model.OrderStatus == "Pending")
+                                        {
+                                            <span class="badge bg-warning text-dark">@Model.OrderStatus</span>
+                                        }
+                                        else if (Model.OrderStatus == "Approved" || Model.OrderStatus == "Shipped")
+                                        {
+                                            <span class="badge bg-info">@Model.OrderStatus</span>
+                                        }
+                                        else if (Model.OrderStatus == "Delivered")
+                                        {
+                                            <span class="badge bg-success">@Model.OrderStatus</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">@Model.OrderStatus</span>
+                                        }
+                                    </td>
+                                </tr>
+                               
+                               
+                                <tr>
+                                    <td class="fw-bold">Payment Method:</td>
+                                    <td>@Model.PaymentMethod</td>
+                                </tr>
+                                @if (!string.IsNullOrEmpty(Model.TrackingNumber))
+                                {
+                                    <tr>
+                                        <td class="fw-bold">Tracking Number:</td>
+                                        <td>@Model.TrackingNumber</td>
+                                    </tr>
+                                }
+
+                                <!-- Shipping Information Section -->
+                                <tr class="table-secondary">
+                                    <td colspan="2" class="fw-bold">
+                                        <i class="bi bi-geo-alt me-2"></i>Shipping Information
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Name:</td>
+                                    <td>@Model.Name</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Address:</td>
+                                    <td>@Model.Address</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">City:</td>
+                                    <td>@Model.City</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Phone:</td>
+                                    <td>@Model.Phone</td>
+                                </tr>
+                                
+                                <!-- Order Items Section -->
+                                <tr class="table-secondary">
+                                    <td colspan="2" class="fw-bold">
+                                        <i class="bi bi-bag-check me-2"></i>Order Items
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" class="p-0">
+                                        <table class="table table-sm mb-0">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Product</th>
+                                                    <th>Size</th>
+                                                    <th>Color</th>
+                                                    <th>Quantity</th>
+                                                    <th>Price</th>
+                                                    <th>Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.OrderDetails)
+                                                {
+                                                    <tr>
+                                                        <td>@item.Product.Name</td>
+                                                        <td>@item.SelectedSize</td>
+                                                        <td>@item.SelectedColor</td>
+                                                        <td>@item.Count</td>
+                                                        <td>@item.Price EGP</td>
+                                                        <td><strong>@((item.Count * item.Price)) EGP</strong></td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <!-- Total Section -->
+                                <tr class="table-success">
+                                    <td class="fw-bold text-end">Order Total:</td>
+                                    <td class="fw-bold text-success fs-5">@Model.TotalPrice EGP</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

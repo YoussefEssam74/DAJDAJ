@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DAJDAJ.Web</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/DAJDAJ.Web.styles.css" asp-append-version="true" />
+
+    <!-- ✅ Custom layout-specific styles -->
+    <link rel="stylesheet" href="~/css/layout-styles.css" asp-append-version="true" />
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+
+    <!-- Font Awesome for TikTok icon -->
+
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <!-- Pink Header with DAJDAJ branding -->
+    <header id="header" style="background-color: #f06292;" class="py-3">
+        <div class="d-flex text-white align-items-center justify-content-center flex-column">
+            <a asp-area="" asp-controller="Home" asp-action="Index" style="text-decoration:none; color:inherit;">
+                <p class="display-4 fw-bolder mb-0 pb-0" style="color: white; letter-spacing: 8px;">DAJDAJ</p>
+            </a>
+            <p class="lead fw-normal mb-0" style="color: rgba(255, 255, 255, 0.8);">By women to women ♡</p>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">DAJDAJ</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                       @*  <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li> *@
+                    </ul>
+                    <div class="d-flex align-items-center">
+                        <!-- Add this where your cart icon is rendered -->
+                        <a href="/Customer/Cart/Index" class="position-relative">
+                            <i class="bi bi-bag" style="font-size: 2rem;"></i>
+                            <span id="cart-count-badge"
+                                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark">
+                            </span>
+                        </a>
+                    </div>
+                    @await Html.PartialAsync("_LoginPartial")
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - DAJDAJ </a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+   
+</body>
+</html>

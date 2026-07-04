@@ -1,0 +1,303 @@
+﻿@model DAJDAJ.Entities.Models.OrderHeader
+
+@{
+    ViewData["Title"] = "Order Details";
+    Layout = "~/Views/Shared/_Customer.cshtml";
+}
+
+<style>
+    .nested-table {
+        margin: 0 !important;
+    }
+
+    .nested-table thead th {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        color: #495057;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        padding: 12px;
+        border: none;
+    }
+
+    .nested-table tbody td {
+        padding: 15px 12px;
+        vertical-align: middle;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .nested-table tbody tr:hover {
+        background-color: #f8f9fa;
+        transition: background-color 0.2s ease;
+    }
+
+    .nested-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .product-name-cell {
+        font-weight: 600;
+        color: #212529;
+    }
+
+    .product-icon {
+        color: #667eea;
+        margin-right: 8px;
+        font-size: 1.1rem;
+    }
+
+    .size-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .color-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        background-color: #f8f9fa;
+        border: 2px solid #dee2e6;
+        color: #495057;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .quantity-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 35px;
+        height: 35px;
+        background-color: #e9ecef;
+        border-radius: 50%;
+        font-weight: 700;
+        color: #495057;
+    }
+
+    .price-cell {
+        color: #6c757d;
+        font-weight: 500;
+    }
+
+    .total-cell {
+        color: #28a745;
+        font-weight: 700;
+        font-size: 1.05rem;
+    }
+
+    .order-total-row {
+        background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    }
+
+    .order-total-label {
+        font-size: 1.2rem;
+        color: #155724;
+    }
+
+    .order-total-amount {
+        font-size: 1.8rem;
+        color: #28a745;
+        font-weight: 800;
+    }
+
+    .section-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white !important;
+    }
+
+    .section-header i {
+        font-size: 1.2rem;
+    }
+
+    .items-summary {
+        background-color: #f8f9fa;
+        padding: 10px 15px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+        .nested-table {
+            font-size: 0.85rem;
+        }
+
+        .nested-table thead th,
+        .nested-table tbody td {
+            padding: 8px;
+        }
+
+        .order-total-amount {
+            font-size: 1.4rem;
+        }
+    }
+</style>
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>
+                    <i class="bi bi-receipt me-2"></i>
+                    Order #@(1000 + Model.Id)
+                </h2>
+                <a asp-action="MyOrders" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to Orders
+                </a>
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Order Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <!-- Order Information Section -->
+                                <tr class="table-secondary">
+                                    <td colspan="2" class="fw-bold">
+                                        <i class="bi bi-info-circle me-2"></i>Order Information
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%;" class="fw-bold">Order Date:</td>
+                                    <td>@Model.OrderDate.ToString("MMMM dd, yyyy")</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Order Status:</td>
+                                    <td>
+                                        @if (Model.OrderStatus == "Pending")
+                                        {
+                                            <span class="badge bg-warning text-dark">@Model.OrderStatus</span>
+                                        }
+                                        else if (Model.OrderStatus == "Approved" || Model.OrderStatus == "Shipped")
+                                        {
+                                            <span class="badge bg-info">@Model.OrderStatus</span>
+                                        }
+                                        else if (Model.OrderStatus == "Delivered")
+                                        {
+                                            <span class="badge bg-success">@Model.OrderStatus</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">@Model.OrderStatus</span>
+                                        }
+                                    </td>
+                                </tr>
+                               
+                               
+                                <tr>
+                                    <td class="fw-bold">Payment Method:</td>
+                                    <td>@Model.PaymentMethod</td>
+                                </tr>
+                                @if (!string.IsNullOrEmpty(Model.TrackingNumber))
+                                {
+                                    <tr>
+                                        <td class="fw-bold">Tracking Number:</td>
+                                        <td>@Model.TrackingNumber</td>
+                                    </tr>
+                                }
+
+                                <!-- Shipping Information Section -->
+                                <tr class="table-secondary">
+                                    <td colspan="2" class="fw-bold">
+                                        <i class="bi bi-geo-alt me-2"></i>Shipping Information
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Name:</td>
+                                    <td>@Model.Name</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Address:</td>
+                                    <td>@Model.Address</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">City:</td>
+                                    <td>@Model.City</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Phone:</td>
+                                    <td>@Model.Phone</td>
+                                </tr>
+                                
+                                <!-- Order Items Section -->
+                                <tr class="section-header">
+                                    <td colspan="2" class="fw-bold py-3">
+                                        <i class="bi bi-bag-check-fill me-2"></i>Order Items
+                                        <span class="float-end badge bg-light text-dark">
+                                            @Model.OrderDetails.Count() @(Model.OrderDetails.Count() == 1 ? "Item" : "Items")
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" class="p-0">
+                                        <table class="table nested-table mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th><i class="bi bi-box-seam me-2"></i>Product</th>
+                                                    <th class="text-center"><i class="bi bi-rulers me-2"></i>Size</th>
+                                                    <th class="text-center"><i class="bi bi-palette me-2"></i>Color</th>
+                                                    <th class="text-center"><i class="bi bi-hash me-2"></i>Qty</th>
+                                                    <th class="text-end"><i class="bi bi-currency-exchange me-2"></i>Price</th>
+                                                    <th class="text-end"><i class="bi bi-calculator me-2"></i>Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.OrderDetails)
+                                                {
+                                                    <tr>
+                                                        <td class="product-name-cell">
+                                                            <i class="bi bi-box-seam product-icon"></i>
+                                                            @item.Product.Name
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <span class="size-badge">@item.SelectedSize</span>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <span class="color-badge">@item.SelectedColor</span>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <span class="quantity-badge">@item.Count</span>
+                                                        </td>
+                                                        <td class="price-cell text-end">@item.Price EGP</td>
+                                                        <td class="total-cell text-end">@((item.Count * item.Price)) EGP</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <!-- Subtotal and Total Section -->
+                                <tr>
+                                    <td class="fw-bold text-end" style="background-color: #f8f9fa;">Subtotal:</td>
+                                    <td class="fw-bold text-end" style="background-color: #f8f9fa;">
+                                        @Model.OrderDetails.Sum(x => x.Count * x.Price) EGP
+                                    </td>
+                                </tr>
+                                <tr class="order-total-row">
+                                    <td class="text-end py-3">
+                                        <span class="order-total-label">
+                                            <i class="bi bi-cash-stack me-2"></i>Order Total:
+                                        </span>
+                                    </td>
+                                    <td class="text-end py-3">
+                                        <span class="order-total-amount">@Model.TotalPrice EGP</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

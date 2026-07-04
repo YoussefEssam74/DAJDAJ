@@ -1,0 +1,257 @@
+﻿using DAJDAJ.Entities.Models;
+using DAJDAJ.Entities.Repositories;
+using DAJDAJ.Entities.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
+
+namespace DAJDAJ.Web.Areas.Admin.Controllers
+{
+    [Area("Admin")]
+    [Authorize(Roles = "Admin")]
+    public class StockController : Controller
+    {
+        private readonly IUntiOfWork _unitOfWork;
+
+        public StockController(IUntiOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+
+        // GET: /Admin/Stock/Index
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        // API: Get products with stock data for DataTables
+        [HttpGet]
+        public IActionResult GetProductsStockData()
+        {
+            var products = _unitOfWork.Product.GetAll(includeword: "Category");
+            var productStockData = products.Select(p =>
+            {
+                var stockItems = _unitOfWork.ProductColorStock.GetStockByProduct(p.Id);
+                var totalStock = stockItems.Sum(s => s.Quantity);
+                var isSoldOut = _unitOfWork.ProductColorStock.IsProductFullySoldOut(p.Id);
+                var isLowStock = stockItems.Any(s => s.IsLowStock) && !isSoldOut;
+
+                return new
+                {
+                    productId = p.Id,
+                    productName = p.Name,
+                    categoryName = p.Category?.Name ?? "N/A",
+                    totalStock = totalStock,
+                    isSoldOut = isSoldOut,
+                    isLowStock = isLowStock,
+                    stockStatus = isSoldOut ? "Sold Out" : isLowStock ? "Low Stock" : "In Stock"
+                };
+            }).ToList();
+
+            return Json(new { data = productStockData });
+        }
+
+        // GET: /Admin/Stock/ManageStock?productId=1
+        public IActionResult ManageStock(int productId)
+        {
+            var product = _unitOfWork.Product.GetFirstorDefault(p => p.Id == productId);
+            if (product == null)
+            {
+                TempData["error"] = "Product not found";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var stockItems = _unitOfWork.ProductColorStock.GetStockByProduct(productId);
+            var vm = new StockManagementVM
+            {
+                ProductId = productId,
+                ProductName = product.Name,
+                ColorStocks = stockItems.Select(s => new ColorStockItem
+                {
+                    Id = s.Id,
+                    Color = s.Color,
+                    Quantity = s.Quantity
+                }).ToList()
+            };
+
+            return View(vm);
+        }
+
+        // POST: /Admin/Stock/UpdateStock
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdateStock(StockManagementVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["error"] = "Invalid data provided";
+                return RedirectToAction(nameof(ManageStock), new { productId = model.ProductId });
+            }
+
+            try
+            {
+                foreach (var item in model.ColorStocks)
+                {
+                    _unitOfWork.ProductColorStock.UpdateStock(model.ProductId, item.Color, item.Quantity);
+                }
+                _unitOfWork.Complete();
+                TempData["success"] = "Stock updated successfully";
+            }
+            catch (Exception ex)
+            {
+                TempData["error"] = $"Error updating stock: {ex.Message}";
+            }
+
+            return RedirectToAction(nameof(ManageStock), new { productId = model.ProductId });
+        }
+
+        // GET: /Admin/Stock/AddStock?productId=1
+        public IActionResult AddStock(int productId)
+        {
+            var product = _unitOfWork.Product.GetFirstorDefault(p => p.Id == productId, Includeword: "ProductImages");
+            if (product == null)
+            {
+                TempData["error"] = "Product not found";
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Get colors from product images that don't have stock yet
+            var existingStockColors = _unitOfWork.ProductColorStock.GetStockByProduct(productId)
+                .Select(s => s.Color.ToLower())
+                .ToList();
+
+            var availableColors = product.ProductImages
+                .Select(img => img.Color)
+                .Where(c => !existingStockColors.Contains(c.ToLower()))
+                .Distinct()
+                .ToList();
+
+            var vm = new AddStockVM
+            {
+                ProductId = productId,
+                ProductName = product.Name,
+                AvailableColors = availableColors
+            };
+
+            return View(vm);
+        }
+
+        // POST: /Admin/Stock/AddStock
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddStock(AddStockVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                var product = _unitOfWork.Product.GetFirstorDefault(p => p.Id == model.ProductId, Includeword: "ProductImages");
+                if (product != null)
+                {
+                    var existingStockColors = _unitOfWork.ProductColorStock.GetStockByProduct(model.ProductId)
+                        .Select(s => s.Color.ToLower())
+                        .ToList();
+
+                    model.AvailableColors = product.ProductImages
+                        .Select(img => img.Color)
+                        .Where(c => !existingStockColors.Contains(c.ToLower()))
+                        .Distinct()
+                        .ToList();
+                }
+                return View(model);
+            }
+
+            try
+            {
+                // Check if stock already exists for this color
+                var existingStock = _unitOfWork.ProductColorStock.GetStockByProductAndColor(model.ProductId, model.Color);
+                if (existingStock != null)
+                {
+                    TempData["error"] = $"Stock for color '{model.Color}' already exists. Use Manage Stock to update it.";
+                    return RedirectToAction(nameof(AddStock), new { productId = model.ProductId });
+                }
+
+                var newStock = new ProductColorStock
+                {
+                    ProductId = model.ProductId,
+                    Color = model.Color,
+                    Quantity = model.Quantity,
+                    LastUpdated = DateTime.UtcNow
+                };
+
+                _unitOfWork.ProductColorStock.Add(newStock);
+                _unitOfWork.Complete();
+
+                TempData["success"] = "Stock added successfully";
+                return RedirectToAction(nameof(ManageStock), new { productId = model.ProductId });
+            }
+            catch (Exception ex)
+            {
+                TempData["error"] = $"Error adding stock: {ex.Message}";
+                return RedirectToAction(nameof(AddStock), new { productId = model.ProductId });
+            }
+        }
+
+        // POST: /Admin/Stock/DeleteStock
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteStock(int id, int productId)
+        {
+            try
+            {
+                var stock = _unitOfWork.ProductColorStock.GetFirstorDefault(s => s.Id == id);
+                if (stock == null)
+                {
+                    TempData["error"] = "Stock entry not found";
+                    return RedirectToAction(nameof(ManageStock), new { productId });
+                }
+
+                _unitOfWork.ProductColorStock.Remove(stock);
+                _unitOfWork.Complete();
+
+                TempData["success"] = "Stock entry deleted successfully";
+            }
+            catch (Exception ex)
+            {
+                TempData["error"] = $"Error deleting stock: {ex.Message}";
+            }
+
+            return RedirectToAction(nameof(ManageStock), new { productId });
+        }
+
+        // GET: /Admin/Stock/LowStockAlerts
+        public IActionResult LowStockAlerts()
+        {
+            var lowStockItems = _unitOfWork.ProductColorStock.GetLowStockItems();
+            var alerts = lowStockItems.Select(item =>
+            {
+                var product = _unitOfWork.Product.GetFirstorDefault(p => p.Id == item.ProductId);
+                return new LowStockAlertVM
+                {
+                    ProductId = item.ProductId,
+                    ProductName = product?.Name ?? "Unknown",
+                    Color = item.Color,
+                    Quantity = item.Quantity
+                };
+            }).ToList();
+
+            return View(alerts);
+        }
+
+        // POST: /Admin/Stock/QuickUpdateStock (Ajax)
+        [HttpPost]
+        public IActionResult QuickUpdateStock(int productId, string color, int quantity)
+        {
+            try
+            {
+                _unitOfWork.ProductColorStock.UpdateStock(productId, color, quantity);
+                _unitOfWork.Complete();
+
+                return Json(new { success = true, message = "Stock updated successfully" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+    }
+}

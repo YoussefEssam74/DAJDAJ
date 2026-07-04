@@ -1,0 +1,59 @@
+﻿using DAJDAJ.Entities.Repositories;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+
+namespace DAJDAJ.Web.Areas.Customer.Controllers
+{
+    [Area("Customer")]
+    [Authorize]
+    public class OrderController : Controller
+    {
+        private readonly IUntiOfWork _unitOfWork;
+
+        public OrderController(IUntiOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+
+        public IActionResult MyOrders()
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (claim == null)
+            {
+                return RedirectToAction("Login", "Account", new { area = "Identity" });
+            }
+
+            var orders = _unitOfWork.OrderHeader
+                .GetAll(x => x.ApplicationUserId == claim.Value, includeword: "OrderDetails")
+                .OrderByDescending(o => o.OrderDate)
+                .ToList();
+
+            return View(orders);
+        }
+
+        public IActionResult OrderDetails(int id)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (claim == null)
+            {
+                return RedirectToAction("Login", "Account", new { area = "Identity" });
+            }
+
+            var order = _unitOfWork.OrderHeader
+                .GetFirstorDefault(x => x.Id == id && x.ApplicationUserId == claim.Value, 
+                    Includeword: "OrderDetails,OrderDetails.Product");
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return View(order);
+        }
+    }
+}

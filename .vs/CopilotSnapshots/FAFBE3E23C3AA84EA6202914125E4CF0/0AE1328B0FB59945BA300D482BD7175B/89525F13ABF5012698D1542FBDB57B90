@@ -1,0 +1,273 @@
+﻿@model DAJDAJ.Entities.ViewModels.OrderVM
+@using DAJDAJ.Utilities
+@{
+    ViewData["Title"] = "Order Details";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+    var order = Model?.OrderHeader;
+    var details = Model?.OrderDetails;
+    var products = Model?.Product;
+}
+<link rel="stylesheet" href="/css/Summary.css" />
+
+<div class="container mt-4">
+    <!-- Print Button -->
+    <div class="mb-3 d-flex justify-content-end">
+        <button class="btn btn-secondary" onclick="printThermal()">
+            <i class="fas fa-print"></i> Print
+        </button>
+    </div>
+
+    <!-- Existing Page Content -->
+    <div class="row">
+        <!-- Pickup Details -->
+        <div class="col-md-7">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h4 class="m-0 font-weight-bold text-primary">PickUp Details</h4>
+                </div>
+                <div class="card-body">
+                    @if (order == null)
+                    {
+                        <div class="alert alert-danger">Order not found or has been deleted.</div>
+                    }
+                    else
+                    {
+                        <form asp-area="Admin" asp-controller="Order" asp-action="UpdateOrderDetails" method="post">
+                            <input type="hidden" asp-for="OrderHeader.Id" />
+                            <div class="row my-1">
+                                <div class="col-3">Name</div>
+                                <div class="col-9">
+                                    <input asp-for="OrderHeader.Name" type="text" class="form-control" />
+                                    <span asp-validation-for="OrderHeader.Name" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Phone</div>
+                                <div class="col-9">
+                                    <input asp-for="OrderHeader.Phone" type="text" class="form-control" />
+                                    <span asp-validation-for="OrderHeader.Phone" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Instegram UserName</div>
+                                <div class="col-9">
+                                    <input asp-for="OrderHeader.InstgramUserName" type="text" class="form-control" />
+                                    <span asp-validation-for="OrderHeader.InstgramUserName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Address</div>
+                                <div class="col-9">
+                                    <input asp-for="OrderHeader.Address" type="text" class="form-control" />
+                                    <span asp-validation-for="OrderHeader.Address" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">City</div>
+                                <div class="col-9">
+                                    <input asp-for="OrderHeader.City" type="text" class="form-control" />
+                                    <span asp-validation-for="OrderHeader.City" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Order Date</div>
+                                <div class="col-9">
+                                    <input asp-for="OrderHeader.OrderDate" type="text" class="form-control" readonly />
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Payment Method</div>
+                                <div class="col-9">
+                                    <input asp-for="OrderHeader.PaymentMethod" type="text" class="form-control" readonly />
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 mt-2">
+                                <i class="fas fa-save"></i> Update Order Details
+                            </button>
+                        </form>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="col-md-5 mx-auto">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 bg-white border-0">
+                    <h4 class="m-0 font-weight-bold text-primary">Order Summary</h4>
+                </div>
+                <div class="card-body">
+                    @if (order == null)
+                    {
+                        <div class="alert alert-danger text-center">Order not found or has been deleted.</div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-primary text-center mb-3 p-2" style="font-weight:bold;">
+                            Order Status - @order.OrderStatus
+                        </div>
+                        <div class="list-group mb-3">
+                            @if (details?.Any() == true)
+                            {
+                                foreach (var item in details)
+                                {
+                                    <div class="list-group-item d-flex justify-content-between align-items-center flex-wrap border-0 border-bottom">
+                                        <div>
+                                            <div class="fw-bold text-primary">Product Name : @item.Product?.Name</div>
+                                            <div class="fw-bold text-primary">Size : @item.SelectedSize</div>
+                                            <div class="fw-bold text-primary">Color : @item.SelectedColor</div>
+                                            <div class="text-muted" style="font-size:13px;">Price : EGP @item.Price.ToString()</div>
+                                            <div class="text-muted" style="font-size:13px;">Quantity : @item.Count</div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="list-group-item text-center">No items found</div>
+                            }
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center bg-dark text-white p-3 rounded-bottom">
+                            <span class="fw-bold">TOTAL</span>
+                            <span class="fw-bold" style="font-size:18px;">EGP @order.TotalPrice.ToString()</span>
+                        </div>
+                        <div class="d-flex justify-content-center gap-2 mt-4">
+                            <form asp-area="Admin" asp-controller="Order" method="post" class="d-flex justify-content-center gap-2">
+                                <input type="hidden" asp-for="OrderHeader.Id" />
+                                @if (Model.OrderHeader.OrderStatus == SD.Proccessing)
+                                {
+                                    <input type="submit" asp-action="BookOrder" class="btn btn-success px-4" value="Book Order" />
+                                }
+                                @if (Model.OrderHeader.OrderStatus != SD.Cancelled && Model.OrderHeader.OrderStatus != SD.Refund)
+                                {
+                                    <input type="submit" asp-action="CancelOrder" class="btn btn-danger px-4" value="Cancel Order" />
+                                }
+                                @if (Model.OrderHeader.OrderStatus == SD.Booked || Model.OrderHeader.OrderStatus == SD.Shipped)
+                                {
+                                    <input type="submit" asp-action="ReturnOrder" class="btn btn-warning px-4" value="Return Order" />
+                                    <input type="submit" asp-action="EarnOrder" class="btn btn-info px-4" value="Earn Order" />
+                                }
+                            </form>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ Thermal Invoice (Print Only Section) -->
+    <div id="thermalInvoice" style="display:none;">
+        <h2 class="center"><strong>DAJDAJ ♡</strong></h2>
+        <hr />
+        <div>
+            <div style="font-size:15px; margin:8px 0; color:#000;">
+            <strong>Name: @order?.Name</strong> <br />
+            <strong>Phone: @order?.Phone</strong> <br />
+            <strong>Address: @order?.Address, @order?.City</strong> <br />
+            <strong>Date: @order?.OrderDate.ToString("yyyy-MM-dd HH:mm")</strong> <br />
+            <strong>Payment: @order?.PaymentMethod</strong>
+        </div>
+        <hr />
+        <div>
+        </div>
+        <hr />
+        <table class="items">
+            <thead>
+                <tr>
+                    <th style="width:20%;"><strong>Product</strong></th>
+                    <th style="width:20%; text-align:center;"><strong>Qty</strong></th>
+                    <th style="width:20%; text-align:right;"><strong>Price</strong></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (details?.Any() == true)
+                {
+                    foreach (var item in details)
+                    {
+                        <tr>
+                            <td>
+                                <strong>@item.Product?.Name</strong><br />
+                                <strong><small>Size: @item.SelectedSize | Color: @item.SelectedColor</small></strong>
+                            </td>
+                            <td style="text-align:center;"><strong>@item.Count</strong></td>
+                            <td style="text-align:right;"><strong>@item.Price.ToString("0.00")</strong></td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3" class="center"><strong>No products found</strong></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div>
+        </div>
+
+        <hr />
+        <div class="center">
+            <strong>Total: EGP @order?.TotalPrice.ToString("0.00")</strong>
+        </div>
+
+        <hr />
+        <div class="center" style="font-size:10px;">
+            <strong>Thank you for your purchase!</strong>
+        </div>
+    </div>
+
+@section Scripts {
+    <style>
+        @@media print {
+            @@page {
+                size: 360mm auto;   
+                margin: 5mm;
+            }
+
+            * { margin:0 !important; padding:0 !important; box-sizing:border-box; }
+            body { 
+                margin:0 !important; 
+                padding:0 !important; 
+                font-family:'Courier New',monospace !important; 
+                font-size:16px !important;
+                -webkit-print-color-adjust: exact;
+            }
+
+         
+            body > * { visibility:hidden !important; }
+            #thermalInvoice, #thermalInvoice * { visibility:visible !important; }
+
+            #thermalInvoice {
+                display:block !important;
+                position:absolute !important;
+                left:0 !important; top:0 !important;
+                width: 72mm !important;        
+                padding: 0.2mm !important;
+                background:#fff !important;
+                transform: scale(3.4) !important;   
+                transform-origin: top left !important;
+            }
+
+            #thermalInvoice * {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+
+            hr { 
+                border:0 !important; 
+                border-top:1px dashed #000 !important; 
+                margin:8px 0 !important; 
+            }
+
+            table { width:100% !important; font-size:16px !important; }
+            th, td { padding:4px 0 !important; }
+            small { font-size:14px !important; }
+        }
+    </style>
+
+    <script>
+        function printThermal() {
+            window.print();
+        }
+    </script>
+}

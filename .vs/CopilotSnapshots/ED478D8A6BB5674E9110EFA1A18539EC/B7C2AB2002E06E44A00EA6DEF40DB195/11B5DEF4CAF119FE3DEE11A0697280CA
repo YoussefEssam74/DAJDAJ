@@ -1,0 +1,384 @@
+﻿@model ShoppingCartVM
+
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    @Html.AntiForgeryToken()
+    <style>
+        :root {
+            --primary-color: #e91e63;
+            --secondary-color: #f8bbd0;
+            --dark-pink: #c2185b;
+            --light-pink: #fff0f5;
+            --border-color: #f8d7da;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-pink);
+            color: #333;
+        }
+
+        h2 {
+            color: var(--dark-pink);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .cart-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Product Card Styles */
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .product-image-container {
+            flex: 0 0 200px;
+            max-width: 200px;
+            margin-right: 20px;
+            text-align: center;
+        }
+
+        .product-image-wrapper {
+            background: #fff;
+            border-radius: 12px;
+            padding: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: inline-block;
+        }
+
+        .product-image {
+            width: 180px;
+            height: 240px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .product-details {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .product-name a {
+            font-weight: 600;
+            color: var(--dark-pink);
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+            .product-name a:hover {
+                color: var(--primary-color);
+            }
+
+        .product-attributes div {
+            margin-bottom: 8px;
+        }
+
+        .checkout-label {
+            font-weight: 500;
+            margin-right: 5px;
+        }
+
+        .required {
+            color: red;
+        }
+
+        .product-actions {
+            flex: 0 0 150px;
+            text-align: right;
+        }
+
+        .qty-control {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .btn-qty {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .price {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        /* Summary Styles */
+        .summary {
+            background: var(--light-pink);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 20px;
+        }
+
+            .summary h3 {
+                font-size: 1.4rem;
+                color: var(--dark-pink);
+                margin-bottom: 1rem;
+            }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* Buttons */
+        .btn-outline-primary {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+            .btn-outline-primary:hover {
+                background-color: var(--secondary-color);
+                border-color: var(--primary-color);
+            }
+
+        .btn-success {
+            background-color: var(--primary-color);
+            border: none;
+            padding: 10px;
+            font-weight: 500;
+        }
+
+            .btn-success:hover {
+                background-color: var(--dark-pink);
+            }
+
+        .btn-danger {
+            background-color: var(--secondary-color);
+            color: var(--dark-pink);
+            border: none;
+        }
+
+            .btn-danger:hover {
+                background-color: #f48fb1;
+            }
+
+        /* Responsive Styles */
+        @@media (max-width: 992px) {
+            .product-image-container
+
+        {
+            flex: 0 0 100%;
+            max-width: 100%;
+            margin-right: 0;
+            margin-bottom: 15px;
+        }
+
+        .product-image-wrapper {
+            width: 100%;
+            max-width: 200px;
+        }
+
+        .product-image {
+            width: 100%;
+            height: auto;
+            max-height: 300px;
+        }
+
+        .product-details {
+            flex: 0 0 100%;
+            margin-bottom: 15px;
+        }
+
+        .product-actions {
+            flex: 0 0 100%;
+            text-align: left;
+        }
+
+        .qty-control {
+            justify-content: flex-start;
+        }
+
+        }
+
+        @@media (max-width: 576px) {
+            .product-card
+
+        {
+            padding: 15px;
+        }
+
+        .product-image {
+            max-height: 250px;
+        }
+
+        .summary {
+            margin-top: 20px;
+        }
+
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5 cart-container">
+        <h2 class="text-center">Your Shopping Cart</h2>
+
+        <div class="row">
+            <div class="col-lg-8">
+                @foreach (var item in Model.CartsList)
+                {
+                    var productImages = item.product.ProductImages?.Where(img => !string.IsNullOrEmpty(img.Color)).ToList() ?? new List<ProductImage>();
+                    var colorImages = productImages.GroupBy(img => img.Color.Trim().ToLower()).ToDictionary(g => g.Key, g => g.First().ImagePath);
+                    var selectedColor = item.SelectedColor?.Trim().ToLower();
+                    var selectedImg = colorImages.ContainsKey(selectedColor) ? colorImages[selectedColor] : item.product.Img;
+
+                    <div class="product-card">
+                        <div class="product-image-container">
+                            <div class="product-image-wrapper">
+                                <img class="product-image" src="~/@selectedImg" alt="@item.product.Name" />
+                            </div>
+                        </div>
+
+                        <div class="product-details">
+                            <div class="product-name">
+                                <a href="#">@item.product.Name</a>
+                            </div>
+                            <div class="product-attributes">
+                                <div>
+                                    <label class="checkout-label">Size <span class="required">*</span></label>
+                                    <strong>
+                                        @if (string.IsNullOrWhiteSpace(item.SelectedSize))
+                                        {
+                                            <span class="text-danger">Please select size</span>
+                                        }
+                                        else
+                                        {
+                                            @item.SelectedSize
+                                        }
+                                    </strong>
+                                </div>
+                                <div>
+                                    <label class="checkout-label">Color <span class="required">*</span></label>
+                                    <strong>
+                                        @if (string.IsNullOrWhiteSpace(item.SelectedColor))
+                                        {
+                                            <span class="text-danger">Please select color</span>
+                                        }
+                                        else
+                                        {
+                                            @item.SelectedColor
+                                        }
+                                    </strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="product-actions">
+                            <div class="qty-control">
+                                <button type="button" class="btn btn-outline-primary btn-sm btn-qty" onclick="updateCartCount(@item.Id, -1, this)">-</button>
+                                <span class="mx-2" id="cart-count-@item.Id">@item.Count</span>
+                                <button type="button" class="btn btn-outline-primary btn-sm btn-qty" onclick="updateCartCount(@item.Id, 1, this)">+</button>
+                            </div>
+                            <div class="price">@item.product.Price.ToString("0.00") EGP</div>
+                            <a asp-action="Remove" asp-route-cartid="@item.Id" class="btn btn-sm btn-danger">
+                                <i class="fas fa-trash-alt"></i> Remove
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="col-lg-4">
+                <div class="summary">
+                    <h3>Order Summary</h3>
+                    <hr />
+                    
+                   
+                    <div class="summary-item">
+                        <span>Total</span>
+                        <span><strong>@Model.TotalCarts.ToString("0.00") EGP</strong></span>
+                    </div>
+                    <a asp-action="Summary" class="btn btn-success w-100 mt-3">
+                        Proceed to Checkout <i class="fas fa-arrow-right ms-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+@section Scripts {
+<script>
+        function updateCartCount(cartId, change, btn) {
+            // Update UI immediately
+            var countSpan = document.getElementById('cart-count-' + cartId);
+            var current = parseInt(countSpan.textContent);
+            var updated = current + change;
+            if (updated >= 1 && updated <= 100) {
+                countSpan.textContent = updated;
+            }
+            // Send AJAX to backend
+            let url = change === 1 ? '/Customer/Cart/PlusAjax' : '/Customer/Cart/MinusAjax';
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: `cartid=${cartId}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    countSpan.textContent = data.newCount;
+                    updateOrderSummaryTotal();
+                    updateCartBadge();
+                }
+            });
+        }
+
+    
+
+        function updateOrderSummaryTotal() {
+            let total = 0;
+            document.querySelectorAll('[id^="cart-count-"]').forEach(function(span) {
+                const count = parseInt(span.textContent);
+                const priceElem = span.closest('.product-actions').querySelector('.price');
+                if (priceElem) {
+                    const price = parseFloat(priceElem.textContent.replace(/[^\d.]/g, ''));
+                    total += count * price;
+                }
+            });
+            const summaryElem = document.querySelector('.summary-item strong');
+            if (summaryElem) {
+                summaryElem.textContent = total.toFixed(2) + ' EGP';
+            }
+        }
+    </script>
+}
+</html>

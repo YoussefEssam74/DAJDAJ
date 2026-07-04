@@ -1,0 +1,412 @@
+﻿@model DAJDAJ.Entities.Models.OrderHeader
+
+@{
+    ViewData["Title"] = "Order Details";
+    Layout = "~/Views/Shared/_Customer.cshtml";
+}
+
+<style>
+    .detail-page {
+        background: #f8f9fa;
+        min-height: 100vh;
+        padding: 2rem 0;
+    }
+
+    .detail-card {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        margin-bottom: 1.5rem;
+        background: white;
+        overflow: hidden;
+    }
+
+    .detail-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem;
+    }
+
+    .order-id-badge {
+        font-size: 2rem;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .back-btn {
+        background: rgba(255,255,255,0.2);
+        border: 2px solid white;
+        color: white;
+        padding: 0.6rem 1.5rem;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .back-btn:hover {
+        background: white;
+        color: #667eea;
+    }
+
+    .card-header-custom {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 15px 15px 0 0;
+    }
+
+    .card-header-custom h5 {
+        margin: 0;
+        font-weight: 600;
+        font-size: 1.2rem;
+    }
+
+    .info-row {
+        padding: 1rem 0;
+        border-bottom: 1px solid #f0f0f0;
+        display: flex;
+        align-items: center;
+    }
+
+    .info-row:last-child {
+        border-bottom: none;
+    }
+
+    .info-label {
+        color: #6c757d;
+        font-weight: 600;
+        min-width: 150px;
+        display: flex;
+        align-items: center;
+    }
+
+    .info-label i {
+        margin-right: 0.5rem;
+        font-size: 1.2rem;
+        color: #667eea;
+    }
+
+    .info-value {
+        color: #212529;
+        font-weight: 500;
+    }
+
+    .status-badge-large {
+        padding: 0.6rem 1.5rem;
+        border-radius: 25px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .status-badge-large i {
+        margin-right: 0.5rem;
+    }
+
+    .product-table {
+        margin-top: 1rem;
+    }
+
+    .product-table thead {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    }
+
+    .product-table thead th {
+        border: none;
+        color: #495057;
+        font-weight: 600;
+        padding: 1rem;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+
+    .product-table tbody td {
+        padding: 1.2rem 1rem;
+        vertical-align: middle;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .product-table tbody tr:hover {
+        background: #f8f9fa;
+    }
+
+    .product-name {
+        font-weight: 600;
+        color: #212529;
+    }
+
+    .color-badge {
+        display: inline-block;
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        background: #e9ecef;
+        color: #495057;
+    }
+
+    .size-badge {
+        display: inline-block;
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        background: #667eea;
+        color: white;
+    }
+
+    .total-row {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        font-weight: bold;
+    }
+
+    .total-amount {
+        color: #28a745;
+        font-size: 1.5rem;
+    }
+
+    .tracking-number {
+        background: #fff3cd;
+        border: 2px dashed #ffc107;
+        padding: 1rem;
+        border-radius: 10px;
+        text-align: center;
+        margin-top: 1rem;
+    }
+
+    .tracking-number strong {
+        color: #856404;
+        font-size: 1.2rem;
+    }
+
+    @@media (max-width: 768px) {
+        .detail-header {
+            padding: 1.5rem;
+        }
+
+        .order-id-badge {
+            font-size: 1.5rem;
+        }
+
+        .info-label {
+            min-width: 120px;
+            font-size: 0.9rem;
+        }
+
+        .product-table {
+            font-size: 0.85rem;
+        }
+    }
+</style>
+
+<div class="detail-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="detail-card">
+                    <div class="detail-header">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap">
+                            <div>
+                                <p class="order-id-badge">
+                                    <i class="bi bi-receipt-cutoff me-3"></i>
+                                    Order #@(1000 + Model.Id)
+                                </p>
+                                <p class="mb-0 mt-2" style="opacity: 0.9;">
+                                    <i class="bi bi-calendar3 me-2"></i>
+                                    Placed on @Model.OrderDate.ToString("MMMM dd, yyyy 'at' hh:mm tt")
+                                </p>
+                            </div>
+                            <a asp-action="MyOrders" class="back-btn mt-3 mt-md-0">
+                                <i class="bi bi-arrow-left me-2"></i>Back to Orders
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="detail-card">
+                            <div class="card-header-custom">
+                                <h5><i class="bi bi-info-circle me-2"></i>Order Information</h5>
+                            </div>
+                            <div class="card-body p-4">
+                                <div class="info-row">
+                                    <span class="info-label">
+                                        <i class="bi bi-calendar-check"></i>Order Date
+                                    </span>
+                                    <span class="info-value">@Model.OrderDate.ToString("MMMM dd, yyyy")</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">
+                                        <i class="bi bi-truck"></i>Order Status
+                                    </span>
+                                    <span class="info-value">
+                                        @if (Model.OrderStatus == "Pending")
+                                        {
+                                            <span class="status-badge-large bg-warning text-dark">
+                                                <i class="bi bi-clock-history"></i>@Model.OrderStatus
+                                            </span>
+                                        }
+                                        else if (Model.OrderStatus == "Approved")
+                                        {
+                                            <span class="status-badge-large bg-info text-white">
+                                                <i class="bi bi-check-circle"></i>@Model.OrderStatus
+                                            </span>
+                                        }
+                                        else if (Model.OrderStatus == "Shipped")
+                                        {
+                                            <span class="status-badge-large bg-primary text-white">
+                                                <i class="bi bi-truck"></i>@Model.OrderStatus
+                                            </span>
+                                        }
+                                        else if (Model.OrderStatus == "Delivered")
+                                        {
+                                            <span class="status-badge-large bg-success text-white">
+                                                <i class="bi bi-check-all"></i>@Model.OrderStatus
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="status-badge-large bg-secondary text-white">@Model.OrderStatus</span>
+                                        }
+                                    </span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">
+                                        <i class="bi bi-credit-card"></i>Payment Status
+                                    </span>
+                                    <span class="info-value">
+                                        @if (Model.PaymentStatus == "Approved")
+                                        {
+                                            <span class="status-badge-large bg-success text-white">
+                                                <i class="bi bi-check-circle-fill"></i>Paid
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="status-badge-large bg-warning text-dark">
+                                                <i class="bi bi-hourglass-split"></i>@Model.PaymentStatus
+                                            </span>
+                                        }
+                                    </span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">
+                                        <i class="bi bi-wallet2"></i>Payment Method
+                                    </span>
+                                    <span class="info-value">@Model.PaymentMethod</span>
+                                </div>
+                                @if (!string.IsNullOrEmpty(Model.TrackingNumber))
+                                {
+                                    <div class="tracking-number">
+                                        <div><i class="bi bi-box-seam me-2"></i>Tracking Number</div>
+                                        <strong>@Model.TrackingNumber</strong>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="detail-card">
+                            <div class="card-header-custom">
+                                <h5><i class="bi bi-geo-alt me-2"></i>Shipping Information</h5>
+                            </div>
+                            <div class="card-body p-4">
+                                <div class="info-row">
+                                    <span class="info-label">
+                                        <i class="bi bi-person"></i>Name
+                                    </span>
+                                    <span class="info-value">@Model.Name</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">
+                                        <i class="bi bi-house"></i>Address
+                                    </span>
+                                    <span class="info-value">@Model.Address</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">
+                                        <i class="bi bi-pin-map"></i>City
+                                    </span>
+                                    <span class="info-value">@Model.City</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">
+                                        <i class="bi bi-telephone"></i>Phone
+                                    </span>
+                                    <span class="info-value">@Model.Phone</span>
+                                </div>
+                                @if (!string.IsNullOrEmpty(Model.InstgramUserName))
+                                {
+                                    <div class="info-row">
+                                        <span class="info-label">
+                                            <i class="bi bi-instagram"></i>Instagram
+                                        </span>
+                                        <span class="info-value">@@@Model.InstgramUserName</span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-card">
+                    <div class="card-header-custom">
+                        <h5><i class="bi bi-bag-check me-2"></i>Order Items</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table product-table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Size</th>
+                                        <th>Color</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.OrderDetails)
+                                    {
+                                        <tr>
+                                            <td class="product-name">
+                                                <i class="bi bi-box-seam me-2" style="color: #667eea;"></i>
+                                                @item.Product.Name
+                                            </td>
+                                            <td><span class="size-badge">@item.SelectedSize</span></td>
+                                            <td><span class="color-badge">@item.SelectedColor</span></td>
+                                            <td>
+                                                <span style="font-weight: 600;">@item.Count</span>
+                                            </td>
+                                            <td>@item.Price EGP</td>
+                                            <td><strong>@((item.Count * item.Price)) EGP</strong></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr class="total-row">
+                                        <td colspan="5" class="text-end" style="padding: 1.5rem;">
+                                            <h5 class="mb-0">Total Amount:</h5>
+                                        </td>
+                                        <td style="padding: 1.5rem;">
+                                            <span class="total-amount">@Model.TotalPrice EGP</span>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
